@@ -1,0 +1,217 @@
+import 'dart:io';
+
+import 'package:dotted_border/dotted_border.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:get/instance_manager.dart';
+import 'package:lottie/lottie.dart';
+import 'package:sizer/sizer.dart';
+import 'package:success_airline/constants.dart';
+import 'package:success_airline/controllers/lessons_controller.dart';
+import 'package:success_airline/models/lessonModel.dart';
+import 'package:success_airline/widgets/bigTexT.dart';
+import 'package:success_airline/widgets/roundedButton.dart';
+import 'package:success_airline/widgets/smallText.dart';
+import 'package:success_airline/widgets/textfeild2.dart';
+
+class CategoryItemDetailScreen extends StatelessWidget {
+  final lessonCont = Get.put(LessonsController());
+  final _key = GlobalKey<FormState>();
+  final String category;
+  String? title;
+  String? description;
+  String? audioUrl;
+  Rx<bool> isLoading = false.obs;
+  Rx<File?> audioFile = File('').obs;
+  CategoryItemDetailScreen({Key? key, required this.category})
+      : super(key: key);
+
+  void selectAudio() async {
+    final result = await FilePicker.platform
+        .pickFiles(
+      type: FileType.audio,
+      allowMultiple: false,
+    )
+        .catchError((err) {
+      print(err);
+    });
+    if (result != null) {
+      audioFile.value = File(result.files.first.path!);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: BigText(
+            size: 22,
+            text: category,
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+          ),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          leading: Obx(
+            () => GestureDetector(
+              onTap: isLoading.value
+                  ? () {}
+                  : () {
+                      Get.back();
+                    },
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.black,
+                size: 25,
+              ),
+            ),
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            // height: .h,
+            width: 100.w,
+            child: Column(children: [
+              Lottie.asset('assets/json/femaleJump.json', height: 25.h),
+              BigText(
+                fontWeight: FontWeight.normal,
+                text: 'Add Content',
+                color: Colors.black,
+                size: 22,
+              ),
+              SizedBox(
+                height: 2.h,
+              ),
+              Form(
+                  key: _key,
+                  child: Column(
+                    children: [
+                      CustomTextField(
+                        prefixIcon: FontAwesomeIcons.t,
+                        label: 'Title',
+                        onSave: (val) {
+                          title = val;
+                          print(title);
+                        },
+                        validator: (val) {
+                          if (val!.trim().isEmpty) return 'Please enter title';
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      CustomTextField(
+                        onSave: (val) {
+                          description = val;
+                          print(description);
+                        },
+                        validator: (val) {
+                          if (val!.trim().isEmpty) {
+                            return 'Description must be at least 20 characters';
+                          }
+                          return null;
+                        },
+                        size: Size(90, 15),
+                        prefixIcon: FontAwesomeIcons.fileCircleExclamation,
+                        label: 'Desciption',
+                        keyboardType: TextInputType.multiline,
+                        lines: 20,
+                      ),
+                    ],
+                  )),
+              SizedBox(
+                height: 2.h,
+              ),
+              InkWell(
+                onTap: selectAudio,
+                child: DottedBorder(
+                  dashPattern: const [8],
+                  color: kprimaryColor,
+                  strokeWidth: 2,
+                  radius: Radius.circular(15),
+                  borderType: BorderType.RRect,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 2.w),
+                    height: 9.h,
+                    width: 90.w,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Row(children: [
+                      Spacer(
+                        flex: 1,
+                      ),
+                      SvgPicture.asset(
+                        'assets/svgs/audioFileIcon.svg',
+                        height: 5.h,
+                      ),
+                      Spacer(),
+                      Obx(
+                        () => SmallText(
+                          text: audioFile.value!.path == ''
+                              ? 'Upload Audio File'
+                              : 'File Selected',
+                          color: Colors.black,
+                          size: 16,
+                        ),
+                      ),
+                      Spacer(
+                        flex: 3,
+                      ),
+                    ]),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 5.h,
+              ),
+              Obx(
+                () => RoundedButton(
+                  isLoading: isLoading.value,
+                  label: 'Publish',
+                  onPressed: publish,
+                ),
+              ),
+              SizedBox(
+                height: 5.h,
+              )
+            ]),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> publish() async {
+    if (_key.currentState!.validate()) {
+      _key.currentState!.save();
+      if (audioFile.value!.path == '') {
+        Get.snackbar('Publish failed', 'Please select audio file',
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        return;
+      }
+      isLoading.value = true;
+      audioUrl = await lessonCont.uploadAudio(audioFile.value!);
+      final lesson = Lesson('', title!, description!, audioUrl!);
+      lessonCont.uploadLesson(lesson, category).then((value) {
+        Get.snackbar('Lesson Uploaded', 'Lesson uploaded successfully',
+            snackPosition: SnackPosition.BOTTOM,
+            colorText: Colors.white,
+            backgroundColor: Colors.green);
+      }).then((value) {
+        Get.close(1);
+      });
+    }
+  }
+}

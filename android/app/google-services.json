@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "753797928888",
+    "project_id": "success-airline-lab123",
+    "storage_bucket": "success-airline-lab123.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:753797928888:android:f2264918003c43be65614d",
+        "android_client_info": {
+          "package_name": "com.example.successAirline"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "753797928888-83dlnn3jh8hoekvu4saat5nl77nlp9lt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUXSXG5acrYLkq65mY_4XBX2XYgJNSyDY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "753797928888-83dlnn3jh8hoekvu4saat5nl77nlp9lt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
