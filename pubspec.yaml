@@ -52,6 +52,7 @@ dependencies:
   circular_bottom_navigation: ^2.0.0
   dotted_border: ^2.0.0+2
   file_picker: ^4.5.1
+  audioplayers: ^0.20.1
 
  
 

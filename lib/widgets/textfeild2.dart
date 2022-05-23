@@ -32,7 +32,7 @@ class CustomTextField extends StatefulWidget {
     this.bgColor,
     this.borderRadius = 15,
     required this.label,
-    this.size = const Size(90, 9),
+    this.size = const Size(90, 8.5),
     this.isSmall = false,
     this.keyboardType = TextInputType.text,
     this.controller,
@@ -61,6 +61,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Container(
       width: widget.size.width.w,
       height: widget.size.height.h,
+      constraints: BoxConstraints(
+          minHeight: widget.size.height.h + 1.h,
+          maxHeight: widget.size.height.h + 2.h),
       child: TextFormField(
           maxLines: widget.lines ?? 1,
           style: TextStyle(fontSize: 16.sp),

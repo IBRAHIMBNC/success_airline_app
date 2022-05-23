@@ -12,6 +12,7 @@ class AppUser {
   String? childrenAges;
   String? hearAboutUs;
   bool isAdmin;
+  List<dynamic>? referralList;
 
   AppUser(
       {required this.name,
@@ -20,7 +21,8 @@ class AppUser {
       required this.id,
       required this.homeAddress,
       required this.mailingAddress,
-      this.isAdmin = false});
+      this.isAdmin = false,
+      this.referralList});
   AppUser.withChildrenDetails(
       {required this.name,
       required this.profile,
@@ -42,7 +44,8 @@ class AppUser {
         name: userData.get('firstName') + ' ' + userData.get('lastName'),
         email: userData.get('email'),
         profile: userData.get('image'),
-        isAdmin: userData.get('isAdmin'));
+        isAdmin: userData.get('isAdmin'),
+        referralList: (userData.get('referralData')));
   }
   factory AppUser.fromFirebaseWithChildrenDetails(DocumentSnapshot userData) {
     return AppUser.withChildrenDetails(

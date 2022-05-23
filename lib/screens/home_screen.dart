@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -56,40 +58,41 @@ class HomeScreen extends StatelessWidget {
   //   {'title': 'arming', 'image': SvgPicture.asset('assets/svgs/alert.svg')}
   // ];
 
-  List<String> list = [
-    'Life Skills',
-    'Artist',
-    'Entertainment',
-    'Sports',
-    'Farming',
-    'Technology',
-    'Engineer',
-    'Food & Restaurants',
-    'Drivers',
-    'Sales',
-    'Medical',
-    'Music',
-    'Lawyers',
-    'Doctors',
-    'Film Industry',
-    'Teaching',
-    'Finance',
-    'Emergency',
-    'Drivers',
-    'Aerodynamics',
-    'College Professors',
-    'Oceanography',
-    'Real Estate',
-    'Construction',
-    'Writers',
-    'News',
-    'Business Owners',
-    'Financial literacy'
-  ];
+  Map<String, String> allCategories = {
+    'Doctors': 'assets/json/doctor.json',
+    'Life Skills': 'assets/json/life skills.json',
+    'Artist': 'assets/json/artist.json',
+    'Entertainment': 'assets/json/entertainment.json',
+    'Sports': 'assets/json/sports.json',
+    'Farming': 'assets/json/farming.json',
+    'Technology': 'assets/json/technology.json',
+    'Engineer': 'assets/json/engineer.json',
+    'Food & Restaurants': 'assets/json/food and restaurant.json',
+    'Sales': 'assets/json/sales.json',
+    'Medical': 'assets/json/medical.json',
+    'Music': 'assets/json/music.json',
+    'Lawyers': 'assets/pngs/lawyer.png',
+    'Film Industry': 'assets/json/film industry.json',
+    'Teaching': 'assets/json/teaching.json',
+    'Finance': 'assets/json/finance.json',
+    'Emergency': 'assets/json/emergency.json',
+    'Drivers': 'assets/json/driver.json',
+    'Aerodynamics': 'assets/json/aerodynamics.json',
+    'College Professors': 'assets/pngs/college professor.png',
+    'Oceanography': 'assets/json/oceanographi.json',
+    'Real Estate': 'assets/json/real estate.json',
+    'Construction': 'assets/json/construction.json',
+    'Writers': 'assets/json/writers.json',
+    'News': 'assets/json/news.json',
+    'Business Owners': 'assets/json/business owner.json',
+    'Financial literacy': 'assets/json/financial literacy.json'
+  };
   HomeScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    list.sort();
+    allCategories = SplayTreeMap<String, dynamic>.from(
+        allCategories, (a, b) => a.compareTo(b)).cast();
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -139,36 +142,39 @@ class HomeScreen extends StatelessWidget {
                       SizedBox(
                         height: 2.h,
                       ),
-                      Container(
-                        padding: EdgeInsets.only(left: 4.w, right: 2.w),
-                        alignment: Alignment.center,
-                        height: 7.h,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: kprimaryColor.withOpacity(0.1)),
-                        child: Row(
-                          children: [
-                            const Expanded(
-                              child: TextField(
-                                  decoration: InputDecoration(
-                                      hintStyle: TextStyle(fontSize: 20),
-                                      border: InputBorder.none,
-                                      hintText: 'Search...')),
-                            ),
-                            RoundedIconButton(
-                              onTap: () {
-                                print('signout');
-                                auth.signOut();
-                              },
-                              icon: Icon(
-                                Icons.search,
-                                size: 4.h,
-                                color: kprimaryColor,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
+                      // Container(
+                      //   padding: EdgeInsets.only(left: 4.w, right: 2.w),
+                      //   alignment: Alignment.center,
+                      //   height: 7.h,
+                      //   decoration: BoxDecoration(
+                      //       borderRadius: BorderRadius.circular(15),
+                      //       color: kprimaryColor.withOpacity(0.1)),
+                      //   child: Row(
+                      //     children: [
+                      //       Expanded(
+                      //         child: TextField(
+                      //             style: TextStyle(
+                      //               fontSize: 16.sp,
+                      //             ),
+                      //             decoration: InputDecoration(
+                      //                 hintStyle: TextStyle(fontSize: 20),
+                      //                 border: InputBorder.none,
+                      //                 hintText: 'Search...')),
+                      //       ),
+                      //       RoundedIconButton(
+                      //         onTap: () {
+                      //           print('signout');
+                      //           auth.signOut();
+                      //         },
+                      //         icon: Icon(
+                      //           Icons.search,
+                      //           size: 4.h,
+                      //           color: kprimaryColor,
+                      //         ),
+                      //       )
+                      //     ],
+                      //   ),
+                      // ),
                       SizedBox(
                         height: 2.h,
                       ),
@@ -180,16 +186,25 @@ class HomeScreen extends StatelessWidget {
                       SizedBox(
                         height: 23.h,
                         child: ListView.separated(
+                            shrinkWrap: true,
                             padding: EdgeInsets.symmetric(horizontal: 4.w),
                             scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) =>
-                                _ContinueLearningCard(
-                                  index: index,
+                            itemBuilder: (context, index) => SizedBox(
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        child: _ContinueLearningCard(
+                                          index: index,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                    ],
+                                  ),
                                 ),
                             separatorBuilder: (context, index) => SizedBox(
                                   width: 4.w,
                                 ),
-                            itemCount: list.length),
+                            itemCount: allCategories.length),
                       ),
                       const SmallText(
                         text: 'All categories',
@@ -206,15 +221,17 @@ class HomeScreen extends StatelessWidget {
                             SizedBox(height: 0.5.h),
                         itemBuilder: (context, index) => InkWell(
                           onTap: () {
-                            Get.to(
-                                () => CategoryDetailScreen(title: list[index]));
+                            Get.to(() => CategoryDetailScreen(
+                                  title: allCategories.keys.toList()[index],
+                                  image: allCategories.values.toList()[index],
+                                ));
                           },
                           child: _AllCategoriesItemCard(
-                            list: list,
-                            index: index,
+                            category: allCategories.keys.toList()[index],
+                            image: allCategories.values.toList()[index],
                           ),
                         ),
-                        itemCount: list.length,
+                        itemCount: allCategories.length,
                       )
                     ]),
               ),
@@ -227,14 +244,13 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _AllCategoriesItemCard extends StatelessWidget {
-  final int index;
-  const _AllCategoriesItemCard({
-    required this.index,
+  final String category;
+  final String image;
+  _AllCategoriesItemCard({
     Key? key,
-    required this.list,
+    required this.category,
+    required this.image,
   }) : super(key: key);
-
-  final List<String> list;
 
   @override
   Widget build(BuildContext context) {
@@ -245,31 +261,52 @@ class _AllCategoriesItemCard extends StatelessWidget {
         elevation: 3,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Padding(
-          padding: index == 1 || index == 4
-              ? EdgeInsets.zero
-              : const EdgeInsets.only(left: 20),
+          padding: EdgeInsets.zero,
           child: Row(
             children: [
-              SizedBox(
-                  height: 10.h,
-                  width: 10.w,
-                  child: SvgPicture.asset('assets/svgs/alert.svg')),
-              SizedBox(
-                width: index == 1 || index == 4 ? 13.w : 8.w,
-              ),
+              if (image.contains('.json'))
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: category.toLowerCase() == 'doctors' ? 0 : 2.w),
+                  child: SizedBox(
+                    height: category.toLowerCase() == 'doctors' ? 7.h : 9.h,
+                    width: 20.w,
+                    child: Lottie.asset(
+                      image,
+                      fit: category.toLowerCase() == 'doctors'
+                          ? BoxFit.cover
+                          : BoxFit.contain,
+                    ),
+                  ),
+                )
+              else
+                Padding(
+                  padding: EdgeInsets.all(2.h),
+                  child: SizedBox(
+                    height: 6.h,
+                    width: 6.h,
+                    child: Image.asset(
+                      image,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              Spacer(),
               SmallText(
                 size: 16,
-                text: list[index],
+                text: category,
                 color: Colors.black,
               ),
-              const Spacer(),
+              Spacer(
+                flex: 2,
+              ),
               const RoundedIconButton(
                   icon: Icon(
                 Icons.arrow_forward_ios,
                 color: purpleColor,
               )),
               SizedBox(
-                width: 3.w,
+                width: 4.w,
               )
             ],
           ),
@@ -319,7 +356,7 @@ class _ContinueLearningCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10, bottom: 1),
+      padding: const EdgeInsets.only(top: 10, bottom: 0),
       child: Stack(children: [
         Align(
           alignment: Alignment.topCenter,
@@ -341,7 +378,7 @@ class _ContinueLearningCard extends StatelessWidget {
             ),
             child: Column(children: [
               SizedBox(
-                  height: index == 1 || index == 4 ? 13.h : 9.h,
+                  height: index == 1 || index == 5 ? 13.h : 9.h,
                   width: 30.w,
                   child: index == 1 || index == 4
                       ? Lottie.asset(list[index]['image'])

@@ -1,13 +1,9 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
-import 'package:success_airline/screens/admin_screens/adminHome_screen.dart';
-import 'package:uuid/uuid.dart';
-
 import '../models/appuser.dart';
 
 class AuthController extends GetxController {
@@ -29,17 +25,22 @@ class AuthController extends GetxController {
     await auth.currentUser!.updatePhotoURL(picUrl);
     if (auth.currentUser != null) {
       userDetails['image'] = auth.currentUser!.photoURL;
-
+      saveReferralData(userDetails['referralData'], auth.currentUser!.uid);
       saveUserdata(auth.currentUser, userDetails);
       user = AppUser(
-        profile: userDetails['image'],
-        name: name,
-        email: email,
-        id: auth.currentUser!.uid,
-        homeAddress: userDetails['homeAddress'],
-        mailingAddress: userDetails['mailingAddress'],
-      );
+          profile: userDetails['image'],
+          name: name,
+          email: email,
+          id: auth.currentUser!.uid,
+          homeAddress: userDetails['homeAddress'],
+          mailingAddress: userDetails['mailingAddress'],
+          referralList: userDetails['referralData']);
     }
+  }
+
+  Future<void> saveReferralData(List<dynamic> referrelList, String id) async {
+    // print(referrelList);
+    await userRef.doc(id).update({'referralData': referrelList});
   }
 
   Future<String> uploadProfile(File image) async {
@@ -57,6 +58,7 @@ class AuthController extends GetxController {
         .catchError((err) {
       throw err;
     });
+    if (auth.currentUser!.email == 'admin@gmail.com') return;
     final userData = await userRef.doc(auth.currentUser!.uid).get();
 
     user = AppUser.fromFirebase(userData);
@@ -69,6 +71,8 @@ class AuthController extends GetxController {
   Future<void> saveUserdata(
       User? user, Map<String, dynamic> userDetails) async {
     userDetails['id'] = user!.uid;
+
+    userDetails['isAdmin'] = false;
     userDetails.removeWhere((key, value) => key == 'password');
     if (userDetails.containsKey('childDetails')) {
       final url = await uploadProfile(userDetails['childDetails']['image']);
@@ -93,6 +97,7 @@ class AuthController extends GetxController {
           .collection('users')
           .doc(auth.currentUser!.uid)
           .get();
+      print(userData.data());
       user = AppUser.fromFirebase(userData);
     }
     update();
@@ -100,13 +105,15 @@ class AuthController extends GetxController {
 
   Future<List<AppUser>> fetchAllUsers({String searchKeyword = ''}) async {
     QuerySnapshot<Map<String, dynamic>> allUsersDocs;
-    if (searchKeyword.isEmpty)
-      allUsersDocs = await userRef.get();
-    else {
+    if (searchKeyword.isEmpty) {
+      allUsersDocs =
+          await userRef.where('firstName', isNotEqualTo: 'admin').get();
+    } else {
       allUsersDocs = await userRef
           .where(
             'firstName',
           )
+          .where('firstName', isNotEqualTo: 'admin')
           .get();
       if (allUsersDocs.docs.isEmpty) {
         allUsersDocs = await userRef
@@ -114,6 +121,7 @@ class AuthController extends GetxController {
               'lastName',
               isGreaterThanOrEqualTo: searchKeyword,
             )
+            .where('firstName', isNotEqualTo: 'admin')
             .get();
       }
     }

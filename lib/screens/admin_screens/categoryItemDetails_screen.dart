@@ -20,29 +20,46 @@ import 'package:success_airline/widgets/roundedButton.dart';
 import 'package:success_airline/widgets/smallText.dart';
 import 'package:success_airline/widgets/textfeild2.dart';
 
-class CategoryItemDetailScreen extends StatelessWidget {
+class AddCategoryItemDetailScreen extends StatelessWidget {
   final lessonCont = Get.put(LessonsController());
   final _key = GlobalKey<FormState>();
   final String category;
+  final String image;
   String? title;
   String? description;
   String? audioUrl;
   Rx<bool> isLoading = false.obs;
   Rx<File?> audioFile = File('').obs;
-  CategoryItemDetailScreen({Key? key, required this.category})
-      : super(key: key);
+  AddCategoryItemDetailScreen({
+    Key? key,
+    required this.category,
+    required this.image,
+  }) : super(key: key);
 
   void selectAudio() async {
-    final result = await FilePicker.platform
-        .pickFiles(
-      type: FileType.audio,
-      allowMultiple: false,
-    )
-        .catchError((err) {
-      print(err);
-    });
-    if (result != null) {
-      audioFile.value = File(result.files.first.path!);
+    final result;
+    if (Platform.isIOS) {
+      result = await FilePicker.platform
+          .pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['.mp3'],
+        allowMultiple: false,
+      )
+          .catchError((err) {
+        print(err);
+      });
+      if (result != null) {
+        audioFile.value = File(result.files.first.path!);
+      }
+    } else {
+      result = await FilePicker.platform
+          .pickFiles(
+        type: FileType.audio,
+        allowMultiple: false,
+      )
+          .catchError((err) {
+        print(err);
+      });
     }
   }
 
@@ -82,7 +99,18 @@ class CategoryItemDetailScreen extends StatelessWidget {
             // height: .h,
             width: 100.w,
             child: Column(children: [
-              Lottie.asset('assets/json/femaleJump.json', height: 25.h),
+              SizedBox(
+                width: 90.w,
+                height: 25.h,
+                child: image.contains('.json')
+                    ? Lottie.asset(image)
+                    : Padding(
+                        padding: EdgeInsets.all(4.h),
+                        child: Image.asset(image)),
+              ),
+              SizedBox(
+                height: 2.h,
+              ),
               BigText(
                 fontWeight: FontWeight.normal,
                 text: 'Add Content',
@@ -97,6 +125,7 @@ class CategoryItemDetailScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       CustomTextField(
+                        prefixIconPadding: EdgeInsets.only(bottom: 20),
                         prefixIcon: FontAwesomeIcons.t,
                         label: 'Title',
                         onSave: (val) {

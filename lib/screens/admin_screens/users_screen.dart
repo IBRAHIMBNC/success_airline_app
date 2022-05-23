@@ -16,6 +16,7 @@ import '../home_screen.dart';
 
 class UserScreen extends StatelessWidget {
   AuthController auth = Get.find();
+
   final searchCont = TextEditingController();
   Rx<String> searchKeyword = ''.obs;
   UserScreen({Key? key}) : super(key: key);

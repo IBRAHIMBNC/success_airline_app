@@ -20,7 +20,7 @@ class Lesson {
   }
 
   factory Lesson.fromFirebase(QueryDocumentSnapshot doc) {
-    return Lesson(
-        doc.get('id'), doc.get('title'), doc.get('description'), 'audioLink');
+    return Lesson(doc.get('id'), doc.get('title'), doc.get('description'),
+        doc.get('audioLink'));
   }
 }

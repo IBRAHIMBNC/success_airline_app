@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
 import 'package:circular_bottom_navigation/tab_item.dart';
@@ -19,42 +21,42 @@ import '../home_screen.dart';
 import '../profile_screen/profile_screen.dart';
 
 class ContentScreen extends StatelessWidget {
-  List<String> list = [
-    'Life Skills',
-    'Artist',
-    'Entertainment',
-    'Sports',
-    'Farming',
-    'Technology',
-    'Engineer',
-    'Food & Restaurants',
-    'Drivers',
-    'Sales',
-    'Medical',
-    'Music',
-    'Lawyers',
-    'Doctors',
-    'Film Industry',
-    'Teaching',
-    'Finance',
-    'Emergency',
-    'Drivers',
-    'Aerodynamics',
-    'College Professors',
-    'Oceanography',
-    'Real Estate',
-    'Construction',
-    'Writers',
-    'News',
-    'Business Owners',
-    'Financial literacy'
-  ];
+  Map<String, String> allCategories = {
+    'Doctors': 'assets/json/doctor.json',
+    'Life Skills': 'assets/json/life skills.json',
+    'Artist': 'assets/json/artist.json',
+    'Entertainment': 'assets/json/entertainment.json',
+    'Sports': 'assets/json/sports.json',
+    'Farming': 'assets/json/farming.json',
+    'Technology': 'assets/json/technology.json',
+    'Engineer': 'assets/json/engineer.json',
+    'Food & Restaurants': 'assets/json/food and restaurant.json',
+    'Sales': 'assets/json/sales.json',
+    'Medical': 'assets/json/medical.json',
+    'Music': 'assets/json/music.json',
+    'Lawyers': 'assets/pngs/lawyer.png',
+    'Film Industry': 'assets/json/film industry.json',
+    'Teaching': 'assets/json/teaching.json',
+    'Finance': 'assets/json/finance.json',
+    'Emergency': 'assets/json/emergency.json',
+    'Drivers': 'assets/json/driver.json',
+    'Aerodynamics': 'assets/json/aerodynamics.json',
+    'College Professors': 'assets/pngs/college professor.png',
+    'Oceanography': 'assets/json/oceanographi.json',
+    'Real Estate': 'assets/json/real estate.json',
+    'Construction': 'assets/json/construction.json',
+    'Writers': 'assets/json/writers.json',
+    'News': 'assets/json/news.json',
+    'Business Owners': 'assets/json/business owner.json',
+    'Financial literacy': 'assets/json/financial literacy.json'
+  };
   final AuthController auth = Get.find();
   ContentScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    list.sort();
+    allCategories = SplayTreeMap<String, dynamic>.from(
+        allCategories, (a, b) => a.compareTo(b)).cast();
     return Scaffold(
       extendBody: true,
       backgroundColor: Colors.white,
@@ -124,15 +126,16 @@ class ContentScreen extends StatelessWidget {
                 separatorBuilder: (context, index) => SizedBox(height: 0.5.h),
                 itemBuilder: (context, index) => InkWell(
                   onTap: () {
-                    Get.to(
-                        () => CategoryItemDetailScreen(category: list[index]));
+                    Get.to(() => AddCategoryItemDetailScreen(
+                        image: allCategories.values.toList()[index],
+                        category: allCategories.keys.toList()[index]));
                   },
                   child: _AllCategoriesItemCard(
-                    list: list,
-                    index: index,
+                    category: allCategories.keys.toList()[index],
+                    image: allCategories.values.toList()[index],
                   ),
                 ),
-                itemCount: list.length,
+                itemCount: allCategories.length,
               )
             ]),
           ),
@@ -143,14 +146,13 @@ class ContentScreen extends StatelessWidget {
 }
 
 class _AllCategoriesItemCard extends StatelessWidget {
-  final int index;
+  final String category;
+  final String image;
   const _AllCategoriesItemCard({
-    required this.index,
     Key? key,
-    required this.list,
+    required this.category,
+    required this.image,
   }) : super(key: key);
-
-  final List<String> list;
 
   @override
   Widget build(BuildContext context) {
@@ -161,24 +163,45 @@ class _AllCategoriesItemCard extends StatelessWidget {
         elevation: 3,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Padding(
-          padding: index == 1 || index == 4
-              ? EdgeInsets.zero
-              : const EdgeInsets.only(left: 20),
+          padding: EdgeInsets.zero,
           child: Row(
             children: [
-              SizedBox(
-                  height: 10.h,
-                  width: 10.w,
-                  child: SvgPicture.asset('assets/svgs/alert.svg')),
-              SizedBox(
-                width: index == 1 || index == 4 ? 13.w : 8.w,
-              ),
+              if (image.contains('.json'))
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: category.toLowerCase() == 'doctors' ? 0 : 2.w),
+                  child: SizedBox(
+                    height: category.toLowerCase() == 'doctors' ? 7.h : 9.h,
+                    width: 20.w,
+                    child: Lottie.asset(
+                      image,
+                      fit: category.toLowerCase() == 'doctors'
+                          ? BoxFit.cover
+                          : BoxFit.contain,
+                    ),
+                  ),
+                )
+              else
+                Padding(
+                  padding: EdgeInsets.all(2.h),
+                  child: SizedBox(
+                    height: 6.h,
+                    width: 6.h,
+                    child: Image.asset(
+                      image,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              const Spacer(),
               SmallText(
                 size: 16,
-                text: list[index],
+                text: category,
                 color: Colors.black,
               ),
-              const Spacer(),
+              const Spacer(
+                flex: 2,
+              ),
               const RoundedIconButton(
                   icon: Icon(
                 Icons.arrow_forward_ios,

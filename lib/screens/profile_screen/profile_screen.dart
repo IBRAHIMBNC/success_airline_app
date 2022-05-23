@@ -45,7 +45,7 @@ class ProfileScreen extends StatelessWidget {
               top: 6.h,
               child: SizedBox(
                 width: 100.w,
-                height: 67.h,
+                height: 75.h,
                 child: Column(children: [
                   SizedBox(
                     width: 22.h,
@@ -150,6 +150,29 @@ class ProfileScreen extends StatelessWidget {
                     textColor: Colors.black,
                     bgColor: Colors.black.withOpacity(0.05),
                     label: 'About us',
+                    radius: 15,
+                    icon: const Icon(
+                      Icons.arrow_forward,
+                      color: kprimaryColor,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  RoundedButton(
+                    onPressed: () {
+                      auth.signOut();
+                      Get.close(1);
+                    },
+                    image: Icon(
+                      Icons.exit_to_app,
+                      color: Colors.orange,
+                      size: 4.h,
+                    ),
+                    size: const Size(90, 7),
+                    textColor: Colors.black,
+                    bgColor: Colors.black.withOpacity(0.05),
+                    label: 'Log out',
                     radius: 15,
                     icon: const Icon(
                       Icons.arrow_forward,

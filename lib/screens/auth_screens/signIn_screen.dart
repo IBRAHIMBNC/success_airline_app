@@ -148,7 +148,7 @@ class _LoginFormState extends State<LoginForm> {
               hintext: '',
               prefixIcon: FontAwesomeIcons.solidEnvelope,
             ),
-            SizedBox(height: 2.h),
+            // SizedBox(height: 2.h),
             CustomTextField(
               onSave: (val) {
                 password = val!;

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:success_airline/controllers/auth_controller.dart';
@@ -18,18 +19,20 @@ class ChildrenController extends GetxController {
     return [..._children];
   }
 
-  Future<void> fetchData({String id = ''}) async {
-    if (auth.user == null && id.isEmpty) return;
-    String userId = id;
-    if (id.isEmpty) userId = auth.user!.id;
+  Future<List<Child>> fetchData({String id = ''}) async {
+    String userId;
+    if (id.isNotEmpty) {
+      userId = id;
+    } else {
+      userId = auth.user!.id;
+    }
 
     final data = await childRef.doc(userId).collection('childrenDetails').get();
     List<Child> temp = [];
     for (var child in data.docs) {
       temp.add(Child.fromFirestore(child));
     }
-    _children = [...temp];
-    update();
+    return [...temp];
   }
 
   Future<void> addChild(Child child) async {
@@ -63,7 +66,7 @@ class ChildrenController extends GetxController {
 
   @override
   void onInit() {
-    fetchData();
+    fetchData().then((value) => _children = value);
     // TODO: implement onInit
     super.onInit();
   }

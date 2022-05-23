@@ -153,9 +153,6 @@ class _SignUpFormState extends State<SignUpForm> {
                   hintext: 'Jhon',
                   prefixIcon: FontAwesomeIcons.userLarge,
                   label: 'First Name'),
-              SizedBox(
-                height: 2.h,
-              ),
               CustomTextField(
                   controller: _lNameController,
                   validator: (val) {
@@ -168,9 +165,6 @@ class _SignUpFormState extends State<SignUpForm> {
                   hintext: 'Doe',
                   prefixIcon: FontAwesomeIcons.userLarge,
                   label: 'Last Name'),
-              SizedBox(
-                height: 2.h,
-              ),
               CustomTextField(
                   controller: _emailController,
                   validator: (val) {
@@ -188,10 +182,10 @@ class _SignUpFormState extends State<SignUpForm> {
                   hintext: 'Jhondoe@gmail.com',
                   prefixIcon: FontAwesomeIcons.solidEnvelope,
                   label: 'Email'),
-              if (widget.userData == null)
-                SizedBox(
-                  height: 2.h,
-                ),
+              // if (widget.userData == null)
+              // SizedBox(
+              //   height: 2.h,
+              // ),
               if (widget.userData == null)
                 CustomTextField(
                   validator: (val) {
@@ -209,7 +203,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   isPassword: true,
                 ),
               SizedBox(
-                height: 4.h,
+                height: 2.h,
               ),
               const SmallText(
                 size: 14,
@@ -233,9 +227,6 @@ class _SignUpFormState extends State<SignUpForm> {
                   hintext: '',
                   prefixIcon: FontAwesomeIcons.house,
                   label: 'House Address'),
-              SizedBox(
-                height: 2.h,
-              ),
               CustomTextField(
                 controller: _cityController,
                 validator: (val) {
@@ -251,9 +242,6 @@ class _SignUpFormState extends State<SignUpForm> {
                 prefixIcon: FontAwesomeIcons.city,
                 label: 'City',
               ),
-              SizedBox(
-                height: 2.h,
-              ),
               CustomTextField(
                   controller: _stateController,
                   validator: (val) {
@@ -268,9 +256,6 @@ class _SignUpFormState extends State<SignUpForm> {
                   hintext: '',
                   prefixIcon: FontAwesomeIcons.schoolFlag,
                   label: 'State'),
-              SizedBox(
-                height: 2.h,
-              ),
               CustomTextField(
                   controller: _zipController,
                   keyboardType: TextInputType.phone,
@@ -287,7 +272,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   prefixIcon: FontAwesomeIcons.mapPin,
                   label: 'Zip Code'),
               SizedBox(
-                height: 4.h,
+                height: 2.h,
               ),
               const SmallText(
                 size: 14,
@@ -311,9 +296,6 @@ class _SignUpFormState extends State<SignUpForm> {
                   hintext: '',
                   prefixIcon: FontAwesomeIcons.house,
                   label: 'House Address'),
-              SizedBox(
-                height: 2.h,
-              ),
               CustomTextField(
                 controller: _city2Controller,
                 validator: (val) {
@@ -329,9 +311,6 @@ class _SignUpFormState extends State<SignUpForm> {
                 prefixIcon: Icons.apartment,
                 label: 'City',
               ),
-              SizedBox(
-                height: 2.h,
-              ),
               CustomTextField(
                   controller: _state2Controller,
                   validator: (val) {
@@ -346,9 +325,6 @@ class _SignUpFormState extends State<SignUpForm> {
                   hintext: '',
                   prefixIcon: FontAwesomeIcons.schoolFlag,
                   label: 'State'),
-              SizedBox(
-                height: 2.h,
-              ),
               CustomTextField(
                   controller: _zip2Controller,
                   keyboardType: TextInputType.phone,
@@ -410,22 +386,23 @@ class _SignUpFormState extends State<SignUpForm> {
       }
 
       auth.user = AppUser(
-          id: auth.user!.id,
-          email: _emailController.text,
-          name: _fNameController.text + " " + _lNameController.text,
-          profile: imageUrl,
-          homeAddress: {
-            'home': _homeController.text,
-            'city': _cityController.text,
-            'state': _stateController.text,
-            'zipCode': _zipController.text,
-          },
-          mailingAddress: {
-            'home': _home2Controller.text,
-            'city': _city2Controller.text,
-            'state': _state2Controller.text,
-            'zipCode': _zip2Controller.text,
-          });
+        id: auth.user!.id,
+        email: _emailController.text,
+        name: _fNameController.text + " " + _lNameController.text,
+        profile: imageUrl,
+        homeAddress: {
+          'home': _homeController.text,
+          'city': _cityController.text,
+          'state': _stateController.text,
+          'zipCode': _zipController.text,
+        },
+        mailingAddress: {
+          'home': _home2Controller.text,
+          'city': _city2Controller.text,
+          'state': _state2Controller.text,
+          'zipCode': _zip2Controller.text,
+        },
+      );
       // print(auth.user!.toJson());
 
       auth.updateProfile(auth.user!).then(

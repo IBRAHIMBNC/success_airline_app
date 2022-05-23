@@ -118,7 +118,7 @@ class UserDetailScreen extends StatelessWidget {
                   color: kprimaryColor.withOpacity(0.05)),
               child: FutureBuilder(
                   future: childCont.fetchData(id: user.id),
-                  builder: (context, snapshot) {
+                  builder: (context, AsyncSnapshot<List<Child>> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
                         child: CupertinoActivityIndicator(
@@ -126,7 +126,7 @@ class UserDetailScreen extends StatelessWidget {
                         ),
                       );
                     }
-                    if (childCont.children.isEmpty)
+                    if (!snapshot.hasData)
                       return Center(
                         child: SmallText(
                           text: 'No data',
@@ -134,16 +134,18 @@ class UserDetailScreen extends StatelessWidget {
                         ),
                       );
 
+                    List<Child> children = snapshot.data!;
+
                     return ListView.separated(
                         padding: EdgeInsets.only(top: 5, left: 4.w, right: 4.w),
                         shrinkWrap: true,
                         itemBuilder: (context, index) =>
-                            _ChildListCard(child: childCont.children[index]),
+                            _ChildListCard(child: children[index]),
                         separatorBuilder: (context, index) => Divider(
                               thickness: 2,
                               color: kprimaryColor,
                             ),
-                        itemCount: childCont.children.length);
+                        itemCount: children.length);
                   })),
           SizedBox(
             height: 2.h,

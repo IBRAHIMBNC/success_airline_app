@@ -72,7 +72,6 @@ class _ChildrenCountScreenState extends State<ChildrenCountScreen> {
             hintext: '',
             prefixIcon: FontAwesomeIcons.children,
             label: 'Children'),
-        SizedBox(height: 4.h),
         const SmallText(
           text: "Children Ages",
           color: Colors.black45,
