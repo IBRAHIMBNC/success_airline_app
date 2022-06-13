@@ -25,7 +25,7 @@ class RoundedButton extends StatelessWidget {
       this.textColor = Colors.white,
       this.size = const Size(90, 7.5),
       this.borderLess = true,
-      this.radius = 30,
+      this.radius = 4,
       this.icon,
       this.image,
       this.isLoading = false})
@@ -41,8 +41,8 @@ class RoundedButton extends StatelessWidget {
         height: size.height.h,
         decoration: BoxDecoration(
             border: !borderLess ? Border.all(color: Colors.black38) : null,
-            borderRadius: BorderRadius.circular(radius),
-            color: bgColor),
+            borderRadius: BorderRadius.circular(radius.h),
+            color: onPressed == null ? Colors.black38 : bgColor),
         child: isLoading
             ? Center(
                 child: CircularProgressIndicator(

@@ -22,6 +22,7 @@ class ChildrenDetialScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Colors.white,
         title: Text(
           'Child List',
@@ -50,15 +51,32 @@ class ChildrenDetialScreen extends StatelessWidget {
                   alignment: Alignment.topCenter,
                   height: 75.h,
                   width: 90.w,
-                  child: ListView.separated(
-                    itemBuilder: (context, index) => _ChildListCard(
-                      child: controller.children[index],
-                    ),
-                    separatorBuilder: (context, index) => SizedBox(
-                      height: 1.h,
-                    ),
-                    itemCount: controller.children.length,
-                  ),
+                  child: controller.children.isEmpty
+                      ? Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              SmallText(
+                                text: 'Add child ',
+                                color: kprimaryColor,
+                                size: 20,
+                              ),
+                              Icon(
+                                Icons.add,
+                                color: kprimaryColor,
+                              )
+                            ],
+                          ),
+                        )
+                      : ListView.separated(
+                          itemBuilder: (context, index) => _ChildListCard(
+                            child: controller.children[index],
+                          ),
+                          separatorBuilder: (context, index) => SizedBox(
+                            height: 1.h,
+                          ),
+                          itemCount: controller.children.length,
+                        ),
                 ),
               );
             }),
@@ -171,7 +189,7 @@ class _ChildListCard extends StatelessWidget {
                 text: child.name,
                 color: Colors.black,
               ),
-              Spacer(),
+              const Spacer(),
               SmallText(
                 size: 13,
                 text: child.DOB,

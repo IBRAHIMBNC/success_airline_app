@@ -2,9 +2,6 @@ import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
 import 'package:circular_bottom_navigation/tab_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/screens/admin_screens/contents_screen.dart';
 import 'package:success_airline/screens/admin_screens/users_screen.dart';
@@ -27,7 +24,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         extendBody: true,
         body: screens[bottomNaviCont.value!],
         bottomNavigationBar: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(15), topRight: Radius.circular(15))),
           child: CircularBottomNavigation(

@@ -13,13 +13,15 @@ class LessonDetailScreen extends StatefulWidget {
   final String image;
   final String title;
   final int index;
+  final Function(bool isContinue)? save;
 
-  LessonDetailScreen(
+  const LessonDetailScreen(
       {Key? key,
       required this.lesson,
       required this.title,
       required this.index,
-      required this.image})
+      required this.image,
+      this.save})
       : super(key: key);
 
   @override
@@ -27,19 +29,22 @@ class LessonDetailScreen extends StatefulWidget {
 }
 
 class _LessonDetailScreenState extends State<LessonDetailScreen> {
-  bool isPause = true;
-  AudioPlayer audio = AudioPlayer();
+  AudioPlayer? audio;
+  bool isPlay = false;
   int currentLessonIndex = 0;
+  bool isContinue = true;
   @override
   void initState() {
     currentLessonIndex = widget.index;
-    audio.onDurationChanged.listen((event) {
-      print(event.inSeconds);
-    });
-    audio.onAudioPositionChanged.listen((event) {
-      print(event.inSeconds);
-    });
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (audio != null) audio?.dispose();
+    widget.save!(isContinue);
+    super.dispose();
   }
 
   @override
@@ -47,6 +52,7 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: SmallText(
@@ -54,7 +60,7 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
           color: Colors.black,
           size: 18,
         ),
-        leading: null,
+        leading: GestureDetector(onTap: () {}),
       ),
       body: Container(
           height: 100.h,
@@ -78,9 +84,9 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
               Container(
                 padding: EdgeInsets.only(bottom: 5.h),
                 alignment: Alignment.center,
-                height: 48.h,
+                height: 45.h,
                 width: 90.w,
-                child: Stack(children: [
+                child: Stack(clipBehavior: Clip.none, children: [
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20),
                     child: Container(
@@ -91,21 +97,21 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                         color: orangeColor,
                       ),
                       child: Column(children: [
-                        Spacer(
+                        const Spacer(
                           flex: 1,
                         ),
-                        SmallText(
+                        const SmallText(
                           text: 'Definition',
                           size: 18,
                         ),
-                        Spacer(),
-                        SmallText(
-                          text: widget.lesson[currentLessonIndex].description,
-                          size: 18,
+                        const Spacer(),
+                        Expanded(
+                          child: SmallText(
+                            text: widget.lesson[currentLessonIndex].description,
+                            size: 18,
+                          ),
                         ),
-                        Spacer(
-                          flex: 2,
-                        ),
+                        const Spacer(),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 2.w),
                           child: Row(
@@ -114,9 +120,11 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                               InkWell(
                                 onTap: () {
                                   if (currentLessonIndex > 0) {
-                                    audio.stop();
+                                    audio?.stop();
                                     setState(() {
                                       currentLessonIndex--;
+                                      isPlay = false;
+                                      audio = null;
                                     });
                                   }
                                 },
@@ -128,13 +136,31 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                               ),
                               InkWell(
                                 onTap: () async {
-                                  final res = await audio.play(widget
-                                      .lesson[currentLessonIndex].audioLink);
-                                  print(widget
-                                      .lesson[currentLessonIndex].audioLink);
+                                  if (audio == null) {
+                                    audio = AudioPlayer();
+                                    await audio!.play(widget
+                                        .lesson[currentLessonIndex].audioLink);
+                                    setState(() {
+                                      isPlay = true;
+                                    });
+                                  } else {
+                                    if (isPlay) {
+                                      audio!.pause();
+                                      setState(() {
+                                        isPlay = false;
+                                      });
+                                    } else {
+                                      audio!.resume();
+                                      setState(() {
+                                        isPlay = true;
+                                      });
+                                    }
+                                  }
                                 },
                                 child: Image.asset(
-                                  'assets/pngs/play.png',
+                                  isPlay
+                                      ? 'assets/pngs/pause.png'
+                                      : 'assets/pngs/play.png',
                                   height: 13.5.h,
                                   fit: BoxFit.cover,
                                 ),
@@ -143,9 +169,12 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                                 onTap: () {
                                   if (currentLessonIndex <
                                       widget.lesson.length - 1) {
-                                    audio.stop();
+                                    audio?.stop();
+
                                     setState(() {
+                                      isPlay = false;
                                       currentLessonIndex++;
+                                      audio = null;
                                     });
                                   }
                                 },
@@ -158,22 +187,27 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                             ],
                           ),
                         ),
-                        Spacer(
+                        const Spacer(
                           flex: 3,
                         ),
                       ]),
                     ),
                   ),
                   Positioned(
-                      bottom: -2.5.h,
+                      bottom: -2.3.h,
                       left: 45.w - 6.h,
                       child: InkWell(
                         onTap: () {
-                          audio.stop();
+                          if (currentLessonIndex == widget.lesson.length - 1) {
+                            isContinue = false;
+                          }
+                          widget.save!(isContinue);
+                          if (audio != null) audio!.stop();
                           Get.back();
                         },
                         child: CircleAvatar(
-                          backgroundImage: AssetImage('assets/pngs/abort.png'),
+                          backgroundImage:
+                              const AssetImage('assets/pngs/abort.png'),
                           radius: 6.h,
                           backgroundColor: Colors.white,
                         ),

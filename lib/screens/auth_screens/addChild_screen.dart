@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -39,7 +40,14 @@ class _AddChildScreenState extends State<AddChildScreen> {
 
   void selectImage() async {
     final _imagePicker = ImagePicker();
-    final xfile = await _imagePicker.pickImage(source: ImageSource.gallery);
+    final xfile = await _imagePicker
+        .pickImage(source: ImageSource.gallery)
+        .catchError((err) {
+      Get.snackbar('Permission Denied', 'Go to Settings and allow photos',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
+    });
     if (xfile != null) {
       setState(() {
         childImage = File(xfile.path);
@@ -96,8 +104,8 @@ class _AddChildScreenState extends State<AddChildScreen> {
               padding: EdgeInsets.symmetric(horizontal: 4.w),
               width: 100.w,
               child: Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).padding.top - (3.h)),
+                padding:
+                    EdgeInsets.only(top: MediaQuery.of(context).padding.top),
                 child: Column(children: [
                   Align(
                       alignment: Alignment.topLeft,
@@ -218,9 +226,6 @@ class _AddChildScreenState extends State<AddChildScreen> {
                               hintext: 'jason Born',
                               prefixIcon: FontAwesomeIcons.baby,
                               label: 'Child Name'),
-                          SizedBox(
-                            height: 2.h,
-                          ),
                           DatePickerField(
                             onSave: (val) {
                               childDetails['DOB'] = val;
@@ -237,7 +242,7 @@ class _AddChildScreenState extends State<AddChildScreen> {
                             },
                           ),
                           SizedBox(
-                            height: 2.h,
+                            height: 3.h,
                           ),
                           CustomTextField(
                               validator: (val) {
@@ -338,6 +343,7 @@ class _AddChildScreenState extends State<AddChildScreen> {
                         if (widget.userDetails != null)
                           RoundedButton(
                             onPressed: onSave,
+                            // onPressed: () {},
                             label: 'NEXT',
                             size: const Size(40, 6),
                           ),
@@ -348,6 +354,12 @@ class _AddChildScreenState extends State<AddChildScreen> {
                     RoundedButton(
                       label: 'ADD CHILD',
                       onPressed: addNewChild,
+                      // onPressed: () async {
+                      //   final AuthController auth = Get.find();
+                      //   final childrenRef =
+                      //       FirebaseFirestore.instance.collection('children');
+
+                      // },
                     ),
                   if (isLoading)
                     Container(

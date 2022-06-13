@@ -1,10 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/instance_manager.dart';
 import 'package:success_airline/controllers/auth_controller.dart';
 import 'package:success_airline/models/childModel.dart';
 
@@ -66,7 +61,9 @@ class ChildrenController extends GetxController {
 
   @override
   void onInit() {
-    fetchData().then((value) => _children = value);
+    if (auth.user != null) {
+      fetchData().then((value) => _children = value.isEmpty ? [] : value);
+    }
     // TODO: implement onInit
     super.onInit();
   }

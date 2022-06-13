@@ -22,6 +22,7 @@ class CustomTextField extends StatefulWidget {
   final bool isSmall;
   final TextEditingController? controller;
   final int? lines;
+  final Function(String? value)? onChanged;
   const CustomTextField({
     Key? key,
     this.hintext,
@@ -40,6 +41,7 @@ class CustomTextField extends StatefulWidget {
     this.lines,
     this.prefix,
     this.prefixIconPadding = EdgeInsets.zero,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -59,16 +61,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(bottom: 2.h),
       width: widget.size.width.w,
-      height: widget.size.height.h,
-      constraints: BoxConstraints(
-          minHeight: widget.size.height.h + 1.h,
-          maxHeight: widget.size.height.h + 2.h),
       child: TextFormField(
+          onChanged: widget.onChanged,
           maxLines: widget.lines ?? 1,
           style: TextStyle(fontSize: 16.sp),
           autovalidateMode:
-              widget.alwaysValidate ? AutovalidateMode.onUserInteraction : null,
+              widget.alwaysValidate ? AutovalidateMode.always : null,
           controller: widget.controller,
           validator: widget.validator,
           onSaved: widget.onSave,
@@ -76,6 +76,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
           obscureText: isVisible,
           obscuringCharacter: '●',
           decoration: InputDecoration(
+            constraints: BoxConstraints(
+                minHeight: widget.size.height.h,
+                maxHeight: widget.size.height.h + 2.h),
             alignLabelWithHint: true,
             prefix: widget.prefix,
             labelText: widget.label,

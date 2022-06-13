@@ -44,16 +44,16 @@ class UserDetailScreen extends StatelessWidget {
                     onTap: () {
                       Get.back();
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_back_ios,
                       color: Colors.white,
                     ),
                   )),
               Positioned(
-                top: 6.h,
+                top: 5.h,
                 child: Container(
                   width: 100.w,
-                  height: 30.h,
+                  height: 31.h,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -86,7 +86,7 @@ class UserDetailScreen extends StatelessWidget {
                         color: Colors.black,
                       ),
                       SizedBox(
-                        height: 3.h,
+                        height: 2.h,
                       ),
                     ],
                   ),
@@ -102,7 +102,7 @@ class UserDetailScreen extends StatelessWidget {
           SizedBox(
             height: 3.h,
           ),
-          SmallText(
+          const SmallText(
             text: 'Children',
             size: 16,
             color: Colors.black54,
@@ -110,7 +110,8 @@ class UserDetailScreen extends StatelessWidget {
           SizedBox(height: 2.h),
           Container(
               constraints: BoxConstraints(
-                maxWidth: 100.w,
+                minWidth: 100.w,
+                // minHeight: 4.h,
                 maxHeight: 27.h,
               ),
               decoration: BoxDecoration(
@@ -119,6 +120,7 @@ class UserDetailScreen extends StatelessWidget {
               child: FutureBuilder(
                   future: childCont.fetchData(id: user.id),
                   builder: (context, AsyncSnapshot<List<Child>> snapshot) {
+                    List<Child> children;
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
                         child: CupertinoActivityIndicator(
@@ -126,22 +128,23 @@ class UserDetailScreen extends StatelessWidget {
                         ),
                       );
                     }
-                    if (!snapshot.hasData)
-                      return Center(
-                        child: SmallText(
+                    if (snapshot.data == null) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 3.h),
+                        child: const SmallText(
                           text: 'No data',
                           color: Colors.black,
                         ),
                       );
-
-                    List<Child> children = snapshot.data!;
+                    }
+                    children = snapshot.data!;
 
                     return ListView.separated(
                         padding: EdgeInsets.only(top: 5, left: 4.w, right: 4.w),
                         shrinkWrap: true,
                         itemBuilder: (context, index) =>
                             _ChildListCard(child: children[index]),
-                        separatorBuilder: (context, index) => Divider(
+                        separatorBuilder: (context, index) => const Divider(
                               thickness: 2,
                               color: kprimaryColor,
                             ),
@@ -150,7 +153,7 @@ class UserDetailScreen extends StatelessWidget {
           SizedBox(
             height: 2.h,
           ),
-          SmallText(
+          const SmallText(
             text: 'Paerent Survey',
             color: Colors.black45,
             size: 16,
@@ -161,38 +164,38 @@ class UserDetailScreen extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2.h),
             width: 100.w,
-            height: 24.h,
+            height: 25.h,
             decoration: BoxDecoration(
                 color: kprimaryColor.withOpacity(0.05),
                 borderRadius: BorderRadius.circular(35)),
             child: Column(children: [
-              SmallText(
+              const SmallText(
                 text: 'How did you hear about us?',
                 color: Colors.black,
                 size: 14,
               ),
               SizedBox(height: 1.h),
               Row(children: [
-                Spacer(
+                const Spacer(
                   flex: 6,
                 ),
-                SmallText(
+                const SmallText(
                   text: 'Answer:',
                   size: 16,
                   color: Colors.black54,
                 ),
-                Spacer(),
+                const Spacer(),
                 SmallText(
                   text: user.hearAboutUs!.replaceAll('_', ' '),
                   size: 14,
                   color: Colors.black,
                 ),
-                Spacer(
+                const Spacer(
                   flex: 6,
                 )
               ]),
               SizedBox(height: 2.h),
-              SmallText(
+              const SmallText(
                 text: 'How many children do you have?',
                 color: Colors.black,
                 size: 14,
@@ -205,7 +208,7 @@ class UserDetailScreen extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(25)),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 2.h),
                   child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -213,7 +216,7 @@ class UserDetailScreen extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SmallText(
+                              const SmallText(
                                 text: 'Children:',
                                 size: 16,
                                 color: Colors.black54,
@@ -229,7 +232,7 @@ class UserDetailScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        VerticalDivider(
+                        const VerticalDivider(
                           indent: 10,
                           endIndent: 10,
                           thickness: 2,
@@ -239,7 +242,7 @@ class UserDetailScreen extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SmallText(
+                              const SmallText(
                                 text: 'Ages:',
                                 size: 16,
                                 color: Colors.black54,
@@ -268,9 +271,9 @@ class UserDetailScreen extends StatelessWidget {
             height: 3.h,
           ),
           Container(
-            height: 20.h,
+            height: 24.h,
             width: 100.w,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(35),
                 color: kprimaryColor.withOpacity(0.05)),
@@ -278,7 +281,7 @@ class UserDetailScreen extends StatelessWidget {
               Expanded(
                 child: Column(
                   children: [
-                    SmallText(
+                    const SmallText(
                       text: 'Home Address',
                       color: Colors.black,
                     ),
@@ -289,7 +292,7 @@ class UserDetailScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SmallText(
+                          const SmallText(
                             text: 'Home:',
                             color: Colors.black45,
                           ),
@@ -305,7 +308,7 @@ class UserDetailScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SmallText(
+                          const SmallText(
                             text: 'City:',
                             color: Colors.black45,
                           ),
@@ -321,7 +324,7 @@ class UserDetailScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SmallText(
+                          const SmallText(
                             text: 'state:',
                             color: Colors.black45,
                           ),
@@ -337,7 +340,7 @@ class UserDetailScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SmallText(
+                          const SmallText(
                             text: 'Zip Code:',
                             color: Colors.black45,
                           ),
@@ -363,7 +366,7 @@ class UserDetailScreen extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 3.w),
                   child: Column(
                     children: [
-                      SmallText(
+                      const SmallText(
                         text: 'Home Address',
                         color: Colors.black,
                       ),
@@ -374,7 +377,7 @@ class UserDetailScreen extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SmallText(
+                            const SmallText(
                               text: 'Home:',
                               color: Colors.black45,
                             ),
@@ -386,11 +389,14 @@ class UserDetailScreen extends StatelessWidget {
                           ],
                         ),
                       ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
                       Expanded(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SmallText(
+                            const SmallText(
                               text: 'City:',
                               color: Colors.black45,
                             ),
@@ -402,11 +408,14 @@ class UserDetailScreen extends StatelessWidget {
                           ],
                         ),
                       ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
                       Expanded(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SmallText(
+                            const SmallText(
                               text: 'state:',
                               color: Colors.black45,
                             ),
@@ -418,11 +427,14 @@ class UserDetailScreen extends StatelessWidget {
                           ],
                         ),
                       ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
                       Expanded(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SmallText(
+                            const SmallText(
                               text: 'Zip Code:',
                               color: Colors.black45,
                             ),
@@ -471,14 +483,14 @@ class _ChildListCard extends StatelessWidget {
               CircleProfileImage(
                 url: child.photo,
               ),
-              SmallText(
+              const SmallText(
                 text: 'Photo',
                 color: Colors.black45,
               )
             ],
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 15,
         ),
         Padding(
@@ -491,12 +503,12 @@ class _ChildListCard extends StatelessWidget {
                 text: 'Name',
                 color: Colors.black38,
               ),
-              Spacer(),
+              const Spacer(),
               const SmallText(
                 text: 'DOB',
                 color: Colors.black38,
               ),
-              Spacer(),
+              const Spacer(),
               const SmallText(
                 text: 'Grade',
                 color: Colors.black38,
@@ -504,7 +516,7 @@ class _ChildListCard extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 20,
         ),
         Padding(
@@ -518,13 +530,13 @@ class _ChildListCard extends StatelessWidget {
                 text: child.name,
                 color: Colors.black,
               ),
-              Spacer(),
+              const Spacer(),
               SmallText(
                 size: 13,
                 text: child.DOB,
                 color: Colors.black,
               ),
-              Spacer(),
+              const Spacer(),
               SmallText(
                 size: 13,
                 text: child.grade,
@@ -533,7 +545,7 @@ class _ChildListCard extends StatelessWidget {
             ],
           ),
         ),
-        Spacer(),
+        const Spacer(),
       ]),
     );
   }

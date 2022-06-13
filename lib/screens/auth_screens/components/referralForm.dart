@@ -1,10 +1,12 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/models/referralPerson.dart';
-import 'package:success_airline/screens/admin_screens/userDetails_screen.dart';
+import 'package:success_airline/screens/buyPremium.dart';
 
 import '../../../constants.dart';
 import '../../../controllers/auth_controller.dart';
@@ -41,23 +43,46 @@ class _ReferralFormState extends State<ReferralForm> {
     super.initState();
   }
 
-  String? firstNameValidator(String? value) {
-    if (value!.trim().isEmpty) {
-      return 'Enter first name';
+  @override
+  void dispose() {
+    referralObj.forEach((element) {
+      element.email.dispose();
+      element.fName.dispose();
+      element.lName.dispose();
+    });
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  String? firstNameValidator(String? value, int index) {
+    if (referralObj[index].fName.text.isNotEmpty ||
+        referralObj[index].lName.text.isNotEmpty ||
+        referralObj[index].email.text.isNotEmpty) {
+      if (value!.trim().isEmpty) {
+        return 'Enter first name';
+      }
     }
     return null;
   }
 
-  String? lastNameValidator(String? value) {
-    if (value!.trim().isEmpty) {
-      return 'Enter Last name';
+  String? lastNameValidator(String? value, int index) {
+    if (referralObj[index].fName.text.isNotEmpty ||
+        referralObj[index].lName.text.isNotEmpty ||
+        referralObj[index].email.text.isNotEmpty) {
+      if (value!.trim().isEmpty) {
+        return 'Enter Last name';
+      }
     }
     return null;
   }
 
-  String? emailValidator(String? value) {
-    if (!GetUtils.isEmail(value!)) {
-      return 'Enter a valid email';
+  String? emailValidator(String? value, int index) {
+    if (referralObj[index].fName.text.isNotEmpty ||
+        referralObj[index].lName.text.isNotEmpty ||
+        referralObj[index].email.text.isNotEmpty) {
+      if (!GetUtils.isEmail(value!.trim())) {
+        return 'Enter a valid email';
+      }
     }
     return null;
   }
@@ -65,7 +90,7 @@ class _ReferralFormState extends State<ReferralForm> {
   void onDone() async {
     bool validate = true;
     List<Map<String, String>> referralList = [];
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 10; i++) {
       if (!referralObj[i].key.currentState!.validate()) validate = false;
     }
     if (!validate) {
@@ -90,8 +115,10 @@ class _ReferralFormState extends State<ReferralForm> {
 
       await auth
           .signUp(name, email, password, widget.userDetails!)
-          .then((value) => Get.close(6))
-          .catchError((err) {
+          .then((value) {
+        PURCHASE_ID = '';
+        Get.close(7);
+      }).catchError((err) {
         String msg = err.toString();
         if (msg.contains('A network error')) {
           msg = 'Please check your internet connection';
@@ -99,22 +126,21 @@ class _ReferralFormState extends State<ReferralForm> {
         if (msg.contains('email-already-in-use')) {
           msg = 'The email you entered is already exists';
         }
-        // Get.close(1);
+
         Get.dialog(
-                CupertinoAlertDialog(
-                  title: const Text('Sign up failed'),
-                  content: Text(msg),
-                  actions: [
-                    CupertinoDialogAction(
-                      child: const Text('OK'),
-                      onPressed: () {
-                        Get.offAll(() => HomeScreen());
-                      },
-                    )
-                  ],
-                ),
-                barrierDismissible: false)
-            .then((value) => Get.close(5));
+            CupertinoAlertDialog(
+              title: const Text('Sign up failed'),
+              content: Text(msg),
+              actions: [
+                CupertinoDialogAction(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Get.close(6);
+                  },
+                )
+              ],
+            ),
+            barrierDismissible: false);
       });
     }
   }
@@ -129,7 +155,7 @@ class _ReferralFormState extends State<ReferralForm> {
         };
         auth.user!.referralList!.insert(i, map);
       } else {
-        break;
+        return;
       }
     }
     auth
@@ -161,6 +187,9 @@ class _ReferralFormState extends State<ReferralForm> {
                   onPressed: widget.userDetails != null ? onDone : update,
                   // onPressed: onDone,
                 ),
+                SizedBox(
+                  height: 2.h,
+                )
               ],
             );
           }
@@ -183,7 +212,7 @@ class _ReferralFormState extends State<ReferralForm> {
                     children: [
                       CustomTextField(
                           controller: referralObj[index].fName,
-                          validator: firstNameValidator,
+                          validator: (val) => firstNameValidator(val, index),
                           isSmall: true,
                           size: const Size(42, 8),
                           hintext: '',
@@ -191,7 +220,7 @@ class _ReferralFormState extends State<ReferralForm> {
                           label: 'First Name'),
                       const Spacer(),
                       CustomTextField(
-                          validator: lastNameValidator,
+                          validator: (val) => lastNameValidator(val, index),
                           controller: referralObj[index].lName,
                           isSmall: true,
                           size: const Size(42, 8),
@@ -200,11 +229,11 @@ class _ReferralFormState extends State<ReferralForm> {
                           label: 'Last Name')
                     ],
                   ),
-                  SizedBox(
-                    height: 1.h,
-                  ),
+                  // SizedBox(
+                  //   height: 1.h,
+                  // ),
                   CustomTextField(
-                      validator: emailValidator,
+                      validator: (val) => emailValidator(val, index),
                       controller: referralObj[index].email,
                       size: Size(90, 8.5),
                       hintext: '',

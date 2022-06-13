@@ -28,8 +28,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   void selectImage() async {
     final _imagePicker = ImagePicker();
-    final xfile = await _imagePicker.pickImage(
-        source: ImageSource.gallery, imageQuality: 60);
+    final xfile = await _imagePicker
+        .pickImage(source: ImageSource.gallery, imageQuality: 60)
+        .catchError((err) {
+      Get.snackbar('Permission Denied', 'Go to Settings and allow photos',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
+    });
     if (xfile != null) {
       setState(() {
         image = File(xfile.path);
@@ -56,10 +62,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: SvgPicture.asset(
                     'assets/svgs/Path .svg',
                     width: 55.w,
-                    fit: BoxFit.fitWidth,
+                    height: 20.h,
+                    fit: BoxFit.contain,
                   )),
               Positioned(
-                  top: 5.h,
+                  top: 6.h,
                   left: 3.5.w,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

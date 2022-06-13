@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDUXSXG5acrYLkq65mY_4XBX2XYgJNSyDY',
-    appId: '1:753797928888:android:f2264918003c43be65614d',
+    appId: '1:753797928888:android:7a62893cfcfbafd065614d',
     messagingSenderId: '753797928888',
     projectId: 'success-airline-lab123',
     storageBucket: 'success-airline-lab123.appspot.com',
@@ -59,11 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAzWmcuqk0kibS-mWBD-KvH9eI3n-d1D3Y',
-    appId: '1:753797928888:ios:7c34e3b852aeaff465614d',
+    appId: '1:753797928888:ios:fdf513029f3170cd65614d',
     messagingSenderId: '753797928888',
     projectId: 'success-airline-lab123',
     storageBucket: 'success-airline-lab123.appspot.com',
-    iosClientId: '753797928888-215cq89ni4jkdfvpj5lma0i9rckv3sd1.apps.googleusercontent.com',
-    iosBundleId: 'com.example.successAirline',
+    iosClientId: '753797928888-bol28e1u4gmjejg9d69oejl3endecksr.apps.googleusercontent.com',
+    iosBundleId: 'com.kridin.successairlines',
   );
 }

@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:753797928888:android:f2264918003c43be65614d",
+        "mobilesdk_app_id": "1:753797928888:android:7a62893cfcfbafd065614d",
         "android_client_info": {
-          "package_name": "com.example.successAirline"
+          "package_name": "com.kridin.successairlines"
         }
       },
       "oauth_client": [
@@ -29,6 +29,13 @@
             {
               "client_id": "753797928888-83dlnn3jh8hoekvu4saat5nl77nlp9lt.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "753797928888-215cq89ni4jkdfvpj5lma0i9rckv3sd1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kridin.successairlines"
+              }
             }
           ]
         }

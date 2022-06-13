@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
+import 'package:success_airline/controllers/lessons_controller.dart';
 import 'package:success_airline/screens/categoryDetails_screen.dart';
 
 import 'package:success_airline/screens/profile_screen/profile_screen.dart';
@@ -19,44 +20,6 @@ import '../widgets/smallText.dart';
 
 class HomeScreen extends StatelessWidget {
   final AuthController auth = Get.find();
-  // List<Map<String, dynamic>> list = [
-  //   {
-  //     'title': 'Aerodynamics',
-  //     'image': SvgPicture.asset('assets/svgs/helmet.svg')
-  //   },
-  //   {
-  //     'title': 'Business owners',
-  //     'image': Lottie.asset('assets/json/meeting.json', fit: BoxFit.cover)
-  //   },
-  //   {
-  //     'title': 'College Professor',
-  //     'image': SvgPicture.asset('assets/svgs/alert.svg')
-  //   },
-  //   {
-  //     'title': 'Construction',
-  //     'image': SvgPicture.asset('assets/svgs/helmet.svg')
-  //   },
-  //   {
-  //     'title': 'Doctors',
-  //     'image': Padding(
-  //       padding: const EdgeInsets.only(left: 8, top: 5, bottom: 5),
-  //       child: Lottie.asset('assets/json/doctor.json', fit: BoxFit.cover),
-  //     )
-  //   },
-  //   {'title': 'Drivers', 'image': SvgPicture.asset('assets/svgs/alert.svg')},
-  //   {'title': 'Emergency', 'image': SvgPicture.asset('assets/svgs/alert.svg')},
-  //   {
-  //     'title': 'Life Skills',
-  //     'image': SvgPicture.asset('assets/svgs/alert.svg')
-  //   },
-  //   {'title': 'Artist', 'image': SvgPicture.asset('assets/svgs/alert.svg')},
-  //   {
-  //     'title': 'Entertainment',
-  //     'image': SvgPicture.asset('assets/svgs/alert.svg')
-  //   },
-  //   {'title': 'Sports', 'image': SvgPicture.asset('assets/svgs/alert.svg')},
-  //   {'title': 'arming', 'image': SvgPicture.asset('assets/svgs/alert.svg')}
-  // ];
 
   Map<String, String> allCategories = {
     'Doctors': 'assets/json/doctor.json',
@@ -98,16 +61,17 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
-            child: GetBuilder<AuthController>(
-              builder: (controller) => SizedBox(
-                width: 90.w,
+            child: SizedBox(
+              width: 100.w,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4.w),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
                           const BigText(
-                            text: 'Success Airline',
+                            text: 'Success Airlines',
                             color: kprimaryColor,
                           ),
                           const Spacer(),
@@ -117,23 +81,17 @@ class HomeScreen extends StatelessWidget {
                             },
                             child: GetBuilder<AuthController>(
                                 builder: (controller) {
-                              if (!controller.initialized) {
+                              if (controller.user != null) {
                                 return CircleAvatar(
                                   backgroundColor: kprimaryColor,
                                   radius: 3.1.h,
-                                  backgroundImage: auth.user == null
-                                      ? null
-                                      : CachedNetworkImageProvider(
-                                          auth.user!.profile),
+                                  backgroundImage: CachedNetworkImageProvider(
+                                      auth.user!.profile),
                                 );
                               }
                               return CircleAvatar(
                                 backgroundColor: kprimaryColor,
                                 radius: 3.1.h,
-                                backgroundImage: auth.user == null
-                                    ? null
-                                    : CachedNetworkImageProvider(
-                                        auth.user!.profile),
                               );
                             }),
                           ),
@@ -156,12 +114,13 @@ class HomeScreen extends StatelessWidget {
                       //             style: TextStyle(
                       //               fontSize: 16.sp,
                       //             ),
-                      //             decoration: InputDecoration(
-                      //                 hintStyle: TextStyle(fontSize: 20),
+                      //             decoration:const InputDecoration(
+                      //                 hintStyle:TextStyle(fontSize: 20),
                       //                 border: InputBorder.none,
                       //                 hintText: 'Search...')),
                       //       ),
                       //       RoundedIconButton(
+                      //         radius: 5,
                       //         onTap: () {
                       //           print('signout');
                       //           auth.signOut();
@@ -184,28 +143,57 @@ class HomeScreen extends StatelessWidget {
                         size: 18,
                       ),
                       SizedBox(
-                        height: 23.h,
-                        child: ListView.separated(
-                            shrinkWrap: true,
-                            padding: EdgeInsets.symmetric(horizontal: 4.w),
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) => SizedBox(
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        child: _ContinueLearningCard(
-                                          index: index,
+                          height: 24.h,
+                          child: GetBuilder<LessonsController>(
+                            init: Get.put(LessonsController()),
+                            builder: (cont) => FutureBuilder(
+                              future: cont.fetchContinueCategory(),
+                              builder: ((context,
+                                  AsyncSnapshot<List<Map<String, dynamic>>>
+                                      snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                }
+                                if (snapshot.data == null ||
+                                    snapshot.data!.isEmpty) {
+                                  return Center(
+                                    child: Lottie.asset(
+                                      'assets/json/wait_doll.json',
+                                    ),
+                                  );
+                                }
+
+                                final list = snapshot.data;
+                                return ListView.separated(
+                                    shrinkWrap: true,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 4.w),
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) => SizedBox(
+                                          child: InkWell(
+                                            onTap: () {
+                                              Get.to(() => CategoryDetailScreen(
+                                                  title: list![index]['name'],
+                                                  image: allCategories[
+                                                      list[index]['name']]!));
+                                            },
+                                            child: _ContinueLearningCard(
+                                              image: allCategories[list![index]
+                                                  ['name']]!,
+                                              category: list[index]['name'],
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                      Spacer(),
-                                    ],
-                                  ),
-                                ),
-                            separatorBuilder: (context, index) => SizedBox(
-                                  width: 4.w,
-                                ),
-                            itemCount: allCategories.length),
-                      ),
+                                    separatorBuilder: (context, index) =>
+                                        SizedBox(
+                                          width: 4.w,
+                                        ),
+                                    itemCount: list == null ? 0 : list.length);
+                              }),
+                            ),
+                          )),
                       const SmallText(
                         text: 'All categories',
                         color: Colors.black,
@@ -291,20 +279,22 @@ class _AllCategoriesItemCard extends StatelessWidget {
                     ),
                   ),
                 ),
-              Spacer(),
+              const Spacer(),
               SmallText(
                 size: 16,
                 text: category,
                 color: Colors.black,
               ),
-              Spacer(
+              const Spacer(
                 flex: 2,
               ),
-              const RoundedIconButton(
+              RoundedIconButton(
+                  radius: 4,
                   icon: Icon(
-                Icons.arrow_forward_ios,
-                color: purpleColor,
-              )),
+                    Icons.arrow_forward_ios,
+                    color: purpleColor,
+                    size: 3.h,
+                  )),
               SizedBox(
                 width: 4.w,
               )
@@ -317,94 +307,92 @@ class _AllCategoriesItemCard extends StatelessWidget {
 }
 
 class _ContinueLearningCard extends StatelessWidget {
-  _ContinueLearningCard({
-    Key? key,
-    required this.index,
-  }) : super(key: key);
+  final String image;
+  final String category;
 
-  List<Map<String, dynamic>> list = [
-    {
-      'title': 'Aerodynamics',
-      'image': 'assets/svgs/helmet.svg',
-    },
-    {
-      'title': 'Business owners',
-      'image': 'assets/json/meeting.json',
-    },
-    {
-      'title': 'College Professor',
-      'image': 'assets/svgs/alert.svg',
-    },
-    {
-      'title': 'Construction',
-      'image': 'assets/svgs/helmet.svg',
-    },
-    {
-      'title': 'Doctors',
-      'image': 'assets/json/doctor.json',
-    },
-    {
-      'title': 'Drivers',
-      'image': 'assets/svgs/alert.svg',
-    },
-    {
-      'title': 'Emergency',
-      'image': 'assets/svgs/alert.svg',
-    }
-  ];
-  final int index;
+  const _ContinueLearningCard({
+    Key? key,
+    required this.image,
+    required this.category,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10, bottom: 0),
-      child: Stack(children: [
-        Align(
-          alignment: Alignment.topCenter,
-          child: Container(
-            padding: EdgeInsets.only(
-                left: 4.w,
-                right: 4.w,
-                top: index == 1 || index == 4 ? 1.h : 3.h),
-            alignment: Alignment.center,
-            height: 20.h,
-            width: 40.w,
-            decoration: BoxDecoration(
-              boxShadow: const [
-                BoxShadow(
-                    color: Colors.black26, blurRadius: 5, offset: Offset(0, 2))
-              ],
-              borderRadius: BorderRadius.circular(25),
-              color: Colors.white,
-            ),
-            child: Column(children: [
-              SizedBox(
-                  height: index == 1 || index == 5 ? 13.h : 9.h,
-                  width: 30.w,
-                  child: index == 1 || index == 4
-                      ? Lottie.asset(list[index]['image'])
-                      : SvgPicture.asset(list[index]['image'])),
-              if (index != 1 && index != 4)
-                SizedBox(
-                  height: 2.h,
-                ),
-              SmallText(
-                text: list[index]['title'],
-                color: Colors.black,
-                size: 12,
-              )
-            ]),
-          ),
-        ),
-        Positioned(
-            bottom: 0.4.h,
-            right: 17.w,
-            child: const RoundedIconButton(
-              icon: Icon(
-                Icons.arrow_forward_ios,
-                color: purpleColor,
+      padding: EdgeInsets.only(top: 2.h, bottom: 0),
+      child: SizedBox(
+        height: 10.h,
+        width: 30.w,
+        child: Stack(clipBehavior: Clip.hardEdge, children: [
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              padding: EdgeInsets.only(left: 4.w, right: 4.w, top: 2.h),
+              alignment: Alignment.center,
+              height: 20.h,
+              width: 40.w,
+              decoration: BoxDecoration(
+                boxShadow: const [
+                  BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 5,
+                      offset: Offset(0, 2))
+                ],
+                borderRadius: BorderRadius.circular(25),
+                color: Colors.white,
               ),
-            ))
-      ]),
+              child: Column(children: [
+                if (image.contains('.json'))
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: category.toLowerCase() == 'doctors' ? 0 : 2.w),
+                    child: SizedBox(
+                      height: category.toLowerCase() == 'doctors' ? 7.h : 12.h,
+                      width: 23.w,
+                      child: Lottie.asset(
+                        image,
+                        fit: category.toLowerCase() == 'doctors'
+                            ? BoxFit.cover
+                            : BoxFit.contain,
+                      ),
+                    ),
+                  )
+                else
+                  Padding(
+                    padding: EdgeInsets.all(2.h),
+                    child: SizedBox(
+                      height: 6.h,
+                      width: 6.h,
+                      child: Image.asset(
+                        image,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                const Spacer(),
+                SmallText(
+                  text: category,
+                  color: Colors.black,
+                  size: 14,
+                ),
+                const Spacer(
+                  flex: 4,
+                )
+              ]),
+            ),
+          ),
+          Positioned(
+              bottom: 0.h,
+              right: 11.w,
+              child: RoundedIconButton(
+                radius: 4,
+                icon: Icon(
+                  Icons.arrow_forward_ios,
+                  color: purpleColor,
+                  size: 3.h,
+                ),
+              ))
+        ]),
+      ),
     );
   }
 }
@@ -413,11 +401,13 @@ class RoundedIconButton extends StatelessWidget {
   final Icon icon;
   final Function()? onTap;
   final Color bgColor;
+  final double radius;
   const RoundedIconButton({
     Key? key,
     required this.icon,
     this.onTap,
     this.bgColor = Colors.white,
+    this.radius = 3,
   }) : super(key: key);
 
   @override
@@ -425,7 +415,10 @@ class RoundedIconButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(0.7.h),
+        alignment: Alignment.center,
+        height: radius.h,
+        width: radius.h,
+        padding: EdgeInsets.all(0.2.h),
         child: icon,
         decoration: BoxDecoration(
           boxShadow: const [

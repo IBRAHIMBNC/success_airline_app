@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.successAirline">
+    package="com.kridin.successairlines">
+
+    <uses-permission android:name="com.android.vending.BILLING"/>
    <application
-        android:label="success_airline"
+        android:label="Success Airlines"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

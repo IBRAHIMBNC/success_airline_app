@@ -7,6 +7,7 @@ import 'package:get/instance_manager.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/constants.dart';
 import 'package:success_airline/controllers/auth_controller.dart';
+import 'package:success_airline/controllers/child_controller.dart';
 import 'package:success_airline/models/appuser.dart';
 import 'package:success_airline/screens/admin_screens/userDetails_screen.dart';
 import 'package:success_airline/widgets/bigTexT.dart';
@@ -27,18 +28,19 @@ class UserScreen extends StatelessWidget {
       body: SingleChildScrollView(
           child: Center(
         child: Container(
-          padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-          width: 90.w,
+          padding: EdgeInsets.only(
+              top: MediaQuery.of(context).padding.top, right: 3.w, left: 3.w),
+          width: 100.w,
           child: Container(
             width: 90.w,
             child: Column(children: [
               SizedBox(
                 height: 1.h,
               ),
-              Align(
+              const Align(
                 alignment: Alignment.topLeft,
-                child: const BigText(
-                  text: 'Success Airline',
+                child: BigText(
+                  text: 'Success Airlines',
                   color: kprimaryColor,
                 ),
               ),
@@ -48,7 +50,7 @@ class UserScreen extends StatelessWidget {
               Container(
                 padding: EdgeInsets.only(left: 4.w, right: 2.w),
                 alignment: Alignment.center,
-                height: 7.h,
+                height: 8.h,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     color: kprimaryColor.withOpacity(0.1)),
@@ -61,16 +63,17 @@ class UserScreen extends StatelessWidget {
                             searchKeyword.value = val;
                           },
                           controller: searchCont,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               hintStyle: TextStyle(fontSize: 20),
                               border: InputBorder.none,
                               hintText: 'Search...')),
                     ),
                     RoundedIconButton(
+                      radius: 6,
                       onTap: () {},
                       icon: Icon(
                         Icons.search,
-                        size: 4.h,
+                        size: 5.h,
                         color: kprimaryColor,
                       ),
                     )
@@ -94,13 +97,14 @@ class UserScreen extends StatelessWidget {
                               ),
                             );
                           }
-                          if (!snapshot.hasData)
-                            return Center(
+                          if (!snapshot.hasData) {
+                            return const Center(
                               child: SmallText(
                                 text: 'No data',
                                 color: Colors.black,
                               ),
                             );
+                          }
                           List<AppUser> users = snapshot.data!;
                           return ListView.separated(
                             padding: EdgeInsets.only(top: 2.h, bottom: 9.h),
@@ -155,13 +159,13 @@ class _userCard extends StatelessWidget {
             radius: 3.h,
           ),
         ),
-        Spacer(),
+        const Spacer(),
         SmallText(
           text: user.name,
           color: Colors.black,
           size: 16,
         ),
-        Spacer(
+        const Spacer(
           flex: 10,
         )
       ]),

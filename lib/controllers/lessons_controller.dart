@@ -1,20 +1,19 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/instance_manager.dart';
+import 'package:success_airline/controllers/auth_controller.dart';
 import 'package:success_airline/models/lessonModel.dart';
-import 'package:uuid/uuid.dart';
 
 class LessonsController extends GetxController {
+  final AuthController auth = Get.find();
   final lessonRef = FirebaseFirestore.instance.collection('allCategories');
+  final continueCatgoryRef =
+      FirebaseFirestore.instance.collection('continueCategories');
   Reference storageRef = FirebaseStorage.instance.ref();
   List<Lesson> _lessons = [];
+  List<Map<String, dynamic>> continuedCategories = [];
 
   List<Lesson> get lessons {
     return [..._lessons];
@@ -46,6 +45,35 @@ class LessonsController extends GetxController {
       temp.add(Lesson.fromFirebase(lesson));
     });
     _lessons = [...temp];
+    update();
+  }
+
+  Future<List<Map<String, dynamic>>> fetchContinueCategory() async {
+    final data = await continueCatgoryRef
+        .doc(auth.user!.id)
+        .collection('category')
+        .where('isContinue', isEqualTo: true)
+        .get()
+        .catchError((err) {
+      print(err);
+    });
+    final temp = [];
+    data.docs.forEach((categoty) {
+      temp.add(categoty.data());
+    });
+    continuedCategories = [...temp];
+
+    return continuedCategories;
+  }
+
+  void saveContinueState(bool isContinue, String category) async {
+    continuedCategories.add({'name': category, 'isContinue': isContinue});
+    await continueCatgoryRef
+        .doc(auth.user!.id)
+        .collection('category')
+        .doc(category)
+        .set({'name': category, 'isContinue': isContinue});
+
     update();
   }
 }

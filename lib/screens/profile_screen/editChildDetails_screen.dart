@@ -36,7 +36,14 @@ class _EditChildDetailScreenState extends State<EditChildDetailScreen> {
 
   void selectImage() async {
     final _imagePicker = ImagePicker();
-    final xfile = await _imagePicker.pickImage(source: ImageSource.gallery);
+    final xfile = await _imagePicker
+        .pickImage(source: ImageSource.gallery)
+        .catchError((err) {
+      Get.snackbar('Permission Denied', 'Go to Settings and allow photos',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
+    });
     if (xfile != null) {
       setState(() {
         childImage = File(xfile.path);
@@ -75,8 +82,7 @@ class _EditChildDetailScreenState extends State<EditChildDetailScreen> {
             padding: EdgeInsets.symmetric(horizontal: 4.w),
             width: 100.w,
             child: Padding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).padding.top - (3.h)),
+              padding: EdgeInsets.only(top: 3.h),
               child: Column(children: [
                 Align(
                     alignment: Alignment.topLeft,
@@ -126,9 +132,12 @@ class _EditChildDetailScreenState extends State<EditChildDetailScreen> {
                             ),
                             Positioned(
                               top: 4.h,
-                              right: 4.h,
+                              right: 4.5.h,
                               child: RoundedIconButton(
-                                  icon: Icon(FontAwesomeIcons.camera)),
+                                  icon: Icon(
+                                FontAwesomeIcons.camera,
+                                size: 2.h,
+                              )),
                             )
                           ],
                         ),
@@ -155,7 +164,7 @@ class _EditChildDetailScreenState extends State<EditChildDetailScreen> {
                             prefixIcon: FontAwesomeIcons.baby,
                             label: 'Child Name'),
                         SizedBox(
-                          height: 2.h,
+                          height: 1.h,
                         ),
                         DatePickerField(
                           controller: dateCont,
@@ -170,7 +179,7 @@ class _EditChildDetailScreenState extends State<EditChildDetailScreen> {
                           },
                         ),
                         SizedBox(
-                          height: 2.h,
+                          height: 3.h,
                         ),
                         CustomTextField(
                             controller: gradeCont,

@@ -1,4 +1,4 @@
-package com.example.successAirline
+package com.kridin.successairlines
 
 import io.flutter.embedding.android.FlutterActivity
 

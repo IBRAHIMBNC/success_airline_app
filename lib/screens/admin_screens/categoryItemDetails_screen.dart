@@ -4,12 +4,9 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:get/instance_manager.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/constants.dart';
@@ -60,6 +57,9 @@ class AddCategoryItemDetailScreen extends StatelessWidget {
           .catchError((err) {
         print(err);
       });
+      if (result != null) {
+        audioFile.value = File(result.files.first.path!);
+      }
     }
   }
 
@@ -71,6 +71,7 @@ class AddCategoryItemDetailScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: BigText(
             size: 22,
             text: category,
@@ -95,7 +96,7 @@ class AddCategoryItemDetailScreen extends StatelessWidget {
           ),
         ),
         body: SingleChildScrollView(
-          child: Container(
+          child: SizedBox(
             // height: .h,
             width: 100.w,
             child: Column(children: [
@@ -125,7 +126,6 @@ class AddCategoryItemDetailScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       CustomTextField(
-                        prefixIconPadding: EdgeInsets.only(bottom: 20),
                         prefixIcon: FontAwesomeIcons.t,
                         label: 'Title',
                         onSave: (val) {
@@ -209,7 +209,10 @@ class AddCategoryItemDetailScreen extends StatelessWidget {
                 () => RoundedButton(
                   isLoading: isLoading.value,
                   label: 'Publish',
-                  onPressed: publish,
+                  onPressed: () {
+                    // Focus.of(context).unfocus();
+                    publish();
+                  },
                 ),
               ),
               SizedBox(

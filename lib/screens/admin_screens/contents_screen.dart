@@ -1,9 +1,5 @@
 import 'dart:collection';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
-import 'package:circular_bottom_navigation/tab_item.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,17 +7,15 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/screens/admin_screens/categoryItemDetails_screen.dart';
-import 'package:success_airline/screens/admin_screens/users_screen.dart';
 
 import '../../constants.dart';
 import '../../controllers/auth_controller.dart';
 import '../../widgets/bigTexT.dart';
 import '../../widgets/smallText.dart';
 import '../home_screen.dart';
-import '../profile_screen/profile_screen.dart';
 
 class ContentScreen extends StatelessWidget {
-  Map<String, String> allCategories = {
+  final Map<String, String> allCategories = {
     'Doctors': 'assets/json/doctor.json',
     'Life Skills': 'assets/json/life skills.json',
     'Artist': 'assets/json/artist.json',
@@ -55,8 +49,8 @@ class ContentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    allCategories = SplayTreeMap<String, dynamic>.from(
-        allCategories, (a, b) => a.compareTo(b)).cast();
+    allCategories.addAll(SplayTreeMap<String, dynamic>.from(
+        allCategories, (a, b) => a.compareTo(b)).cast());
     return Scaffold(
       extendBody: true,
       backgroundColor: Colors.white,
@@ -64,50 +58,67 @@ class ContentScreen extends StatelessWidget {
         child: Center(
           child: Container(
             padding: EdgeInsets.only(
-                top: MediaQuery.of(context).padding.top, left: 20, right: 20),
+                top: MediaQuery.of(context).padding.top, left: 3.w, right: 3.w),
             width: 100.w,
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               SizedBox(
                 height: 1.h,
               ),
-              const BigText(
-                text: 'Success Airline',
-                color: kprimaryColor,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const BigText(
+                    text: 'Success Airlines',
+                    color: kprimaryColor,
+                  ),
+                  RoundedIconButton(
+                    onTap: () {
+                      auth.signOut();
+                    },
+                    icon: Icon(
+                      FontAwesomeIcons.arrowRightFromBracket,
+                      color: Colors.white,
+                      size: 3.h,
+                    ),
+                    radius: 5,
+                    bgColor: kprimaryColor,
+                  )
+                ],
               ),
               SizedBox(
                 height: 2.h,
               ),
-              Container(
-                padding: EdgeInsets.only(left: 4.w, right: 2.w),
-                alignment: Alignment.center,
-                height: 7.h,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: kprimaryColor.withOpacity(0.1)),
-                child: Row(
-                  children: [
-                    const Expanded(
-                      child: TextField(
-                          decoration: InputDecoration(
-                              hintStyle: TextStyle(fontSize: 20),
-                              border: InputBorder.none,
-                              hintText: 'Search...')),
-                    ),
-                    RoundedIconButton(
-                      onTap: () {
-                        auth.signOut();
-                        // auth.signOut();
-                      },
-                      icon: Icon(
-                        Icons.search,
-                        size: 4.h,
-                        color: kprimaryColor,
-                      ),
-                    )
-                  ],
-                ),
-              ),
+              // Container(
+              //   padding: EdgeInsets.only(left: 4.w, right: 2.w),
+              //   alignment: Alignment.center,
+              //   height: 7.h,
+              //   decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(15),
+              //       color: kprimaryColor.withOpacity(0.1)),
+              //   child: Row(
+              //     children: [
+              //       const Expanded(
+              //         child: TextField(
+              //             decoration: InputDecoration(
+              //                 hintStyle: TextStyle(fontSize: 20),
+              //                 border: InputBorder.none,
+              //                 hintText: 'Search...')),
+              //       ),
+              //       RoundedIconButton(
+              //         onTap: () {
+              //           auth.signOut();
+              //           // auth.signOut();
+              //         },
+              //         icon: Icon(
+              //           Icons.search,
+              //           size: 4.h,
+              //           color: kprimaryColor,
+              //         ),
+              //       )
+              //     ],
+              //   ),
+              // ),
               SizedBox(
                 height: 2.h,
               ),
@@ -202,11 +213,13 @@ class _AllCategoriesItemCard extends StatelessWidget {
               const Spacer(
                 flex: 2,
               ),
-              const RoundedIconButton(
+              RoundedIconButton(
+                  radius: 4,
                   icon: Icon(
-                Icons.arrow_forward_ios,
-                color: purpleColor,
-              )),
+                    Icons.arrow_forward_ios,
+                    color: purpleColor,
+                    size: 3.h,
+                  )),
               SizedBox(
                 width: 3.w,
               )

@@ -41,6 +41,7 @@ class _HearAboutUScreenState extends State<HearAboutUScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        centerTitle: true,
         iconTheme: IconTheme.of(context).copyWith(color: Colors.black),
         title: const BigText(
           text: 'Parent Survey',
@@ -51,13 +52,14 @@ class _HearAboutUScreenState extends State<HearAboutUScreen> {
       ),
       body: SingleChildScrollView(
         child: SizedBox(
-          height: 100.h,
+          height: 89.h,
           width: 100.w,
-          child: Column(children: [
-            Lottie.asset('assets/json/plane.json', height: 20.h),
+          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            Lottie.asset('assets/json/socialMedia.json',
+                height: 18.h, fit: BoxFit.cover),
             const BigText(
               fontWeight: FontWeight.normal,
-              size: 22,
+              size: 20,
               text: 'How did you hear\nabout us ?',
               color: Colors.black,
             ),
@@ -65,12 +67,13 @@ class _HearAboutUScreenState extends State<HearAboutUScreen> {
               height: 2.h,
             ),
             RoundedButton(
+              size: Size(90, 6.5),
               onPressed: () {
                 setState(() {
                   about = AboutUs.club_house;
                 });
               },
-              radius: 15,
+              radius: 2,
               label: 'Club House',
               bgColor: about == AboutUs.club_house ? purpleColor : Colors.white,
               borderLess: about == AboutUs.club_house ? true : false,
@@ -79,12 +82,13 @@ class _HearAboutUScreenState extends State<HearAboutUScreen> {
             ),
             SizedBox(height: 2.h),
             RoundedButton(
+              size: Size(90, 6.5),
               onPressed: () {
                 setState(() {
                   about = AboutUs.reffered_by_a_friend;
                 });
               },
-              radius: 15,
+              radius: 2,
               label: 'Referred by a Friend',
               bgColor: about == AboutUs.reffered_by_a_friend
                   ? purpleColor
@@ -96,12 +100,13 @@ class _HearAboutUScreenState extends State<HearAboutUScreen> {
             ),
             SizedBox(height: 2.h),
             RoundedButton(
+              size: Size(90, 6.5),
               onPressed: () {
                 setState(() {
                   about = AboutUs.got_our_email;
                 });
               },
-              radius: 15,
+              radius: 2,
               label: 'Got our Email',
               bgColor:
                   about == AboutUs.got_our_email ? purpleColor : Colors.white,
@@ -111,12 +116,13 @@ class _HearAboutUScreenState extends State<HearAboutUScreen> {
             ),
             SizedBox(height: 2.h),
             RoundedButton(
+              size: Size(90, 6.5),
               onPressed: () {
                 setState(() {
                   about = AboutUs.twitter;
                 });
               },
-              radius: 15,
+              radius: 2,
               label: 'Twitter',
               bgColor: about == AboutUs.twitter ? purpleColor : Colors.white,
               borderLess: about == AboutUs.twitter ? true : false,
@@ -124,12 +130,13 @@ class _HearAboutUScreenState extends State<HearAboutUScreen> {
             ),
             SizedBox(height: 2.h),
             RoundedButton(
+              size: Size(90, 6.5),
               onPressed: () {
                 setState(() {
                   about = AboutUs.facebook;
                 });
               },
-              radius: 15,
+              radius: 2,
               label: 'Facebook',
               bgColor: about == AboutUs.facebook ? purpleColor : Colors.white,
               borderLess: about == AboutUs.facebook ? true : false,
@@ -138,12 +145,13 @@ class _HearAboutUScreenState extends State<HearAboutUScreen> {
             ),
             SizedBox(height: 2.h),
             RoundedButton(
+              size: Size(90, 6.5),
               onPressed: () {
                 setState(() {
                   about = AboutUs.instagram;
                 });
               },
-              radius: 15,
+              radius: 2,
               label: 'Instagram',
               bgColor: about == AboutUs.instagram ? purpleColor : Colors.white,
               borderLess: about == AboutUs.instagram ? true : false,

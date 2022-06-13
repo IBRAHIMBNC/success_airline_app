@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/controllers/child_controller.dart';
+import 'package:success_airline/screens/auth_screens/hearAbout_screen.dart';
 import 'package:success_airline/screens/auth_screens/referral_screen.dart';
+import 'package:success_airline/screens/profile_screen/aboutUs_screen.dart';
 
 import '../../constants.dart';
 import '../../controllers/auth_controller.dart';
@@ -36,13 +38,13 @@ class ProfileScreen extends StatelessWidget {
                 onTap: () {
                   Get.back();
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.arrow_back_ios,
                   color: Colors.white,
                 ),
               )),
           Positioned(
-              top: 6.h,
+              top: 5.h,
               child: SizedBox(
                 width: 100.w,
                 height: 75.h,
@@ -59,7 +61,7 @@ class ProfileScreen extends StatelessWidget {
                       Align(
                         alignment: Alignment.center,
                         child: CircleAvatar(
-                          radius: 9.h,
+                          radius: 8.5.h,
                           backgroundColor: Colors.transparent,
                           backgroundImage:
                               CachedNetworkImageProvider(auth.user!.profile),
@@ -90,7 +92,7 @@ class ProfileScreen extends StatelessWidget {
                     textColor: Colors.black,
                     bgColor: Colors.black.withOpacity(0.05),
                     label: 'My Account',
-                    radius: 15,
+                    radius: 3,
                     icon: const Icon(
                       Icons.arrow_forward,
                       color: kprimaryColor,
@@ -111,7 +113,7 @@ class ProfileScreen extends StatelessWidget {
                     textColor: Colors.black,
                     bgColor: Colors.black.withOpacity(0.05),
                     label: 'Children Details',
-                    radius: 15,
+                    radius: 3,
                     icon: const Icon(
                       Icons.arrow_forward,
                       color: kprimaryColor,
@@ -132,7 +134,7 @@ class ProfileScreen extends StatelessWidget {
                     textColor: Colors.black,
                     bgColor: Colors.black.withOpacity(0.05),
                     label: 'Referral',
-                    radius: 15,
+                    radius: 3,
                     icon: const Icon(
                       Icons.arrow_forward,
                       color: kprimaryColor,
@@ -142,6 +144,9 @@ class ProfileScreen extends StatelessWidget {
                     height: 2.h,
                   ),
                   RoundedButton(
+                    onPressed: () {
+                      Get.to(() => AboutUsScreen());
+                    },
                     image: Image.asset(
                       'assets/pngs/info.png',
                       height: 4.h,
@@ -150,7 +155,7 @@ class ProfileScreen extends StatelessWidget {
                     textColor: Colors.black,
                     bgColor: Colors.black.withOpacity(0.05),
                     label: 'About us',
-                    radius: 15,
+                    radius: 3,
                     icon: const Icon(
                       Icons.arrow_forward,
                       color: kprimaryColor,
@@ -173,7 +178,7 @@ class ProfileScreen extends StatelessWidget {
                     textColor: Colors.black,
                     bgColor: Colors.black.withOpacity(0.05),
                     label: 'Log out',
-                    radius: 15,
+                    radius: 3,
                     icon: const Icon(
                       Icons.arrow_forward,
                       color: kprimaryColor,

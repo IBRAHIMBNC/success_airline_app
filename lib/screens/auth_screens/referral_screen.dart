@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../widgets/bigTexT.dart';
@@ -25,17 +26,14 @@ class ReferralScreen extends StatelessWidget {
               child: Column(children: [
                 SvgPicture.asset(
                   'assets/svgs/logo.svg',
-                  height: 10.h,
+                  height: 8.h,
                 ),
                 SizedBox(
                   height: 3.h,
                 ),
-                Image.asset(
-                  'assets/pngs/refer.png',
-                  height: 5.h,
-                ),
+                Lottie.asset('assets/json/gift.json', height: 20.h),
                 SizedBox(
-                  height: 15.h,
+                  height: 2.h,
                 ),
                 const BigText(
                   fontWeight: FontWeight.normal,

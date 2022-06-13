@@ -3,15 +3,17 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:success_airline/screens/admin_screens/forgotPassword_screen.dart';
 import 'package:success_airline/screens/auth_screens/addChild_screen.dart';
 import 'package:success_airline/screens/auth_screens/signUp_screen.dart';
-
+import 'package:success_airline/screens/home_screen.dart';
 import '../../constants.dart';
 import '../../controllers/auth_controller.dart';
 import '../../widgets/bigTexT.dart';
 import '../../widgets/roundedButton.dart';
 import '../../widgets/smallText.dart';
 import '../../widgets/textfeild2.dart';
+import '../buyPremium.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -28,7 +30,7 @@ class SignInScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: 45.h,
+                    height: 47.h,
                     child: Stack(children: [
                       Positioned(
                           left: -3.h,
@@ -36,7 +38,8 @@ class SignInScreen extends StatelessWidget {
                           child: SvgPicture.asset(
                             'assets/svgs/Path .svg',
                             width: 55.w,
-                            fit: BoxFit.fitWidth,
+                            height: 20.h,
+                            fit: BoxFit.contain,
                           )),
                       Positioned(
                           top: 6.h,
@@ -56,7 +59,7 @@ class SignInScreen extends StatelessWidget {
                             ],
                           )),
                       Positioned(
-                        bottom: 3.h,
+                        bottom: 2.h,
                         right: 25.w,
                         child: SvgPicture.asset(
                           'assets/svgs/Feed-amico.svg',
@@ -95,6 +98,7 @@ class _LoginFormState extends State<LoginForm> {
   final _key = GlobalKey<FormState>();
 
   void onSave() {
+    FocusScope.of(context).unfocus();
     if (_key.currentState!.validate()) {
       setState(() {
         isLoading = true;
@@ -120,10 +124,11 @@ class _LoginFormState extends State<LoginForm> {
           message: msg,
         ));
       }).then((value) {
-        if (mounted)
+        if (mounted) {
           setState(() {
             isLoading = false;
           });
+        }
       });
     }
   }
@@ -158,11 +163,11 @@ class _LoginFormState extends State<LoginForm> {
               prefixIcon: Icons.lock,
               isPassword: true,
             ),
-            SizedBox(
-              height: 2.h,
-            ),
-            GestureDetector(
-              onTap: () {},
+
+            InkWell(
+              onTap: () {
+                Get.to(() => ForgotPasswordScreen());
+              },
               child: const SmallText(
                 text: 'Forgot Password?',
                 color: Colors.red,
@@ -187,6 +192,8 @@ class _LoginFormState extends State<LoginForm> {
               ),
               GestureDetector(
                 onTap: () {
+                  // Get.to(() => PremiumPlanScreen());
+                  // Get.to(() => AddChildScreen());
                   Get.to(() => const SignUpScreen());
                 },
                 child: const BigText(

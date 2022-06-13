@@ -27,7 +27,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   File? newImage;
   void selectImage() async {
     final _imagePicker = ImagePicker();
-    final xfile = await _imagePicker.pickImage(source: ImageSource.gallery);
+    final xfile = await _imagePicker
+        .pickImage(source: ImageSource.gallery)
+        .catchError((err) {
+      Get.snackbar('Permission Denied', 'Go to Settings and allow photos',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
+    });
     if (xfile != null) {
       setState(() {
         newImage = File(xfile.path);
@@ -67,7 +74,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                         )),
                     Positioned(
-                        top: 6.h,
+                        top: 5.h,
                         child: SizedBox(
                           width: 100.w,
                           child: Column(children: [
@@ -99,10 +106,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   Positioned(
                                       top: 3.h,
                                       right: 3.h,
-                                      child: const RoundedIconButton(
+                                      child: RoundedIconButton(
+                                        radius: 4,
                                         icon: Icon(
                                           FontAwesomeIcons.camera,
-                                          size: 20,
+                                          size: 3.h,
                                         ),
                                       ))
                                 ]),

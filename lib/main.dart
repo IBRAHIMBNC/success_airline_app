@@ -5,18 +5,21 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/screens/admin_screens/adminHome_screen.dart';
-import 'package:success_airline/screens/admin_screens/contents_screen.dart';
 import 'package:success_airline/screens/auth_screens/signIn_screen.dart';
 import 'package:success_airline/screens/home_screen.dart';
 import 'package:success_airline/screens/loadingScreen.dart';
+import 'package:success_airline/widgets/bigTexT.dart';
 
 import 'controllers/auth_controller.dart';
 import 'firebase_options.dart';
+import 'widgets/splas_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   Get.lazyPut(() => AuthController(), fenix: true);
+  // Get.put(PurchasesApi());
+
   runApp(const MyApp());
 }
 
@@ -28,31 +31,51 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     return Sizer(
-      builder: (context, orientation, deviceType) => GetBuilder<AuthController>(
-        builder: (controller) => GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            fontFamily: 'avenir',
-            primarySwatch: Colors.blue,
-          ),
-          home: StreamBuilder(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, AsyncSnapshot<User?> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const LoadingScreen();
-              }
-              if (snapshot.hasData) {
-                if (snapshot.data!.email == 'admin@gmail.com') {
-                  return AdminHomeScreen();
-                }
-                return HomeScreen();
-              }
-              return const SignInScreen();
-            },
-          ),
-        ),
-      ),
-    );
+        builder: (context, orientation, deviceType) =>
+            GetBuilder<AuthController>(
+                builder: (controller) => GetMaterialApp(
+                      debugShowCheckedModeBanner: false,
+                      title: 'Flutter Demo',
+                      theme: ThemeData(
+                        fontFamily: 'avenir',
+                        primarySwatch: Colors.blue,
+                      ),
+                      home: SplashScreen(
+                        splashTransition: SplashTransition.fadeTransition,
+                        height: 60,
+                        splash: Column(
+                          children: [
+                            const BigText(
+                                text: 'Success Airlines',
+                                color: Colors.white,
+                                size: 30),
+                            Image.asset(
+                              'assets/pngs/planeLoop.gif',
+                              width: 100.w,
+                              height: 50.h,
+                              fit: BoxFit.cover,
+                            ),
+                          ],
+                        ),
+                        backgroundColor: const Color(0xffCBE4FE),
+                        nextScreen: StreamBuilder(
+                          stream: FirebaseAuth.instance.authStateChanges(),
+                          builder: (context, AsyncSnapshot<User?> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const LoadingScreen();
+                            }
+
+                            if (snapshot.hasData) {
+                              if (snapshot.data!.email == 'admin@gmail.com') {
+                                return const AdminHomeScreen();
+                              }
+                              return HomeScreen();
+                            }
+                            return const SignInScreen();
+                          },
+                        ),
+                      ),
+                    )));
   }
 }

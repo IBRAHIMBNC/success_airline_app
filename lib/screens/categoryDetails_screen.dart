@@ -18,6 +18,10 @@ class CategoryDetailScreen extends StatelessWidget {
   CategoryDetailScreen({Key? key, required this.title, required this.image})
       : super(key: key);
 
+  void saveCategoyState(bool isContinue) {
+    lessonCont.saveContinueState(isContinue, title);
+  }
+
   @override
   Widget build(BuildContext context) {
     print(image);
@@ -84,6 +88,7 @@ class CategoryDetailScreen extends StatelessWidget {
                         itemBuilder: (context, index) => RoundedButton(
                             onPressed: () {
                               Get.to(() => LessonDetailScreen(
+                                  save: saveCategoyState,
                                   image: image,
                                   title: title,
                                   lesson: lessonCont.lessons,
@@ -92,7 +97,7 @@ class CategoryDetailScreen extends StatelessWidget {
                             image: Image.asset('assets/pngs/play.png'),
                             label: lessonCont.lessons[index].title,
                             size: Size(90, 8),
-                            radius: 15,
+                            radius: 2,
                             textColor: Colors.black,
                             bgColor: kprimaryColor.withOpacity(0.05),
                             icon: Icon(
