@@ -126,7 +126,7 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              InkWell(
+                              GestureDetector(
                                 onTap: () {
                                   if (currentLessonIndex > 0) {
                                     audioController.stopAudio();
@@ -141,7 +141,7 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              InkWell(
+                              GestureDetector(
                                 onTap: () async {
                                   if (audioController.myPlayer == null) {
                                     audioController.startAudio(widget
@@ -168,7 +168,7 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                                         );
                                 }),
                               ),
-                              InkWell(
+                              GestureDetector(
                                 onTap: () {
                                   if (currentLessonIndex <
                                       widget.lesson.length - 1) {
