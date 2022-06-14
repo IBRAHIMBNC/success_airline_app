@@ -20,7 +20,6 @@ class _TextFieldContainerState extends State<TextFieldContainer> {
   bool isHide = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 

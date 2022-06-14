@@ -64,7 +64,6 @@ class ChildrenController extends GetxController {
     if (auth.user != null) {
       fetchData().then((value) => _children = value.isEmpty ? [] : value);
     }
-    // TODO: implement onInit
     super.onInit();
   }
 }

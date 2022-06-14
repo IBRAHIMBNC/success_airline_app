@@ -1,80 +1,77 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/screens/admin_screens/forgotPassword_screen.dart';
-import 'package:success_airline/screens/auth_screens/addChild_screen.dart';
 import 'package:success_airline/screens/auth_screens/signUp_screen.dart';
-import 'package:success_airline/screens/home_screen.dart';
 import '../../constants.dart';
 import '../../controllers/auth_controller.dart';
 import '../../widgets/bigTexT.dart';
 import '../../widgets/roundedButton.dart';
 import '../../widgets/smallText.dart';
 import '../../widgets/textfeild2.dart';
-import '../buyPremium.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final padding = MediaQuery.of(context).padding;
+    final EdgeInsets padding = MediaQuery.of(context).padding;
     return Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Stack(children: [
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 47.h,
-                    child: Stack(children: [
-                      Positioned(
-                          left: -3.h,
-                          top: 0,
-                          child: SvgPicture.asset(
-                            'assets/svgs/Path .svg',
-                            width: 55.w,
-                            height: 20.h,
-                            fit: BoxFit.contain,
-                          )),
-                      Positioned(
-                          top: 6.h,
-                          left: 5.w,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              SmallText(
-                                fontWeight: FontWeight.w500,
-                                text: 'Welcome Back,',
-                                size: 16,
-                              ),
-                              BigText(
-                                text: 'Log in!',
-                                size: 22,
-                              )
-                            ],
-                          )),
-                      Positioned(
-                        bottom: 2.h,
-                        right: 25.w,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 47.h,
+                  child: Stack(children: [
+                    Positioned(
+                        left: -3.h,
+                        top: 0,
                         child: SvgPicture.asset(
-                          'assets/svgs/Feed-amico.svg',
-                          width: 50.w,
-                        ),
+                          'assets/svgs/Path .svg',
+                          width: 55.w,
+                          height: 20.h,
+                          fit: BoxFit.contain,
+                        )),
+                    Positioned(
+                        top: 6.h,
+                        left: 5.w,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            SmallText(
+                              fontWeight: FontWeight.w500,
+                              text: 'Welcome Back,',
+                              size: 16,
+                            ),
+                            BigText(
+                              text: 'Log in!',
+                              size: 22,
+                            )
+                          ],
+                        )),
+                    Positioned(
+                      bottom: 2.h,
+                      right: 25.w,
+                      child: SvgPicture.asset(
+                        'assets/svgs/Feed-amico.svg',
+                        width: 50.w,
                       ),
-                      Positioned(
-                          right: 4.w,
-                          top: 5.h,
-                          child: SvgPicture.asset('assets/svgs/logo.svg'))
-                    ]),
-                  ),
-                  const LoginForm(),
-                ],
-              ),
+                    ),
+                    Positioned(
+                        right: 4.w,
+                        top: 5.h,
+                        child: SvgPicture.asset('assets/svgs/logo.svg'))
+                  ]),
+                ),
+                const LoginForm(),
+              ],
             ),
           ]),
         ));

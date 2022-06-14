@@ -1,13 +1,9 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
-import 'package:success_airline/screens/auth_screens/signIn_screen.dart';
 import 'package:success_airline/screens/buyPremium.dart';
-import 'package:success_airline/screens/home_screen.dart';
 import '../models/appuser.dart';
 
 class AuthController extends GetxController {
@@ -32,7 +28,7 @@ class AuthController extends GetxController {
       picUrl =
           'https://firebasestorage.googleapis.com/v0/b/success-airline-lab123.appspot.com/o/profile_placeholder.jpeg?alt=media&token=5542fab1-de36-4516-8068-1b9fe122c708';
     } else {
-      String picUrl = await uploadProfile(userDetails['image']);
+      await uploadProfile(userDetails['image']);
     }
 
     await auth.currentUser!.updatePhotoURL(picUrl);

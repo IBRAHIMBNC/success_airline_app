@@ -1,7 +1,4 @@
 import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -20,6 +17,7 @@ import '../../widgets/textfeild2.dart';
 
 import 'hearAbout_screen.dart';
 
+// ignore: must_be_immutable
 class AddChildScreen extends StatefulWidget {
   Map<String, dynamic>? userDetails =
       Get.arguments == null ? null : Get.arguments as Map<String, dynamic>;
@@ -78,15 +76,9 @@ class _AddChildScreenState extends State<AddChildScreen> {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   void dispose() {
     dateCont.dispose();
-    // TODO: implement dispose
+
     super.dispose();
   }
 

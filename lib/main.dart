@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:success_airline/controllers/audio_controller.dart';
 import 'package:success_airline/screens/admin_screens/adminHome_screen.dart';
 import 'package:success_airline/screens/auth_screens/signIn_screen.dart';
 import 'package:success_airline/screens/home_screen.dart';
@@ -19,6 +20,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   Get.lazyPut(() => AuthController(), fenix: true);
   // Get.put(PurchasesApi());
+  Get.put(AudioController());
 
   runApp(const MyApp());
 }

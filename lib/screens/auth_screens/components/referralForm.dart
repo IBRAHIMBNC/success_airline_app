@@ -1,6 +1,3 @@
-import 'dart:math';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -13,7 +10,6 @@ import '../../../controllers/auth_controller.dart';
 import '../../../widgets/roundedButton.dart';
 import '../../../widgets/smallText.dart';
 import '../../../widgets/textfeild2.dart';
-import '../../home_screen.dart';
 import 'loading_screen.dart';
 
 class ReferralForm extends StatefulWidget {
@@ -39,18 +35,16 @@ class _ReferralFormState extends State<ReferralForm> {
         referralObj[i].email.text = auth.user!.referralList![i]['email'];
       }
     }
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   void dispose() {
-    referralObj.forEach((element) {
+    for (var element in referralObj) {
       element.email.dispose();
       element.fName.dispose();
       element.lName.dispose();
-    });
-    // TODO: implement dispose
+    }
     super.dispose();
   }
 
@@ -96,14 +90,14 @@ class _ReferralFormState extends State<ReferralForm> {
     if (!validate) {
       return;
     } else {
-      referralObj.forEach((refer) {
+      for (var refer in referralObj) {
         final Map<String, String> map = {
           'firstName': refer.fName.text,
           'lastName': refer.lName.text,
           'email': refer.email.text
         };
         referralList.add(map);
-      });
+      }
       widget.userDetails!['referralData'] = referralList;
 
       Get.dialog(const ProgressScreen(), barrierDismissible: false);

@@ -1,9 +1,8 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/instance_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:get/utils.dart';
 import 'package:sizer/sizer.dart';
@@ -52,7 +51,8 @@ class ForgotPasswordScreen extends StatelessWidget {
                 validator: (value) {
                   if (!GetUtils.isEmail(value!)) {
                     return ' Enter a valid email address';
-                  }
+                  } else
+                    return value;
                 },
                 onChanged: (value) {
                   email.value = value!;

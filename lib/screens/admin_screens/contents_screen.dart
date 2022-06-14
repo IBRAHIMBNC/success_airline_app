@@ -1,7 +1,5 @@
 import 'dart:collection';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -42,7 +40,7 @@ class ContentScreen extends StatelessWidget {
     'Writers': 'assets/json/writers.json',
     'News': 'assets/json/news.json',
     'Business Owners': 'assets/json/business owner.json',
-    'Financial literacy': 'assets/json/financial literacy.json'
+    'Financial Literacy': 'assets/json/financial literacy.json'
   };
   final AuthController auth = Get.find();
   ContentScreen({Key? key}) : super(key: key);

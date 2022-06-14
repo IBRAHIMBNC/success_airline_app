@@ -35,12 +35,10 @@
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Select audio file for this lesson</string>
-	<key>NSCameraUsageDescription</key>
-	<string>To chosse user profile</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>To take user profile image </string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>To take user profile image </string>
+    <key>NSCameraUsageDescription</key>
+    <string>This app uses camera to take profile Picture.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This app uses Photo Library to select profile picture.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

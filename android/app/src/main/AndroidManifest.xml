@@ -2,6 +2,7 @@
     package="com.kridin.successairlines">
 
     <uses-permission android:name="com.android.vending.BILLING"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="Success Airlines"
         android:name="${applicationName}"

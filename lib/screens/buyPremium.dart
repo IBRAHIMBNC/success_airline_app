@@ -1,19 +1,14 @@
+// ignore_for_file: implementation_imports, avoid_function_literals_in_foreach_calls
+
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter_launcher_icons/xml_templates.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase_android/src/in_app_purchase_android_platform_addition.dart'
     show InAppPurchaseAndroidPlatformAddition;
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/constants.dart';
@@ -22,7 +17,6 @@ import 'package:success_airline/screens/auth_screens/address_screen.dart';
 import 'package:success_airline/widgets/bigTexT.dart';
 import 'package:success_airline/widgets/roundedButton.dart';
 import 'package:success_airline/widgets/smallText.dart';
-import '../controllers/consumable_store.dart';
 import '../controllers/test_purchase.dart';
 
 String PURCHASE_ID = '';
@@ -45,14 +39,12 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
       : ['success_599_1m', 'yearly_6299_1y'];
   List<ProductDetails> _products = [];
   List<PurchaseDetails> _purchases = [];
-  bool _isAvailable = false;
   bool _purchasePending = false;
   StreamSubscription<List<PurchaseDetails>>? _subscription;
   String? purchasedProdID;
   DateTime expiryDate = DateTime.now();
   final RxBool isYearlyPlan = true.obs;
   bool isLoading = true;
-  String? _queryProductError;
   @override
   void initState() {
     final Stream<List<PurchaseDetails>> _purchaseStream = _ipa.purchaseStream;
@@ -82,7 +74,6 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
     isAvailable = await _ipa.isAvailable();
     if (!isAvailable) {
       setState(() {
-        _isAvailable = isAvailable;
         _products = <ProductDetails>[];
         _purchases = <PurchaseDetails>[];
 
@@ -102,8 +93,6 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
         await _ipa.queryProductDetails(productIds.toSet());
     if (productDetailResponse.error != null) {
       setState(() {
-        _queryProductError = productDetailResponse.error!.message;
-        _isAvailable = isAvailable;
         _products = productDetailResponse.productDetails;
         _purchases = <PurchaseDetails>[];
         _purchasePending = false;
@@ -113,8 +102,6 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
 
     if (productDetailResponse.productDetails.isEmpty) {
       setState(() {
-        _queryProductError = null;
-        _isAvailable = isAvailable;
         _products = productDetailResponse.productDetails;
         _purchases = <PurchaseDetails>[];
         _purchasePending = false;
@@ -123,7 +110,6 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
       return;
     }
     setState(() {
-      _isAvailable = isAvailable;
       _products = productDetailResponse.productDetails;
 
       _purchasePending = false;

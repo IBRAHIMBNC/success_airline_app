@@ -51,7 +51,8 @@ dependencies:
   circular_bottom_navigation: ^2.0.0
   dotted_border: ^2.0.0+2
   file_picker: ^4.5.1
-  audioplayers: ^0.20.1
+  just_audio: ^0.9.20
+  path_provider: ^2.0.9
   shared_preferences: ^2.0.15
   flutter_launcher_icons: ^0.9.2
   in_app_purchase: ^3.0.4

@@ -59,7 +59,7 @@ class _EditChildDetailScreenState extends State<EditChildDetailScreen> {
     imageUrl = widget.child.photo;
 
     isBoy = widget.child.isBoy;
-    // TODO: implement initState
+
     super.initState();
   }
 
@@ -68,7 +68,6 @@ class _EditChildDetailScreenState extends State<EditChildDetailScreen> {
     dateCont.dispose();
     nameCont.dispose();
     gradeCont.dispose();
-    // TODO: implement dispose
     super.dispose();
   }
 

@@ -1,8 +1,9 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:collection';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
@@ -48,7 +49,7 @@ class HomeScreen extends StatelessWidget {
     'Writers': 'assets/json/writers.json',
     'News': 'assets/json/news.json',
     'Business Owners': 'assets/json/business owner.json',
-    'Financial literacy': 'assets/json/financial literacy.json'
+    'Financial Literacy': 'assets/json/financial literacy.json'
   };
   HomeScreen({Key? key}) : super(key: key);
   @override

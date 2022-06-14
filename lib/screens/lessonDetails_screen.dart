@@ -1,10 +1,9 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/constants.dart';
+import 'package:success_airline/controllers/audio_controller.dart';
 import 'package:success_airline/models/lessonModel.dart';
 import 'package:success_airline/widgets/smallText.dart';
 
@@ -29,10 +28,11 @@ class LessonDetailScreen extends StatefulWidget {
 }
 
 class _LessonDetailScreenState extends State<LessonDetailScreen> {
-  AudioPlayer? audio;
-  bool isPlay = false;
   int currentLessonIndex = 0;
   bool isContinue = true;
+
+  AudioController audioController = Get.find();
+
   @override
   void initState() {
     currentLessonIndex = widget.index;
@@ -42,7 +42,7 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
 
   @override
   void dispose() {
-    if (audio != null) audio?.dispose();
+    audioController.stopAudio();
     widget.save!(isContinue);
     super.dispose();
   }
@@ -62,8 +62,8 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
         ),
         leading: GestureDetector(onTap: () {}),
       ),
-      body: Container(
-          height: 100.h,
+      body: SizedBox(
+          height: 200.h,
           width: 100.w,
           child: Column(
             children: [
@@ -84,7 +84,7 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
               Container(
                 padding: EdgeInsets.only(bottom: 5.h),
                 alignment: Alignment.center,
-                height: 45.h,
+                height: 50.h,
                 width: 90.w,
                 child: Stack(clipBehavior: Clip.none, children: [
                   Padding(
@@ -97,21 +97,30 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                         color: orangeColor,
                       ),
                       child: Column(children: [
-                        const Spacer(
-                          flex: 1,
+                        SizedBox(
+                          height: 3.h,
                         ),
                         const SmallText(
                           text: 'Definition',
                           size: 18,
+                          fontWeight: FontWeight.w600,
                         ),
-                        const Spacer(),
-                        Expanded(
-                          child: SmallText(
-                            text: widget.lesson[currentLessonIndex].description,
-                            size: 18,
+                        SizedBox(height: 10),
+                        SizedBox(
+                          height: 14.h,
+                          width: 85.w,
+                          child: Center(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: SmallText(
+                                text: widget
+                                    .lesson[currentLessonIndex].description,
+                                size: 16,
+                              ),
+                            ),
                           ),
                         ),
-                        const Spacer(),
+                        SizedBox(height: 10),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 2.w),
                           child: Row(
@@ -120,11 +129,9 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                               InkWell(
                                 onTap: () {
                                   if (currentLessonIndex > 0) {
-                                    audio?.stop();
+                                    audioController.stopAudio();
                                     setState(() {
                                       currentLessonIndex--;
-                                      isPlay = false;
-                                      audio = null;
                                     });
                                   }
                                 },
@@ -136,45 +143,40 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                               ),
                               InkWell(
                                 onTap: () async {
-                                  if (audio == null) {
-                                    audio = AudioPlayer();
-                                    await audio!.play(widget
+                                  if (audioController.myPlayer == null) {
+                                    audioController.startAudio(widget
                                         .lesson[currentLessonIndex].audioLink);
-                                    setState(() {
-                                      isPlay = true;
-                                    });
                                   } else {
-                                    if (isPlay) {
-                                      audio!.pause();
-                                      setState(() {
-                                        isPlay = false;
-                                      });
+                                    if (audioController.isPlaying.value) {
+                                      audioController.myPlayer!.pause();
                                     } else {
-                                      audio!.resume();
-                                      setState(() {
-                                        isPlay = true;
-                                      });
+                                      audioController.myPlayer!.play();
                                     }
                                   }
                                 },
-                                child: Image.asset(
-                                  isPlay
-                                      ? 'assets/pngs/pause.png'
-                                      : 'assets/pngs/play.png',
-                                  height: 13.5.h,
-                                  fit: BoxFit.cover,
-                                ),
+                                child: Obx(() {
+                                  return audioController.isSyncingAudio.value
+                                      ? CircularProgressIndicator(
+                                          color: Colors.white,
+                                        )
+                                      : Image.asset(
+                                          audioController.isPlaying.value
+                                              ? 'assets/pngs/pause.png'
+                                              : 'assets/pngs/play.png',
+                                          height: 13.5.h,
+                                          fit: BoxFit.cover,
+                                        );
+                                }),
                               ),
                               InkWell(
                                 onTap: () {
                                   if (currentLessonIndex <
                                       widget.lesson.length - 1) {
-                                    audio?.stop();
+                                    audioController.stopAudio();
 
                                     setState(() {
-                                      isPlay = false;
                                       currentLessonIndex++;
-                                      audio = null;
+                                      // audioController.myPlayer = null;
                                     });
                                   }
                                 },
@@ -202,7 +204,8 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                             isContinue = false;
                           }
                           widget.save!(isContinue);
-                          if (audio != null) audio!.stop();
+                          if (audioController.myPlayer != null)
+                            audioController.stopAudio();
                           Get.back();
                         },
                         child: CircleAvatar(

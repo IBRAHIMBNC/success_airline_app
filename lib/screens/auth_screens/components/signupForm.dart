@@ -118,7 +118,6 @@ class _SignUpFormState extends State<SignUpForm> {
       _state2Controller.text = user.mailingAddress['state']!;
       _zip2Controller.text = user.mailingAddress['zipCode']!;
     }
-    // TODO: implement initState
     super.initState();
   }
 

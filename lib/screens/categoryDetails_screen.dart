@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/instance_manager.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/constants.dart';
 import 'package:success_airline/controllers/lessons_controller.dart';
-import 'package:success_airline/models/lessonModel.dart';
 import 'package:success_airline/screens/lessonDetails_screen.dart';
 import 'package:success_airline/widgets/roundedButton.dart';
 import 'package:success_airline/widgets/smallText.dart';
@@ -40,17 +37,14 @@ class CategoryDetailScreen extends StatelessWidget {
           onTap: () {
             Get.back();
           },
-          child: Container(
-            // margin: EdgeInsets.only(left: 20),
-            child: Image.asset(
-              'assets/pngs/abort.png',
-              height: 10.h,
-              fit: BoxFit.cover,
-            ),
+          child: Image.asset(
+            'assets/pngs/abort.png',
+            height: 10.h,
+            fit: BoxFit.cover,
           ),
         ),
       ),
-      body: Container(
+      body: SizedBox(
           width: 100.w,
           height: 100.h,
           child: Column(children: [
@@ -62,7 +56,7 @@ class CategoryDetailScreen extends StatelessWidget {
                   : Padding(
                       padding: EdgeInsets.all(4.h), child: Image.asset(image)),
             ),
-            Container(
+            SizedBox(
                 height: 42.h,
                 width: 90.w,
                 // color: Colors.red,

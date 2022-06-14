@@ -870,6 +870,5 @@ submit a request form by clicking here.
         ),
       ),
     );
-    ;
   }
 }

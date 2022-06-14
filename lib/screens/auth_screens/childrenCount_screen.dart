@@ -26,17 +26,11 @@ class _ChildrenCountScreenState extends State<ChildrenCountScreen> {
   final _controller = TextEditingController();
   ChildAge age = ChildAge.age0_3;
   bool isAgree = false;
-  @override
-  void initState() {
-    print(widget.userDetails);
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   void dispose() {
     _controller.dispose();
-    // TODO: implement dispose
+
     super.dispose();
   }
 

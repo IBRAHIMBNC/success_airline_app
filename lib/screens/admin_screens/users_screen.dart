@@ -1,13 +1,12 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/instance_manager.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/constants.dart';
 import 'package:success_airline/controllers/auth_controller.dart';
-import 'package:success_airline/controllers/child_controller.dart';
 import 'package:success_airline/models/appuser.dart';
 import 'package:success_airline/screens/admin_screens/userDetails_screen.dart';
 import 'package:success_airline/widgets/bigTexT.dart';
@@ -31,7 +30,7 @@ class UserScreen extends StatelessWidget {
           padding: EdgeInsets.only(
               top: MediaQuery.of(context).padding.top, right: 3.w, left: 3.w),
           width: 100.w,
-          child: Container(
+          child: SizedBox(
             width: 90.w,
             child: Column(children: [
               SizedBox(
@@ -142,7 +141,7 @@ class _userCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 8.h,
       width: 90.w,
       child: Row(children: [

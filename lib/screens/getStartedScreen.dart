@@ -1,14 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/instance_manager.dart';
-import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
-import 'package:success_airline/constants.dart';
-import 'package:success_airline/screens/auth_screens/signIn_screen.dart';
 import 'package:success_airline/widgets/bigTexT.dart';
 import 'package:success_airline/widgets/roundedButton.dart';
 

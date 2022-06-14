@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
@@ -54,7 +53,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   void initState() {
     isVisible = widget.isPassword;
-    // TODO: implement initState
     super.initState();
   }
 

@@ -157,6 +157,7 @@ class _ChildListCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
+            // ignore: prefer_const_literals_to_create_immutables
             children: [
               const SmallText(
                 text: 'Name',

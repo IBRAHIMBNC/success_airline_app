@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/controllers/child_controller.dart';
-import 'package:success_airline/screens/auth_screens/hearAbout_screen.dart';
 import 'package:success_airline/screens/auth_screens/referral_screen.dart';
 import 'package:success_airline/screens/profile_screen/aboutUs_screen.dart';
 

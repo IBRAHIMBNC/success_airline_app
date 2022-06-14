@@ -1,13 +1,10 @@
-import 'package:flutter/gestures.dart';
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
-import 'package:success_airline/screens/auth_screens/signUp_screen.dart';
 import 'package:success_airline/widgets/roundedButton.dart';
 
 import '../../widgets/bigTexT.dart';
@@ -37,7 +34,7 @@ class AddressScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         height: 100.h,
         width: 100.w,
         child: SingleChildScrollView(
