@@ -43,7 +43,16 @@ class ContentScreen extends StatelessWidget {
     'Financial Literacy': 'assets/json/financial literacy.json'
   };
   final AuthController auth = Get.find();
-  ContentScreen({Key? key}) : super(key: key);
+
+  List<KeyData> allCategoryList = [];
+  ContentScreen() {
+    var sortedKeys = allCategories.keys.toList()..sort();
+
+    for (String item in sortedKeys) {
+      KeyData obj = KeyData(item, allCategories[item].toString());
+      allCategoryList.add(obj);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,15 +145,16 @@ class ContentScreen extends StatelessWidget {
                 itemBuilder: (context, index) => InkWell(
                   onTap: () {
                     Get.to(() => AddCategoryItemDetailScreen(
-                        image: allCategories.values.toList()[index],
-                        category: allCategories.keys.toList()[index]));
+                          image: allCategoryList[index].json,
+                          category: allCategoryList[index].key,
+                        ));
                   },
                   child: _AllCategoriesItemCard(
-                    category: allCategories.keys.toList()[index],
-                    image: allCategories.values.toList()[index],
+                    category: allCategoryList[index].key,
+                    image: allCategoryList[index].json,
                   ),
                 ),
-                itemCount: allCategories.length,
+                itemCount: allCategoryList.length,
               )
             ]),
           ),
@@ -152,6 +162,12 @@ class ContentScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+class KeyData {
+  String key;
+  String json;
+  KeyData(this.key, this.json);
 }
 
 class _AllCategoriesItemCard extends StatelessWidget {
