@@ -1,11 +1,7 @@
 // Design and programmed by Syed Muhammad Idrees
 
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:get/state_manager.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:path_provider/path_provider.dart';
 
 class AudioController extends GetxController {
   AudioPlayer? myPlayer;
