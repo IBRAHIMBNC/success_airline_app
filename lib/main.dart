@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/controllers/audio_controller.dart';
+import 'package:success_airline/controllers/idrees_controller.dart';
 import 'package:success_airline/screens/admin_screens/adminHome_screen.dart';
 import 'package:success_airline/screens/auth_screens/signIn_screen.dart';
 import 'package:success_airline/screens/home_screen.dart';
@@ -20,6 +21,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   Get.lazyPut(() => AuthController(), fenix: true);
   // Get.put(PurchasesApi());
+  Get.put(IdreesController());
   Get.put(AudioController());
 
   runApp(const MyApp());
@@ -70,6 +72,7 @@ class MyApp extends StatelessWidget {
 
                             if (snapshot.hasData) {
                               if (snapshot.data!.email == 'admin@gmail.com') {
+                                Get.find<IdreesController>().isAdmin = true;
                                 return const AdminHomeScreen();
                               }
                               return HomeScreen();

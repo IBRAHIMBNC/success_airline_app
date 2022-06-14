@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
+import 'package:success_airline/controllers/idrees_controller.dart';
 import 'package:success_airline/screens/buyPremium.dart';
 import '../models/appuser.dart';
 
@@ -71,7 +72,10 @@ class AuthController extends GetxController {
         .catchError((err) {
       throw err;
     });
-    if (auth.currentUser!.email == 'admin@gmail.com') return;
+    if (auth.currentUser!.email == 'admin@gmail.com') {
+      Get.find<IdreesController>().isAdmin = true;
+      return;
+    }
     final userData = await userRef.doc(auth.currentUser!.uid).get();
     user = AppUser.fromFirebase(userData);
     varifyUser().then((value) {

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/constants.dart';
+import 'package:success_airline/controllers/idrees_controller.dart';
 import 'package:success_airline/controllers/lessons_controller.dart';
 import 'package:success_airline/screens/lessonDetails_screen.dart';
 import 'package:success_airline/widgets/roundedButton.dart';
@@ -16,7 +17,8 @@ class CategoryDetailScreen extends StatelessWidget {
       : super(key: key);
 
   void saveCategoyState(bool isContinue) {
-    lessonCont.saveContinueState(isContinue, title);
+    if (!Get.find<IdreesController>().isAdmin)
+      lessonCont.saveContinueState(isContinue, title);
   }
 
   @override

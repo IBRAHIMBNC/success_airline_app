@@ -12,6 +12,7 @@ import '../../constants.dart';
 import '../../controllers/auth_controller.dart';
 import '../../widgets/bigTexT.dart';
 import '../../widgets/smallText.dart';
+import '../categoryDetails_screen.dart';
 import '../home_screen.dart';
 
 class ContentScreen extends StatelessWidget {
@@ -146,9 +147,13 @@ class ContentScreen extends StatelessWidget {
                 separatorBuilder: (context, index) => SizedBox(height: 0.5.h),
                 itemBuilder: (context, index) => InkWell(
                   onTap: () {
-                    Get.to(() => AddCategoryItemDetailScreen(
+                    // Get.to(() => AddCategoryItemDetailScreen(
+                    //       image: allCategoryList[index].json,
+                    //       category: allCategoryList[index].key,
+                    //     ));
+                    Get.to(() => CategoryDetailScreen(
                           image: allCategoryList[index].json,
-                          category: allCategoryList[index].key,
+                          title: allCategoryList[index].key,
                         ));
                   },
                   child: _AllCategoriesItemCard(

@@ -7,6 +7,9 @@ import 'package:success_airline/controllers/audio_controller.dart';
 import 'package:success_airline/models/lessonModel.dart';
 import 'package:success_airline/widgets/smallText.dart';
 
+import '../controllers/idrees_controller.dart';
+import 'admin_screens/categoryItemDetails_screen.dart';
+
 class LessonDetailScreen extends StatefulWidget {
   final List<Lesson> lesson;
   final String image;
@@ -43,7 +46,8 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
   @override
   void dispose() {
     audioController.stopAudio();
-    widget.save!(isContinue);
+
+    if (!Get.find<IdreesController>().isAdmin) widget.save!(isContinue);
     super.dispose();
   }
 
@@ -60,7 +64,38 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
           color: Colors.black,
           size: 18,
         ),
-        leading: GestureDetector(onTap: () {}),
+        leading: InkWell(
+          onTap: () {
+            Get.back();
+          },
+          child: Container(
+            height: 060,
+            width: 60,
+            child: Center(
+              child: Image(
+                image: AssetImage("assets/pngs/arrow_back.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
+        actions: [
+          InkWell(
+            onTap: () {
+              Get.back();
+            },
+            child: Container(
+              height: 060,
+              width: 60,
+              child: Center(
+                child: Image(
+                  image: AssetImage("assets/pngs/arrow_forward.png"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SizedBox(
           height: 200.h,
@@ -213,6 +248,29 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                           backgroundColor: Colors.white,
                         ),
                       )),
+                  if (Get.find<IdreesController>().isAdmin)
+                    Positioned(
+                        top: -1.2.h,
+                        right: -1.2.h,
+                        child: InkWell(
+                          onTap: () {
+                            Get.to(() => AddCategoryItemDetailScreen(
+                                  image: widget.image,
+                                  category: widget.title,
+                                ));
+                          },
+                          child: Container(
+                            height: 060,
+                            width: 60,
+                            child: Center(
+                              child: Image(
+                                image:
+                                    AssetImage("assets/pngs/arrow_forward.png"),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        )),
                 ]),
               )
             ],
