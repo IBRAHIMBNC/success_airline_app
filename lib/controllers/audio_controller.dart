@@ -16,7 +16,6 @@ class AudioController extends GetxController {
 
   initateAudioPlayer() {
     myPlayer!.playerStateStream.listen((event) {
-      print(event);
       var processingState = event.processingState;
       switch (processingState) {
         case ProcessingState.completed:
@@ -55,8 +54,6 @@ class AudioController extends GetxController {
   }
 
   stopAudio() async {
-    print("Disposed Audio Player Controller");
-
     if (myPlayer != null) {
       isPlaying.value = false;
       isSyncingAudio.value = false;
@@ -66,19 +63,5 @@ class AudioController extends GetxController {
       await myPlayer!.dispose();
       myPlayer = null;
     }
-  }
-
-  Future<File> downloadFile(String url, String filename) async {
-    var httpClient = HttpClient();
-    var request = await httpClient.getUrl(Uri.parse(url));
-    var response = await request.close();
-    var bytes = await consolidateHttpClientResponseBytes(response);
-    String dir = "";
-    dir = (await getTemporaryDirectory()).path;
-
-    File file = File('$dir/$filename');
-    await file.writeAsBytes(bytes, mode: FileMode.write);
-
-    return file;
   }
 }

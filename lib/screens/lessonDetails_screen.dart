@@ -173,10 +173,8 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                                   if (currentLessonIndex <
                                       widget.lesson.length - 1) {
                                     audioController.stopAudio();
-
                                     setState(() {
                                       currentLessonIndex++;
-                                      // audioController.myPlayer = null;
                                     });
                                   }
                                 },
