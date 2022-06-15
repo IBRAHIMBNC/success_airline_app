@@ -75,6 +75,8 @@ class AuthController extends GetxController {
     if (auth.currentUser!.email == 'admin@gmail.com') {
       Get.find<IdreesController>().isAdmin = true;
       return;
+    } else {
+      Get.find<IdreesController>().isAdmin = false;
     }
     final userData = await userRef.doc(auth.currentUser!.uid).get();
     user = AppUser.fromFirebase(userData);

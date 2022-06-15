@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/constants.dart';
 import 'package:success_airline/controllers/audio_controller.dart';
+import 'package:success_airline/controllers/lessons_controller.dart';
 import 'package:success_airline/models/lessonModel.dart';
 import 'package:success_airline/widgets/smallText.dart';
 
@@ -68,8 +69,12 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
           style: TextStyle(
               fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red)),
       onPressed: () {
-        Navigator.pop(context);
-        //onItemClicked("Delete");
+        LessonsController lessonsController = Get.find();
+        lessonsController.deleteLesson(
+            widget.lesson[widget.index], widget.title);
+        IdreesController idreesController = Get.find();
+        idreesController.onUpdateCategoriesStream?.call();
+        Get.back();
       },
     );
 

@@ -5,6 +5,7 @@ import 'package:sizer/sizer.dart';
 import 'package:success_airline/constants.dart';
 import 'package:success_airline/controllers/idrees_controller.dart';
 import 'package:success_airline/controllers/lessons_controller.dart';
+import 'package:success_airline/screens/admin_screens/categoryItemDetails_screen.dart';
 import 'package:success_airline/screens/lessonDetails_screen.dart';
 import 'package:success_airline/widgets/roundedButton.dart';
 import 'package:success_airline/widgets/smallText.dart';
@@ -20,20 +21,19 @@ class CategoryDetailScreen extends StatefulWidget {
 
 class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
   final lessonCont = Get.put(LessonsController());
-
+  IdreesController idreesController = Get.find();
   updateFuturebuilderCategories() {
     setState(() {});
   }
 
   @override
   void initState() {
-    IdreesController idreesController = Get.find();
     idreesController.onUpdateCategoriesStream = updateFuturebuilderCategories;
     super.initState();
   }
 
   void saveCategoyState(bool isContinue) {
-    if (!Get.find<IdreesController>().isAdmin)
+    if (!idreesController.isAdmin)
       lessonCont.saveContinueState(isContinue, widget.title);
   }
 
@@ -121,14 +121,21 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                         itemCount: lessonCont.lessons.length,
                       );
                     })),
-            InkWell(
+            GestureDetector(
               child: Image.asset(
-                'assets/pngs/home.png',
+                idreesController.isAdmin
+                    ? "assets/pngs/add.png"
+                    : 'assets/pngs/home.png',
                 height: 14.h,
                 fit: BoxFit.cover,
               ),
               onTap: () {
-                Get.back();
+                if (idreesController.isAdmin) {
+                  Get.to(() => AddCategoryItemDetailScreen(
+                      image: widget.image, category: widget.title));
+                } else {
+                  Get.back();
+                }
               },
             )
           ])),

@@ -287,6 +287,7 @@ class AddCategoryItemDetailScreen extends StatelessWidget {
               colorText: Colors.white,
               backgroundColor: Colors.green);
         }).then((value) {
+          idreesController.onUpdateCategoriesStream?.call();
           Get.close(1);
         });
       }

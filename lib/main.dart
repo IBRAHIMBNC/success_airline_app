@@ -74,6 +74,8 @@ class MyApp extends StatelessWidget {
                               if (snapshot.data!.email == 'admin@gmail.com') {
                                 Get.find<IdreesController>().isAdmin = true;
                                 return AdminHomeScreen();
+                              } else {
+                                Get.find<IdreesController>().isAdmin = false;
                               }
                               return HomeScreen();
                             }
