@@ -112,22 +112,6 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
           color: Colors.black,
           size: 18,
         ),
-        leading: InkWell(
-          onTap: () {
-            Get.back();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: Image(
-                height: 35,
-                width: 35,
-                image: AssetImage("assets/pngs/goback.png"),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        ),
         actions: [
           if (isAdmin)
             InkWell(
