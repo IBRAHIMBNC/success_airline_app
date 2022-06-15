@@ -54,8 +54,8 @@ class ProfileScreen extends StatelessWidget {
                     child: Stack(children: [
                       Image.asset(
                         'assets/pngs/profileAvater.png',
-                        height: 22.h,
-                        fit: BoxFit.cover,
+                        height: 25.h,
+                        fit: BoxFit.fill,
                       ),
                       Align(
                         alignment: Alignment.center,

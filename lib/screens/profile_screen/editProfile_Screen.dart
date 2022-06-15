@@ -85,7 +85,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               child: Stack(children: [
                                 Image.asset(
                                   'assets/pngs/profileAvater.png',
-                                  height: 22.h,
+                                  height: 25.h,
                                   fit: BoxFit.cover,
                                 ),
                                 Align(
