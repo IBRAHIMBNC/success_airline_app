@@ -41,7 +41,7 @@ class AppUser {
         id: userData.get('id'),
         name: userData.get('firstName') + ' ' + userData.get('lastName'),
         email: userData.get('email'),
-        profile: userData.get('image'),
+        profile: userData.get('image') ?? defaultProfile,
         referralList: (userData.get('referralData')));
   }
   factory AppUser.fromFirebaseWithChildrenDetails(DocumentSnapshot userData) {
