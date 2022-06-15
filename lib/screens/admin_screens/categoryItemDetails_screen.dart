@@ -28,10 +28,16 @@ class AddCategoryItemDetailScreen extends StatelessWidget {
   String? audioUrl;
   Rx<bool> isLoading = false.obs;
   Rx<File?> audioFile = File('').obs;
+  bool isUpdate;
+
+  TextEditingController txtTitle = TextEditingController();
+  TextEditingController txtDescription = TextEditingController();
+
   AddCategoryItemDetailScreen({
     Key? key,
     required this.category,
     required this.image,
+    this.isUpdate = false,
   }) : super(key: key);
 
   void selectAudio() async {
@@ -115,7 +121,7 @@ class AddCategoryItemDetailScreen extends StatelessWidget {
               ),
               BigText(
                 fontWeight: FontWeight.normal,
-                text: 'Add Content',
+                text: isUpdate ? "Update Content" : 'Add Content',
                 color: Colors.black,
                 size: 22,
               ),
@@ -129,6 +135,7 @@ class AddCategoryItemDetailScreen extends StatelessWidget {
                       CustomTextField(
                         prefixIcon: FontAwesomeIcons.t,
                         label: 'Title',
+                        controller: txtTitle,
                         onSave: (val) {
                           title = val;
                           print(title);
@@ -153,6 +160,7 @@ class AddCategoryItemDetailScreen extends StatelessWidget {
                           return null;
                         },
                         size: Size(90, 15),
+                        controller: txtDescription,
                         prefixIcon: FontAwesomeIcons.fileCircleExclamation,
                         label: 'Desciption',
                         keyboardType: TextInputType.multiline,

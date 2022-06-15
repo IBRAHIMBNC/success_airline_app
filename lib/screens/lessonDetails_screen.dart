@@ -35,7 +35,7 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
   bool isContinue = true;
 
   AudioController audioController = Get.find();
-
+  bool isAdmin = Get.find<IdreesController>().isAdmin;
   @override
   void initState() {
     currentLessonIndex = widget.index;
@@ -47,7 +47,7 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
   void dispose() {
     audioController.stopAudio();
 
-    if (!Get.find<IdreesController>().isAdmin) widget.save!(isContinue);
+    if (!isAdmin) widget.save!(isContinue);
     super.dispose();
   }
 
@@ -68,33 +68,36 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
           onTap: () {
             Get.back();
           },
-          child: Container(
-            height: 060,
-            width: 60,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Center(
               child: Image(
-                image: AssetImage("assets/pngs/arrow_back.png"),
+                height: 35,
+                width: 35,
+                image: AssetImage("assets/pngs/goback.png"),
                 fit: BoxFit.cover,
               ),
             ),
           ),
         ),
         actions: [
-          InkWell(
-            onTap: () {
-              Get.back();
-            },
-            child: Container(
-              height: 060,
-              width: 60,
-              child: Center(
-                child: Image(
-                  image: AssetImage("assets/pngs/arrow_forward.png"),
-                  fit: BoxFit.cover,
+          if (isAdmin)
+            InkWell(
+              onTap: () {
+                Get.back();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Image(
+                    height: 35,
+                    width: 35,
+                    image: AssetImage("assets/pngs/delete.png"),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
-          ),
         ],
       ),
       body: SizedBox(
@@ -250,22 +253,26 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                       )),
                   if (Get.find<IdreesController>().isAdmin)
                     Positioned(
-                        top: -1.2.h,
-                        right: -1.2.h,
-                        child: InkWell(
+                        top: -1.1.h,
+                        right: -1.1.h,
+                        child: GestureDetector(
                           onTap: () {
                             Get.to(() => AddCategoryItemDetailScreen(
                                   image: widget.image,
                                   category: widget.title,
+                                  isUpdate: true,
                                 ));
                           },
                           child: Container(
-                            height: 060,
-                            width: 60,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(100)),
+                            padding: EdgeInsets.all(6),
                             child: Center(
                               child: Image(
-                                image:
-                                    AssetImage("assets/pngs/arrow_forward.png"),
+                                height: 40,
+                                width: 40,
+                                image: AssetImage("assets/pngs/edit.png"),
                                 fit: BoxFit.cover,
                               ),
                             ),
