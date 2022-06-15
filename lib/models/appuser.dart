@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:success_airline/contants/appContants.dart';
 
 class AppUser {
   final String id;
@@ -44,6 +45,8 @@ class AppUser {
         referralList: (userData.get('referralData')));
   }
   factory AppUser.fromFirebaseWithChildrenDetails(DocumentSnapshot userData) {
+    String email = userData.get("email");
+    print(email);
     return AppUser.withChildrenDetails(
         homeAddress: Map<String, String>.from(userData.get('homeAddress')),
         mailingAddress:
@@ -51,7 +54,7 @@ class AppUser {
         id: userData.get('id'),
         name: userData.get('firstName') + ' ' + userData.get('lastName'),
         email: userData.get('email'),
-        profile: userData.get('image'),
+        profile: userData.get('image') ?? defaultProfile,
         children: userData.get('children'),
         childrenAges: userData.get('childrenAge'),
         hearAboutUs: userData.get('hearAboutUs'));

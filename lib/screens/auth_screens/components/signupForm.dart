@@ -89,6 +89,7 @@ class _SignUpFormState extends State<SignUpForm> {
     //   return;
     // }
     _key.currentState!.save();
+
     Map<String, dynamic> userDetails = {
       'firstName': firstName,
       'lastName': lastName,

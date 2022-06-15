@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
+import 'package:success_airline/contants/appContants.dart';
 import 'package:success_airline/controllers/idrees_controller.dart';
 import 'package:success_airline/screens/buyPremium.dart';
 import '../models/appuser.dart';
@@ -26,8 +27,7 @@ class AuthController extends GetxController {
     });
     String picUrl = '';
     if (userDetails['image'] == '') {
-      picUrl =
-          'https://firebasestorage.googleapis.com/v0/b/success-airline-lab123.appspot.com/o/profile_placeholder.jpeg?alt=media&token=5542fab1-de36-4516-8068-1b9fe122c708';
+      picUrl = defaultProfile;
     } else {
       await uploadProfile(userDetails['image']);
     }
@@ -152,6 +152,7 @@ class AuthController extends GetxController {
       }
     }
     final List<AppUser> users = [];
+
     for (var user in allUsersDocs.docs) {
       users.add(AppUser.fromFirebaseWithChildrenDetails(user));
     }

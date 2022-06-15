@@ -132,7 +132,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     SizedBox(height: 1.h),
                     const SmallText(
-                      text: 'photo',
+                      text: 'Photo',
                       color: Colors.black,
                     )
                   ],
