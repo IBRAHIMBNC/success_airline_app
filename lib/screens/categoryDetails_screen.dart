@@ -9,27 +9,43 @@ import 'package:success_airline/screens/lessonDetails_screen.dart';
 import 'package:success_airline/widgets/roundedButton.dart';
 import 'package:success_airline/widgets/smallText.dart';
 
-class CategoryDetailScreen extends StatelessWidget {
-  final lessonCont = Get.put(LessonsController());
+class CategoryDetailScreen extends StatefulWidget {
   final String title;
   final String image;
-  CategoryDetailScreen({Key? key, required this.title, required this.image})
-      : super(key: key);
+  CategoryDetailScreen({Key? key, required this.title, required this.image});
+
+  @override
+  State<CategoryDetailScreen> createState() => _CategoryDetailScreenState();
+}
+
+class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
+  final lessonCont = Get.put(LessonsController());
+
+  updateFuturebuilderCategories() {
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    IdreesController idreesController = Get.find();
+    idreesController.onUpdateCategoriesStream = updateFuturebuilderCategories;
+    super.initState();
+  }
 
   void saveCategoyState(bool isContinue) {
     if (!Get.find<IdreesController>().isAdmin)
-      lessonCont.saveContinueState(isContinue, title);
+      lessonCont.saveContinueState(isContinue, widget.title);
   }
 
   @override
   Widget build(BuildContext context) {
-    print(image);
+    print(widget.image);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         title: SmallText(
-          text: title,
+          text: widget.title,
           color: Colors.black,
           size: 18,
         ),
@@ -53,17 +69,18 @@ class CategoryDetailScreen extends StatelessWidget {
             SizedBox(
               width: 90.w,
               height: 30.h,
-              child: image.contains('.json')
-                  ? Lottie.asset(image)
+              child: widget.image.contains('.json')
+                  ? Lottie.asset(widget.image)
                   : Padding(
-                      padding: EdgeInsets.all(4.h), child: Image.asset(image)),
+                      padding: EdgeInsets.all(4.h),
+                      child: Image.asset(widget.image)),
             ),
             SizedBox(
                 height: 42.h,
                 width: 90.w,
                 // color: Colors.red,
                 child: FutureBuilder(
-                    future: lessonCont.fetchLessons(title),
+                    future: lessonCont.fetchLessons(widget.title),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(child: const CircularProgressIndicator());
@@ -85,8 +102,8 @@ class CategoryDetailScreen extends StatelessWidget {
                             onPressed: () {
                               Get.to(() => LessonDetailScreen(
                                   save: saveCategoyState,
-                                  image: image,
-                                  title: title,
+                                  image: widget.image,
+                                  title: widget.title,
                                   lesson: lessonCont.lessons,
                                   index: index));
                             },

@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/constants.dart';
+import 'package:success_airline/controllers/idrees_controller.dart';
 import 'package:success_airline/controllers/lessons_controller.dart';
 import 'package:success_airline/models/lessonModel.dart';
 import 'package:success_airline/widgets/bigTexT.dart';
@@ -28,17 +29,33 @@ class AddCategoryItemDetailScreen extends StatelessWidget {
   String? audioUrl;
   Rx<bool> isLoading = false.obs;
   Rx<File?> audioFile = File('').obs;
+  File? downloadedFile;
   bool isUpdate;
-
+  Lesson? lesson;
+  IdreesController idreesController = Get.find();
   TextEditingController txtTitle = TextEditingController();
   TextEditingController txtDescription = TextEditingController();
 
-  AddCategoryItemDetailScreen({
-    Key? key,
-    required this.category,
-    required this.image,
-    this.isUpdate = false,
-  }) : super(key: key);
+  AddCategoryItemDetailScreen(
+      {Key? key,
+      required this.category,
+      required this.image,
+      this.isUpdate = false,
+      this.lesson}) {
+    if (isUpdate) {
+      updateDataonAdmin();
+    }
+  }
+
+  updateDataonAdmin() async {
+    txtTitle.text = lesson!.title;
+    txtDescription.text = lesson!.description;
+    isLoading.value = true;
+    audioFile.value =
+        await idreesController.downloadFile(lesson!.audioLink, "test.mp3");
+    downloadedFile = audioFile.value;
+    isLoading.value = false;
+  }
 
   void selectAudio() async {
     final FilePickerResult? result;
@@ -243,16 +260,36 @@ class AddCategoryItemDetailScreen extends StatelessWidget {
         return;
       }
       isLoading.value = true;
-      audioUrl = await lessonCont.uploadAudio(audioFile.value!);
-      final lesson = Lesson('', title!, description!, audioUrl!);
-      lessonCont.uploadLesson(lesson, category).then((value) {
-        Get.snackbar('Lesson Uploaded', 'Lesson uploaded successfully',
-            snackPosition: SnackPosition.BOTTOM,
-            colorText: Colors.white,
-            backgroundColor: Colors.green);
-      }).then((value) {
-        Get.close(1);
-      });
+
+      if (downloadedFile!.path != audioFile.value!.path) {
+        audioUrl = await lessonCont.uploadAudio(audioFile.value!);
+      } else {
+        audioUrl = lesson!.audioLink;
+      }
+
+      if (isUpdate) {
+        String ss = lesson!.id;
+        Lesson less = Lesson(ss, txtTitle.text, txtDescription.text, audioUrl!);
+        lessonCont.updateLesson(less, category).then((value) {
+          Get.snackbar('Lesson Updated', 'Lesson updated successfully',
+              snackPosition: SnackPosition.BOTTOM,
+              colorText: Colors.white,
+              backgroundColor: Colors.green);
+        }).then((value) {
+          idreesController.onUpdateCategoriesStream?.call();
+          Get.close(2);
+        });
+      } else {
+        final lesson = Lesson('', title!, description!, audioUrl!);
+        lessonCont.uploadLesson(lesson, category).then((value) {
+          Get.snackbar('Lesson Uploaded', 'Lesson uploaded successfully',
+              snackPosition: SnackPosition.BOTTOM,
+              colorText: Colors.white,
+              backgroundColor: Colors.green);
+        }).then((value) {
+          Get.close(1);
+        });
+      }
     }
   }
 }

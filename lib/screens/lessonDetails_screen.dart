@@ -51,6 +51,49 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
     super.dispose();
   }
 
+  deleteAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Cancel",
+          style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.normal,
+              color: Colors.grey.shade800)),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Delete",
+          style: TextStyle(
+              fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red)),
+      onPressed: () {
+        Navigator.pop(context);
+        //onItemClicked("Delete");
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Delete Category",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+      content: Text("Are you sure you want to delete this category?",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal)),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +127,7 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
           if (isAdmin)
             InkWell(
               onTap: () {
-                Get.back();
+                deleteAlertDialog(context);
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -234,7 +277,7 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                   Positioned(
                       bottom: -2.3.h,
                       left: 45.w - 6.h,
-                      child: InkWell(
+                      child: GestureDetector(
                         onTap: () {
                           if (currentLessonIndex == widget.lesson.length - 1) {
                             isContinue = false;
@@ -261,6 +304,7 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                                   image: widget.image,
                                   category: widget.title,
                                   isUpdate: true,
+                                  lesson: widget.lesson[widget.index],
                                 ));
                           },
                           child: Container(

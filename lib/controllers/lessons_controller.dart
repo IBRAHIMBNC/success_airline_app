@@ -32,6 +32,18 @@ class LessonsController extends GetxController {
         .update({'id': response.id});
   }
 
+  Future<void> updateLesson(Lesson les, String category) async {
+    await lessonRef
+        .doc(category)
+        .collection('lessons')
+        .doc(les.id)
+        .update(les.toJason());
+  }
+
+  Future<void> deleteLesson(Lesson les, String category) async {
+    await lessonRef.doc(category).collection('lessons').doc(les.id).delete();
+  }
+
   Future<String> uploadAudio(File file) async {
     final String id = DateTime.now().toIso8601String();
     storageRef = storageRef.child('audioFiles').child(id + '.mp3');
@@ -44,7 +56,9 @@ class LessonsController extends GetxController {
     final lessons = await lessonRef.doc(category).collection('lessons').get();
     final temp = [];
     lessons.docs.forEach((lesson) {
-      temp.add(Lesson.fromFirebase(lesson));
+      Lesson ss = Lesson.fromFirebase(lesson);
+
+      temp.add(ss);
     });
     _lessons = [...temp];
     update();
