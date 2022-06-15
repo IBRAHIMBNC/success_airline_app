@@ -37,6 +37,8 @@
 	<string>Select audio file for this lesson</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This app uses camera to take profile Picture.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app uses Microphone just for opening camera.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app uses Photo Library to select profile picture.</string>
 	<key>UIBackgroundModes</key>
