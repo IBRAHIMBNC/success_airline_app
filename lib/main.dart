@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
                             Image.asset(
                               'assets/pngs/planeLoop.gif',
                               width: 100.w,
-                              height: 50.h,
+                              height: 40.h,
                               fit: BoxFit.cover,
                             ),
                           ],

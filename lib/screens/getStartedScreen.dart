@@ -24,7 +24,9 @@ class GetStartedScreen extends StatelessWidget {
             const BigText(
                 text: 'Success airlines', color: Colors.white, size: 30),
             const Spacer(),
-            Image.asset('assets/pngs/planeLoop.gif'),
+            Image.asset(
+              'assets/pngs/planeLoop.gif',
+            ),
             const Spacer(),
             RoundedButton(
               label: 'GET STARTED',

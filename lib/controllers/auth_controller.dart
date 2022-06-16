@@ -154,7 +154,12 @@ class AuthController extends GetxController {
     final List<AppUser> users = [];
 
     for (var user in allUsersDocs.docs) {
-      users.add(AppUser.fromFirebaseWithChildrenDetails(user));
+      Map<String, dynamic> ss = user.data(); // as Map<String,dynamic>();
+      bool sss = ss.keys.contains("homeAddress");
+
+      if (sss) {
+        users.add(AppUser.fromFirebaseWithChildrenDetails(user));
+      }
     }
     return users;
   }

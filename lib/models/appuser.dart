@@ -45,8 +45,10 @@ class AppUser {
         referralList: (userData.get('referralData')));
   }
   factory AppUser.fromFirebaseWithChildrenDetails(DocumentSnapshot userData) {
-    String email = userData.get("email");
-    print(email);
+    // String email = userData.get("email");
+
+    // Map<String, dynamic> s = userData.data() as Map<String, dynamic>;
+
     return AppUser.withChildrenDetails(
         homeAddress: Map<String, String>.from(userData.get('homeAddress')),
         mailingAddress:
