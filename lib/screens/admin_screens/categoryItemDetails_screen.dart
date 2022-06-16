@@ -236,6 +236,8 @@ class AddCategoryItemDetailScreen extends StatelessWidget {
                   isLoading: isLoading.value,
                   label: 'Publish',
                   onPressed: () {
+                    // print(lesson!.audioLink);
+                    // return;
                     // Focus.of(context).unfocus();
                     publish();
                   },
@@ -261,7 +263,8 @@ class AddCategoryItemDetailScreen extends StatelessWidget {
       }
       isLoading.value = true;
 
-      if (downloadedFile!.path != audioFile.value!.path) {
+      if (downloadedFile == null ||
+          downloadedFile!.path != audioFile.value!.path) {
         audioUrl = await lessonCont.uploadAudio(audioFile.value!);
       } else {
         audioUrl = lesson!.audioLink;

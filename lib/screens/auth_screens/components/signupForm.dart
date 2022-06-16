@@ -208,75 +208,75 @@ class _SignUpFormState extends State<SignUpForm> {
               if (widget.userData != null)
                 Column(
                   children: [
-                    const SmallText(
-                      size: 14,
-                      text: 'Home Address',
-                      color: Colors.blue,
-                    ),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    CustomTextField(
-                        controller: _homeController,
-                        validator: (val) {
-                          if (val!.trim().isEmpty) {
-                            return 'This field must not be empty';
-                          }
-                          return null;
-                        },
-                        onSave: (val) {
-                          homeAddress['home'] = val!;
-                        },
-                        hintext: '',
-                        prefixIcon: FontAwesomeIcons.house,
-                        label: 'House Address'),
-                    CustomTextField(
-                      controller: _cityController,
-                      validator: (val) {
-                        if (val!.trim().isEmpty) {
-                          return 'This field must not be empty';
-                        }
-                        return null;
-                      },
-                      onSave: (val) {
-                        homeAddress['city'] = val!;
-                      },
-                      hintext: '',
-                      prefixIcon: FontAwesomeIcons.city,
-                      label: 'City',
-                    ),
-                    CustomTextField(
-                        controller: _stateController,
-                        validator: (val) {
-                          if (val!.trim().isEmpty) {
-                            return 'This field must not be empty';
-                          }
-                          return null;
-                        },
-                        onSave: (val) {
-                          homeAddress['state'] = val!;
-                        },
-                        hintext: '',
-                        prefixIcon: FontAwesomeIcons.schoolFlag,
-                        label: 'State'),
-                    CustomTextField(
-                        controller: _zipController,
-                        keyboardType: TextInputType.phone,
-                        validator: (val) {
-                          if (val!.trim().isEmpty) {
-                            return 'This field must not be empty';
-                          }
-                          return null;
-                        },
-                        onSave: (val) {
-                          homeAddress['zipCode'] = val!;
-                        },
-                        hintext: '',
-                        prefixIcon: FontAwesomeIcons.mapPin,
-                        label: 'Zip Code'),
-                    SizedBox(
-                      height: 2.h,
-                    ),
+                    // const SmallText(
+                    //   size: 14,
+                    //   text: 'Home Address',
+                    //   color: Colors.blue,
+                    // ),
+                    // SizedBox(
+                    //   height: 2.h,
+                    // ),
+                    // CustomTextField(
+                    //     controller: _homeController,
+                    //     validator: (val) {
+                    //       if (val!.trim().isEmpty) {
+                    //         return 'This field must not be empty';
+                    //       }
+                    //       return null;
+                    //     },
+                    //     onSave: (val) {
+                    //       homeAddress['home'] = val!;
+                    //     },
+                    //     hintext: '',
+                    //     prefixIcon: FontAwesomeIcons.house,
+                    //     label: 'House Address'),
+                    // CustomTextField(
+                    //   controller: _cityController,
+                    //   validator: (val) {
+                    //     if (val!.trim().isEmpty) {
+                    //       return 'This field must not be empty';
+                    //     }
+                    //     return null;
+                    //   },
+                    //   onSave: (val) {
+                    //     homeAddress['city'] = val!;
+                    //   },
+                    //   hintext: '',
+                    //   prefixIcon: FontAwesomeIcons.city,
+                    //   label: 'City',
+                    // ),
+                    // CustomTextField(
+                    //     controller: _stateController,
+                    //     validator: (val) {
+                    //       if (val!.trim().isEmpty) {
+                    //         return 'This field must not be empty';
+                    //       }
+                    //       return null;
+                    //     },
+                    //     onSave: (val) {
+                    //       homeAddress['state'] = val!;
+                    //     },
+                    //     hintext: '',
+                    //     prefixIcon: FontAwesomeIcons.schoolFlag,
+                    //     label: 'State'),
+                    // CustomTextField(
+                    //     controller: _zipController,
+                    //     keyboardType: TextInputType.phone,
+                    //     validator: (val) {
+                    //       if (val!.trim().isEmpty) {
+                    //         return 'This field must not be empty';
+                    //       }
+                    //       return null;
+                    //     },
+                    //     onSave: (val) {
+                    //       homeAddress['zipCode'] = val!;
+                    //     },
+                    //     hintext: '',
+                    //     prefixIcon: FontAwesomeIcons.mapPin,
+                    //     label: 'Zip Code'),
+                    // SizedBox(
+                    //   height: 2.h,
+                    // ),
                     const SmallText(
                       size: 14,
                       text: 'Mailing Address',

@@ -137,12 +137,9 @@ class _LoginFormState extends State<LoginForm> {
         child: Column(
           children: [
             CustomTextField(
-              validator: (val) {
-                if (!GetUtils.isEmail(val.toString())) {
-                  return 'Please enter a valid email';
-                }
-                return null;
-              },
+              validator: (input) => input!.isValidEmail()
+                  ? null
+                  : "Please enter a valid email address.",
               onSave: (val) {
                 email = val!;
               },

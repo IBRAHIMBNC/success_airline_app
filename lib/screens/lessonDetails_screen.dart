@@ -75,6 +75,7 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
         IdreesController idreesController = Get.find();
         idreesController.onUpdateCategoriesStream?.call();
         Get.back();
+        Get.back();
       },
     );
 
