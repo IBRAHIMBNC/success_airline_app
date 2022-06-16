@@ -215,8 +215,11 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                               GestureDetector(
                                 onTap: () async {
                                   if (audioController.myPlayer == null) {
-                                    audioController.startAudio(widget
-                                        .lesson[currentLessonIndex].audioLink);
+                                    audioController.startAudio(
+                                        widget.lesson[currentLessonIndex]
+                                            .audioLink,
+                                        widget
+                                            .lesson[currentLessonIndex].title);
                                   } else {
                                     if (audioController.isPlaying.value) {
                                       audioController.myPlayer!.pause();
