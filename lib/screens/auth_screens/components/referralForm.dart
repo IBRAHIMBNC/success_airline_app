@@ -12,9 +12,12 @@ import '../../../widgets/smallText.dart';
 import '../../../widgets/textfeild2.dart';
 import 'loading_screen.dart';
 
+GlobalKey<_ReferralFormState> referralKey = GlobalKey();
+
 class ReferralForm extends StatefulWidget {
   final Map<String, dynamic>? userDetails;
-  const ReferralForm({Key? key, required this.userDetails}) : super(key: key);
+
+  ReferralForm({Key? key, required this.userDetails}) : super(key: key);
 
   @override
   State<ReferralForm> createState() => _ReferralFormState();

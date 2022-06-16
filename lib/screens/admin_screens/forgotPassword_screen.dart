@@ -4,8 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
-import 'package:get/utils.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/widgets/bigTexT.dart';
 import 'package:success_airline/widgets/roundedButton.dart';

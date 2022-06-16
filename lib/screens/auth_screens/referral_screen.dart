@@ -26,9 +26,36 @@ class ReferralScreen extends StatelessWidget {
             width: 90.w,
             child: SingleChildScrollView(
               child: Column(children: [
-                SvgPicture.asset(
-                  'assets/svgs/logo.svg',
-                  height: 8.h,
+                Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: SvgPicture.asset(
+                        'assets/svgs/logo.svg',
+                        height: 8.h,
+                      ),
+                    ),
+                    if (userDetails != null)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: GestureDetector(
+                          onTap: () {
+                            referralKey.currentState!.onDone();
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 30, horizontal: 20),
+                            child: Text(
+                              "Skip",
+                              style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontSize: 16,
+                                  decoration: TextDecoration.underline),
+                            ),
+                          ),
+                        ),
+                      )
+                  ],
                 ),
                 SizedBox(
                   height: 3.h,
@@ -49,6 +76,7 @@ class ReferralScreen extends StatelessWidget {
                 ),
                 ReferralForm(
                   userDetails: userDetails,
+                  key: referralKey,
                 )
               ]),
             ),

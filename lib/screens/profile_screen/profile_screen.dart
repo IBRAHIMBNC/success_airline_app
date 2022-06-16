@@ -49,7 +49,7 @@ class ProfileScreen extends StatelessWidget {
                 height: 75.h,
                 child: Column(children: [
                   SizedBox(
-                    width: 22.h,
+                    width: 21.5.h,
                     height: 22.h,
                     child: Stack(children: [
                       Image.asset(

@@ -61,8 +61,8 @@ class _ChildrenCountScreenState extends State<ChildrenCountScreen> {
           SizedBox(height: 2.h),
           CustomTextField(
               validator: (val) {
-                if (val!.isEmpty) return 'you have at least on child';
-                if (int.parse(val) < 1) return 'you have at least on child';
+                if (val!.isEmpty) return '';
+                if (int.parse(val) < 1) return '';
                 return null;
               },
               alwaysValidate: true,
