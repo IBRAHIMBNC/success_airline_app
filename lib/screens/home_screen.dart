@@ -84,7 +84,7 @@ class HomeScreen extends StatelessWidget {
                                 builder: (controller) {
                               if (controller.user != null) {
                                 return CircleAvatar(
-                                  backgroundColor: kprimaryColor,
+                                  backgroundColor: Colors.grey.shade300,
                                   radius: 3.1.h,
                                   backgroundImage: CachedNetworkImageProvider(
                                       auth.user!.profile),
