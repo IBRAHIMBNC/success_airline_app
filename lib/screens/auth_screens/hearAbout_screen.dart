@@ -29,7 +29,7 @@ class HearAboutUScreen extends StatefulWidget {
 }
 
 class _HearAboutUScreenState extends State<HearAboutUScreen> {
-  AboutUs about = AboutUs.facebook;
+  AboutUs? about;
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +158,8 @@ class _HearAboutUScreenState extends State<HearAboutUScreen> {
               label: 'NEXT',
               onPressed: () {
                 print(about);
-                widget.userDetails['hearAboutUs'] = about.name;
+                if (about == null) return;
+                widget.userDetails['hearAboutUs'] = about!.name;
                 Get.to(() => ChildrenCountScreen(),
                     arguments: widget.userDetails);
               },
