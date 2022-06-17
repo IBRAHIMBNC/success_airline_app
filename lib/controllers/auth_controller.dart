@@ -43,7 +43,6 @@ class AuthController extends GetxController {
           name: name,
           email: email,
           id: auth.currentUser!.uid,
-          homeAddress: userDetails['homeAddress'],
           mailingAddress: userDetails['mailingAddress'],
           referralList: userDetails['referralData']);
       purchaseRef.doc(user!.id).set({

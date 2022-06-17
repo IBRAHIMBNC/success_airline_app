@@ -124,7 +124,7 @@ class UserDetailScreen extends StatelessWidget {
                       ),
                     );
                   }
-                  if (snapshot.data == null) {
+                  if (snapshot.data!.isEmpty) {
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: 3.h),
                       child: const SmallText(
@@ -294,7 +294,7 @@ class UserDetailScreen extends StatelessWidget {
                         Expanded(
                             child: SmallText(
                           color: Colors.black,
-                          text: user.homeAddress['home']!,
+                          text: user.mailingAddress['home']!,
                         ))
                       ],
                     ),
@@ -310,7 +310,7 @@ class UserDetailScreen extends StatelessWidget {
                         Expanded(
                             child: SmallText(
                           color: Colors.black,
-                          text: user.homeAddress['city']!,
+                          text: user.mailingAddress['city']!,
                         ))
                       ],
                     ),
@@ -326,7 +326,7 @@ class UserDetailScreen extends StatelessWidget {
                         Expanded(
                             child: SmallText(
                           color: Colors.black,
-                          text: user.homeAddress['state']!,
+                          text: user.mailingAddress['state']!,
                         ))
                       ],
                     ),
@@ -342,107 +342,12 @@ class UserDetailScreen extends StatelessWidget {
                         Expanded(
                             child: SmallText(
                           color: Colors.black,
-                          text: user.homeAddress['zipCode']!,
+                          text: user.mailingAddress['zipCode']!,
                         ))
                       ],
                     ),
                   ),
                 ],
-              ),
-            ),
-            VerticalDivider(
-              color: kprimaryColor,
-              endIndent: 0.5.h,
-              indent: 0.5.h,
-              thickness: 2,
-            ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 3.w),
-                child: Column(
-                  children: [
-                    const SmallText(
-                      text: 'Home Address',
-                      color: Colors.black,
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const SmallText(
-                            text: 'Home:',
-                            color: Colors.black45,
-                          ),
-                          Expanded(
-                              child: SmallText(
-                            color: Colors.black,
-                            text: user.homeAddress['home']!,
-                          ))
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const SmallText(
-                            text: 'City:',
-                            color: Colors.black45,
-                          ),
-                          Expanded(
-                              child: SmallText(
-                            color: Colors.black,
-                            text: user.homeAddress['city']!,
-                          ))
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const SmallText(
-                            text: 'state:',
-                            color: Colors.black45,
-                          ),
-                          Expanded(
-                              child: SmallText(
-                            color: Colors.black,
-                            text: user.homeAddress['state']!,
-                          ))
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const SmallText(
-                            text: 'Zip Code:',
-                            color: Colors.black45,
-                          ),
-                          Expanded(
-                              child: SmallText(
-                            color: Colors.black,
-                            text: user.homeAddress['zipCode']!,
-                          ))
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ),
           ]),

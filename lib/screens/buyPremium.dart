@@ -20,6 +20,7 @@ import 'package:success_airline/widgets/smallText.dart';
 import '../controllers/test_purchase.dart';
 
 String PURCHASE_ID = '';
+DateTime? expiryDate;
 
 class PremiumPlanScreen extends StatefulWidget {
   final userDetails = Get.arguments as Map<String, dynamic>;
@@ -42,7 +43,6 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
   bool _purchasePending = false;
   StreamSubscription<List<PurchaseDetails>>? _subscription;
   String? purchasedProdID;
-  DateTime expiryDate = DateTime.now();
   final RxBool isYearlyPlan = true.obs;
   bool isLoading = true;
   @override

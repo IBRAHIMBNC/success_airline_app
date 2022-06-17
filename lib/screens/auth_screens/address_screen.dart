@@ -23,7 +23,6 @@ class AddressScreen extends StatelessWidget {
     }
     _key.currentState!.save();
 
-    userDetails['homeAddress'] = homeAddress;
     userDetails['mailingAddress'] = mailingAddress;
     print(userDetails);
     Get.to(() => AddChildScreen(), arguments: userDetails);

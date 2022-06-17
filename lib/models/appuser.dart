@@ -5,7 +5,6 @@ class AppUser {
   final String id;
   final String profile;
   final String name;
-  final Map<String, String> homeAddress;
   final Map<String, String> mailingAddress;
   final String? email;
   String? children;
@@ -18,7 +17,6 @@ class AppUser {
       required this.profile,
       required this.email,
       required this.id,
-      required this.homeAddress,
       required this.mailingAddress,
       this.referralList});
   AppUser.withChildrenDetails({
@@ -26,7 +24,6 @@ class AppUser {
     required this.profile,
     required this.email,
     required this.id,
-    required this.homeAddress,
     required this.mailingAddress,
     required this.children,
     required this.childrenAges,
@@ -35,7 +32,6 @@ class AppUser {
 
   factory AppUser.fromFirebase(DocumentSnapshot userData) {
     return AppUser(
-        homeAddress: Map<String, String>.from(userData.get('homeAddress')),
         mailingAddress:
             Map<String, String>.from(userData.get('mailingAddress')),
         id: userData.get('id'),
@@ -50,7 +46,6 @@ class AppUser {
     // Map<String, dynamic> s = userData.data() as Map<String, dynamic>;
 
     return AppUser.withChildrenDetails(
-        homeAddress: Map<String, String>.from(userData.get('homeAddress')),
         mailingAddress:
             Map<String, String>.from(userData.get('mailingAddress')),
         id: userData.get('id'),
@@ -68,7 +63,6 @@ class AppUser {
       'lastName': name.split(' ')[1],
       'email': email,
       'id': id,
-      'homeAddress': homeAddress,
       'image': profile,
       'mailingAddress': mailingAddress
     };

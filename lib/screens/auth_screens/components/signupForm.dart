@@ -52,16 +52,10 @@ class _SignUpFormState extends State<SignUpForm> {
   String password = '';
   String firstName = '';
   String lastName = '';
-
+  Map<String, dynamic> userDetails = {};
   bool isEmailAvailable = true;
   bool isUpdating = false;
 
-  Map<String, String> homeAddress = {
-    'home': '',
-    'city': '',
-    'state': '',
-    'zip Code': '',
-  };
   Map<String, String> mailingAddress = {
     'home': '',
     'city': '',
@@ -90,13 +84,14 @@ class _SignUpFormState extends State<SignUpForm> {
     // }
     _key.currentState!.save();
 
-    Map<String, dynamic> userDetails = {
+    userDetails = {
       'firstName': firstName,
       'lastName': lastName,
       'email': email,
       'password': password,
       'image': widget.image ?? '',
-      'purchaseId': PURCHASE_ID
+      'purchaseId': PURCHASE_ID,
+      'expiryDate': expiryDate,
     };
 
     Get.to(() => PURCHASE_ID.isEmpty ? PremiumPlanScreen() : AddressScreen(),
@@ -110,10 +105,6 @@ class _SignUpFormState extends State<SignUpForm> {
       _fNameController.text = user!.name.split(' ')[0];
       _lNameController.text = user.name.split(' ')[1];
       _emailController.text = user.email!;
-      _homeController.text = user.homeAddress['home']!;
-      _cityController.text = user.homeAddress['city']!;
-      _stateController.text = user.homeAddress['state']!;
-      _zipController.text = user.mailingAddress['zipCode']!;
       _home2Controller.text = user.mailingAddress['home']!;
       _city2Controller.text = user.mailingAddress['city']!;
       _state2Controller.text = user.mailingAddress['state']!;
@@ -445,12 +436,6 @@ class _SignUpFormState extends State<SignUpForm> {
         email: _emailController.text,
         name: _fNameController.text + " " + _lNameController.text,
         profile: imageUrl,
-        homeAddress: {
-          'home': _homeController.text,
-          'city': _cityController.text,
-          'state': _stateController.text,
-          'zipCode': _zipController.text,
-        },
         mailingAddress: {
           'home': _home2Controller.text,
           'city': _city2Controller.text,
