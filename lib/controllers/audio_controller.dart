@@ -47,6 +47,7 @@ class AudioController extends GetxController {
 
   Future startAudio(String url, String name) async {
     if (myPlayer == null) {
+      isSyncingAudio.value = true;
       myPlayer = AudioPlayer();
       initateAudioPlayer();
 
@@ -59,7 +60,6 @@ class AudioController extends GetxController {
       if (isFileExist) {
         myPlayer!.setFilePath(file.path);
       } else {
-        isSyncingAudio.value = true;
         file = await idreesController.downloadFile(url, filename);
         //isSyncingAudio.value = false;
         myPlayer!.setFilePath(file.path);
