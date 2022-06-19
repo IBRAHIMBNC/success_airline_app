@@ -69,7 +69,6 @@ class MyApp extends StatelessWidget {
                                 ConnectionState.waiting) {
                               return const LoadingScreen();
                             }
-
                             if (snapshot.hasData) {
                               if (snapshot.data!.email == 'admin@gmail.com') {
                                 Get.find<IdreesController>().isAdmin = true;
