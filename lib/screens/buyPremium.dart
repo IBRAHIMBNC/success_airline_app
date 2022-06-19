@@ -121,28 +121,6 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
     });
   }
 
-  // Future<void> initStoreInfo() async {
-  //   final bool isAvailable = await _ipa.isAvailable();
-  //   if (!isAvailable) {
-  //     setState(() {
-  //       _isAvailable = isAvailable;
-  //       _products = <ProductDetails>[];
-  //       _purchases = <PurchaseDetails>[];
-  //       _purchasePending = false;
-  //       isLoading = false;
-  //     });
-  //     return;
-  //   }
-  // }
-
-  // getProducts() async {
-  //   Set<String> ids = Set.from(productIds);
-  //   ProductDetailsResponse response = await _ipa.queryProductDetails(ids);
-  //   setState(() {
-  //     _products = response.productDetails;
-  //   });
-  // }
-
   PurchaseDetails _hasPurchase(String id) {
     return _purchases.firstWhere((item) => item.productID == id);
   }
@@ -169,6 +147,13 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
           .buyConsumable(purchaseParam: purchaseParam, autoConsume: true)
           .catchError((err) {
         print(err);
+
+        //this wil be the temp code
+        //TODO : We have to remove this Snakcbar once the error is solved aboit purchases
+        Get.snackbar('Error', err.message,
+            snackPosition: SnackPosition.BOTTOM,
+            colorText: Colors.white,
+            backgroundColor: Colors.red);
       });
     }
   }
@@ -264,35 +249,6 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
                           height: 20.h,
                           child: Image.asset('assets/pngs/diamond 1.png'),
                         ),
-                        // BigText(
-                        //   text: 'Prices',
-                        //   color: Colors.black,
-                        //   size: 16,
-                        // ),
-                        // SizedBox(
-                        //   height: 2.h,
-                        // ),
-                        // _Feature(
-                        //   text: 'Lorem ipsum doctor  sit aimt',
-                        // ),
-                        // SizedBox(
-                        //   height: 2.h,
-                        // ),
-                        // _Feature(
-                        //   text: 'Lorem ipsum doctor  sit aimt',
-                        // ),
-                        // SizedBox(
-                        //   height: 2.h,
-                        // ),
-                        // _Feature(
-                        //   text: 'Lorem ipsum doctor  sit aimt',
-                        // ),
-                        // SizedBox(
-                        //   height: 2.h,
-                        // ),
-                        // _Feature(
-                        //   text: 'Lorem ipsum doctor  sit aimt',
-                        // ),
                         SizedBox(
                           height: 5.h,
                         ),
@@ -371,16 +327,7 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
                                   Spacer(
                                     flex: 3,
                                   )
-                                ]
-                                    // trailing: SizedBox(width: 10.w),
-                                    // trailing: BigText(
-                                    //   text: '\$ 71.88',
-                                    //   color: !isYearlyPlan.value
-                                    //       ? Colors.white
-                                    //       : Colors.black,
-                                    //   size: 12,
-                                    // ),
-                                    ),
+                                ]),
                               ),
                             ),
                           ),
@@ -490,20 +437,6 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
                                 text: 'Log out',
                                 color: Colors.black38,
                               ))
-                        // RoundedButton(
-                        //   label: 'Log out',
-                        //   size: Size(50, 7.5),
-                        //   radius: 2,
-                        //   onPressed: () async {
-                        //     // print(_purchases.first.error);
-                        //     // final platformAddition = _ipa.getPlatformAddition<
-                        //     //     InAppPurchaseAndroidPlatformAddition>();
-                        //     // platformAddition
-                        //     //     .consumePurchase(_purchases.first)
-                        //     //     .then((value) => print(value.responseCode));
-                        //
-                        //   },
-                        // )
                       ]),
                 )),
     );

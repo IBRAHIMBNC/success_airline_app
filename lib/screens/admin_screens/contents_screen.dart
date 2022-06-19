@@ -97,36 +97,6 @@ class ContentScreen extends StatelessWidget {
               SizedBox(
                 height: 2.h,
               ),
-              // Container(
-              //   padding: EdgeInsets.only(left: 4.w, right: 2.w),
-              //   alignment: Alignment.center,
-              //   height: 7.h,
-              //   decoration: BoxDecoration(
-              //       borderRadius: BorderRadius.circular(15),
-              //       color: kprimaryColor.withOpacity(0.1)),
-              //   child: Row(
-              //     children: [
-              //       const Expanded(
-              //         child: TextField(
-              //             decoration: InputDecoration(
-              //                 hintStyle: TextStyle(fontSize: 20),
-              //                 border: InputBorder.none,
-              //                 hintText: 'Search...')),
-              //       ),
-              //       RoundedIconButton(
-              //         onTap: () {
-              //           auth.signOut();
-              //           // auth.signOut();
-              //         },
-              //         icon: Icon(
-              //           Icons.search,
-              //           size: 4.h,
-              //           color: kprimaryColor,
-              //         ),
-              //       )
-              //     ],
-              //   ),
-              // ),
               SizedBox(
                 height: 2.h,
               ),
@@ -145,10 +115,6 @@ class ContentScreen extends StatelessWidget {
                 separatorBuilder: (context, index) => SizedBox(height: 0.5.h),
                 itemBuilder: (context, index) => InkWell(
                   onTap: () {
-                    // Get.to(() => AddCategoryItemDetailScreen(
-                    //       image: allCategoryList[index].json,
-                    //       category: allCategoryList[index].key,
-                    //     ));
                     Get.to(() => CategoryDetailScreen(
                           image: allCategoryList[index].json,
                           title: allCategoryList[index].key,

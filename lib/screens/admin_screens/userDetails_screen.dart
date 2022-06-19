@@ -150,7 +150,7 @@ class UserDetailScreen extends StatelessWidget {
           height: 2.h,
         ),
         const SmallText(
-          text: 'Paerent Survey',
+          text: 'Parent Survey',
           color: Colors.black45,
           size: 16,
         ),
@@ -166,7 +166,7 @@ class UserDetailScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(35)),
           child: Column(children: [
             const SmallText(
-              text: 'How did you hear about us?',
+              text: 'Where did you hear about us?',
               color: Colors.black,
               size: 14,
             ),
@@ -320,7 +320,7 @@ class UserDetailScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const SmallText(
-                          text: 'state:',
+                          text: 'State:',
                           color: Colors.black45,
                         ),
                         Expanded(

@@ -179,7 +179,7 @@ class AddCategoryItemDetailScreen extends StatelessWidget {
                         size: Size(90, 15),
                         controller: txtDescription,
                         prefixIcon: FontAwesomeIcons.fileCircleExclamation,
-                        label: 'Desciption',
+                        label: 'Description',
                         keyboardType: TextInputType.multiline,
                         lines: 20,
                       ),
