@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:success_airline/contants/appContants.dart';
 import 'package:success_airline/screens/auth_screens/address_screen.dart';
 import 'package:success_airline/screens/buyPremium.dart';
 import 'package:success_airline/screens/termsAndCondition_screens/EULATerams.dart';
@@ -89,7 +90,7 @@ class _SignUpFormState extends State<SignUpForm> {
       'lastName': lastName,
       'email': email,
       'password': password,
-      'image': widget.image ?? '',
+      'image': widget.image ?? defaultProfile,
       'purchaseId': PURCHASE_ID,
       'expiryDate': expiryDate,
     };

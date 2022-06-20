@@ -17,7 +17,7 @@ class AudioController extends GetxController {
   initateAudioPlayer() {
     myPlayer!.playerStateStream.listen((event) {
       var processingState = event.processingState;
-
+      print(event);
       switch (processingState) {
         case ProcessingState.completed:
           stopAudio();
@@ -26,7 +26,6 @@ class AudioController extends GetxController {
           break;
         case ProcessingState.idle:
           isPlaying.value = false;
-          isSyncingAudio.value = false;
           break;
         case ProcessingState.ready:
           isPlaying.value = event.playing;
