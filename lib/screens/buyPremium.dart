@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/constants.dart';
+import 'package:success_airline/contants/appContants.dart';
 import 'package:success_airline/controllers/auth_controller.dart';
 import 'package:success_airline/screens/auth_screens/address_screen.dart';
 import 'package:success_airline/widgets/bigTexT.dart';
@@ -408,13 +409,26 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
                         RoundedButton(
                           isLoading: _purchasePending,
                           onPressed: () async {
-                            ProductDetails prod;
-                            if (isYearlyPlan.value) {
-                              prod = _products[1];
+                            if (isPurchaesTest) {
+                              //print(widget.userDetails);
+                              expiryDate =
+                                  DateTime.now().add(const Duration(days: 30));
+                              //this code is for bypasing the purchases in Test mode
+                              widget.userDetails['expiryDate'] = expiryDate;
+                              PURCHASE_ID = "testIDfor-30-Days";
+                              widget.userDetails['purchaseId'] = PURCHASE_ID;
+
+                              Get.off(() => AddressScreen(),
+                                  arguments: widget.userDetails);
                             } else {
-                              prod = _products[0];
+                              ProductDetails prod;
+                              if (isYearlyPlan.value) {
+                                prod = _products[1];
+                              } else {
+                                prod = _products[0];
+                              }
+                              buyProduct(prod);
                             }
-                            buyProduct(prod);
                           },
                           label: 'Get Offer',
                           radius: 2,
