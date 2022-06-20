@@ -102,43 +102,10 @@ class _ReferralFormState extends State<ReferralForm> {
         referralList.add(map);
       }
       widget.userDetails!['referralData'] = referralList;
-
-      Get.dialog(const ProgressScreen(), barrierDismissible: false);
-      String name = widget.userDetails!['firstName'] +
-          ' ' +
-          widget.userDetails!['lastName'];
-      String email = widget.userDetails!['email'];
-      String password = widget.userDetails!['password'];
-
-      await auth
-          .signUp(name, email, password, widget.userDetails!)
-          .then((value) {
-        PURCHASE_ID = '';
-        Get.close(7);
-      }).catchError((err) {
-        String msg = err.toString();
-        if (msg.contains('A network error')) {
-          msg = 'Please check your internet connection';
-        }
-        if (msg.contains('email-already-in-use')) {
-          msg = 'The email you entered is already exists';
-        }
-
-        Get.dialog(
-            CupertinoAlertDialog(
-              title: const Text('Sign up failed'),
-              content: Text(msg),
-              actions: [
-                CupertinoDialogAction(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    Get.close(6);
-                  },
-                )
-              ],
-            ),
-            barrierDismissible: false);
-      });
+      Get.to(
+        () => PremiumPlanScreen(),
+        arguments: widget.userDetails,
+      );
     }
   }
 

@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,6 +20,7 @@ import 'package:success_airline/widgets/bigTexT.dart';
 import 'package:success_airline/widgets/roundedButton.dart';
 import 'package:success_airline/widgets/smallText.dart';
 import '../controllers/test_purchase.dart';
+import 'auth_screens/components/loading_screen.dart';
 
 String PURCHASE_ID = '';
 DateTime? expiryDate;
@@ -456,7 +458,8 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
     );
   }
 
-  void newPurchase(PurchaseDetails purchaseDetails) {
+  Future<void> newPurchase(PurchaseDetails purchaseDetails) async {
+    Get.dialog(const ProgressScreen(), barrierDismissible: false);
     purchasedProdID = purchaseDetails.purchaseID;
     if (purchaseDetails.productID == _products[0].id) {
       expiryDate = DateTime.now().add(const Duration(days: 30));
@@ -473,7 +476,39 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
     _ipa.completePurchase(purchaseDetails);
     print(purchasedProdID);
     PURCHASE_ID = purchaseDetails.productID;
-    Get.off(() => AddressScreen(), arguments: widget.userDetails);
+    // Get.off(() => AddressScreen(), arguments: widget.userDetails);
+    String name =
+        widget.userDetails['firstName'] + ' ' + widget.userDetails['lastName'];
+    String email = widget.userDetails['email'];
+    String password = widget.userDetails['password'];
+
+    await auth.signUp(name, email, password, widget.userDetails).then((value) {
+      PURCHASE_ID = '';
+      Get.close(8);
+    }).catchError((err) {
+      String msg = err.toString();
+      if (msg.contains('A network error')) {
+        msg = 'Please check your internet connection';
+      }
+      if (msg.contains('email-already-in-use')) {
+        msg = 'The email you entered is already exists';
+      }
+
+      Get.dialog(
+          CupertinoAlertDialog(
+            title: const Text('Sign up failed'),
+            content: Text(msg),
+            actions: [
+              CupertinoDialogAction(
+                child: const Text('OK'),
+                onPressed: () {
+                  Get.close(8);
+                },
+              )
+            ],
+          ),
+          barrierDismissible: false);
+    });
   }
 
   void updatePurchase(PurchaseDetails purchaseDetails) {

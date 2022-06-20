@@ -5,6 +5,7 @@ import 'dart:collection';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/controllers/lessons_controller.dart';
@@ -19,9 +20,22 @@ import '../constants.dart';
 import '../widgets/bigTexT.dart';
 import '../widgets/smallText.dart';
 
-class HomeScreen extends StatelessWidget {
-  final AuthController auth = Get.find();
+_HomeScreenState? state;
 
+class HomeScreen extends StatefulWidget {
+  HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() {
+    state = _HomeScreenState();
+    return _HomeScreenState();
+  }
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final AuthController auth = Get.find();
+  final LessonsController lessoons = Get.put(LessonsController());
+  bool isLoading = false;
   Map<String, String> allCategories = {
     'Doctors': 'assets/json/doctor.json',
     'Life Skills': 'assets/json/life skills.json',
@@ -51,7 +65,23 @@ class HomeScreen extends StatelessWidget {
     'Business Owners': 'assets/json/business owner.json',
     'Financial Literacy': 'assets/json/financial literacy.json'
   };
-  HomeScreen({Key? key}) : super(key: key);
+  int i = 0;
+  @override
+  void initState() {
+    // if (auth.user != null)
+    //   setState(() {
+    //     isLoading = false;
+    //   });
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     allCategories = SplayTreeMap<String, dynamic>.from(
@@ -59,175 +89,192 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: SizedBox(
-              width: 100.w,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4.w),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          const BigText(
-                            text: 'Success Airlines',
-                            color: kprimaryColor,
-                          ),
-                          const Spacer(),
-                          GestureDetector(
-                            onTap: () {
-                              Get.to(() => ProfileScreen());
-                            },
-                            child: GetBuilder<AuthController>(
-                                builder: (controller) {
-                              if (controller.user != null) {
-                                return CircleAvatar(
-                                  backgroundColor: Colors.grey.shade300,
-                                  radius: 3.1.h,
-                                  backgroundImage: CachedNetworkImageProvider(
-                                      auth.user!.profile),
-                                );
-                              }
-                              return CircleAvatar(
-                                backgroundColor: kprimaryColor,
-                                radius: 3.1.h,
-                              );
-                            }),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      // Container(
-                      //   padding: EdgeInsets.only(left: 4.w, right: 2.w),
-                      //   alignment: Alignment.center,
-                      //   height: 7.h,
-                      //   decoration: BoxDecoration(
-                      //       borderRadius: BorderRadius.circular(15),
-                      //       color: kprimaryColor.withOpacity(0.1)),
-                      //   child: Row(
-                      //     children: [
-                      //       Expanded(
-                      //         child: TextField(
-                      //             style: TextStyle(
-                      //               fontSize: 16.sp,
-                      //             ),
-                      //             decoration:const InputDecoration(
-                      //                 hintStyle:TextStyle(fontSize: 20),
-                      //                 border: InputBorder.none,
-                      //                 hintText: 'Search...')),
-                      //       ),
-                      //       RoundedIconButton(
-                      //         radius: 5,
-                      //         onTap: () {
-                      //           print('signout');
-                      //           auth.signOut();
-                      //         },
-                      //         icon: Icon(
-                      //           Icons.search,
-                      //           size: 4.h,
-                      //           color: kprimaryColor,
-                      //         ),
-                      //       )
-                      //     ],
-                      //   ),
-                      // ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      const SmallText(
-                        text: 'Continue Learning',
-                        color: Colors.black,
-                        size: 18,
-                      ),
-                      SizedBox(
-                          height: 24.h,
-                          child: GetBuilder<LessonsController>(
-                            init: Get.put(LessonsController()),
-                            builder: (cont) => FutureBuilder(
-                              future: cont.fetchContinueCategory(),
-                              builder: ((context,
-                                  AsyncSnapshot<List<Map<String, dynamic>>>
-                                      snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const Center(
-                                      child: CircularProgressIndicator());
-                                }
-                                if (snapshot.data == null ||
-                                    snapshot.data!.isEmpty) {
-                                  return Center(
-                                    child: Lottie.asset(
-                                      'assets/json/wait_doll.json',
-                                    ),
-                                  );
-                                }
-
-                                final list = snapshot.data;
-                                return ListView.separated(
-                                    shrinkWrap: true,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 4.w),
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (context, index) => SizedBox(
-                                          child: InkWell(
-                                            onTap: () {
-                                              Get.to(() => CategoryDetailScreen(
-                                                  title: list![index]['name'],
-                                                  image: allCategories[
-                                                      list[index]['name']]!));
-                                            },
-                                            child: _ContinueLearningCard(
-                                              image: allCategories[list![index]
-                                                  ['name']]!,
-                                              category: list[index]['name'],
-                                            ),
-                                          ),
-                                        ),
-                                    separatorBuilder: (context, index) =>
-                                        SizedBox(
-                                          width: 4.w,
-                                        ),
-                                    itemCount: list == null ? 0 : list.length);
-                              }),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : SafeArea(
+              child: SingleChildScrollView(
+                child: Center(
+                  child: SizedBox(
+                    width: 100.w,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4.w),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const BigText(
+                                  text: 'Success Airlines',
+                                  color: kprimaryColor,
+                                ),
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.to(() => ProfileScreen());
+                                  },
+                                  child: GetBuilder<AuthController>(
+                                      builder: (controller) {
+                                    if (controller.user != null) {
+                                      return CircleAvatar(
+                                        backgroundColor: Colors.grey.shade300,
+                                        radius: 3.1.h,
+                                        backgroundImage:
+                                            CachedNetworkImageProvider(
+                                                auth.user!.profile),
+                                      );
+                                    }
+                                    return CircleAvatar(
+                                      backgroundColor: kprimaryColor,
+                                      radius: 3.1.h,
+                                    );
+                                  }),
+                                ),
+                              ],
                             ),
-                          )),
-                      const SmallText(
-                        text: 'All categories',
-                        color: Colors.black,
-                        size: 18,
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      ListView.separated(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        separatorBuilder: (context, index) =>
-                            SizedBox(height: 0.5.h),
-                        itemBuilder: (context, index) => InkWell(
-                          onTap: () {
-                            Get.to(() => CategoryDetailScreen(
-                                  title: allCategories.keys.toList()[index],
+                            SizedBox(
+                              height: 2.h,
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(left: 4.w, right: 2.w),
+                              alignment: Alignment.center,
+                              height: 7.h,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: kprimaryColor.withOpacity(0.1)),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: TextField(
+                                        style: TextStyle(
+                                          fontSize: 16.sp,
+                                        ),
+                                        decoration: const InputDecoration(
+                                            hintStyle: TextStyle(fontSize: 20),
+                                            border: InputBorder.none,
+                                            hintText: 'Search...')),
+                                  ),
+                                  RoundedIconButton(
+                                    radius: 5,
+                                    onTap: () {
+                                      print('signout');
+                                      auth.signOut();
+                                    },
+                                    icon: Icon(
+                                      Icons.search,
+                                      size: 4.h,
+                                      color: kprimaryColor,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 2.h,
+                            ),
+                            const SmallText(
+                              text: 'Continue Learning',
+                              color: Colors.black,
+                              size: 18,
+                            ),
+                            SizedBox(
+                                height: 24.h,
+                                child: GetBuilder<AuthController>(
+                                  builder: (controller) =>
+                                      GetBuilder<LessonsController>(
+                                    builder: (cont) => FutureBuilder(
+                                      future: cont.fetchContinueCategory(),
+                                      builder: ((context,
+                                          AsyncSnapshot<
+                                                  List<Map<String, dynamic>>>
+                                              snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const Center(
+                                              child:
+                                                  CircularProgressIndicator());
+                                        }
+                                        if (snapshot.data == null ||
+                                            snapshot.data!.isEmpty) {
+                                          return Center(
+                                            child: Lottie.asset(
+                                              'assets/json/wait_doll.json',
+                                            ),
+                                          );
+                                        }
+
+                                        final list = snapshot.data;
+                                        return ListView.separated(
+                                            shrinkWrap: true,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 4.w),
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder:
+                                                (context, index) => SizedBox(
+                                                      child: InkWell(
+                                                        onTap: () {
+                                                          Get.to(() => CategoryDetailScreen(
+                                                              title:
+                                                                  list![index]
+                                                                      ['name'],
+                                                              image: allCategories[
+                                                                  list[index][
+                                                                      'name']]!));
+                                                        },
+                                                        child:
+                                                            _ContinueLearningCard(
+                                                          image: allCategories[
+                                                              list![index]
+                                                                  ['name']]!,
+                                                          category: list[index]
+                                                              ['name'],
+                                                        ),
+                                                      ),
+                                                    ),
+                                            separatorBuilder:
+                                                (context, index) => SizedBox(
+                                                      width: 4.w,
+                                                    ),
+                                            itemCount:
+                                                list == null ? 0 : list.length);
+                                      }),
+                                    ),
+                                  ),
+                                )),
+                            const SmallText(
+                              text: 'All categories',
+                              color: Colors.black,
+                              size: 18,
+                            ),
+                            SizedBox(
+                              height: 2.h,
+                            ),
+                            ListView.separated(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              separatorBuilder: (context, index) =>
+                                  SizedBox(height: 0.5.h),
+                              itemBuilder: (context, index) => InkWell(
+                                onTap: () {
+                                  Get.to(() => CategoryDetailScreen(
+                                        title:
+                                            allCategories.keys.toList()[index],
+                                        image: allCategories.values
+                                            .toList()[index],
+                                      ));
+                                },
+                                child: _AllCategoriesItemCard(
+                                  category: allCategories.keys.toList()[index],
                                   image: allCategories.values.toList()[index],
-                                ));
-                          },
-                          child: _AllCategoriesItemCard(
-                            category: allCategories.keys.toList()[index],
-                            image: allCategories.values.toList()[index],
-                          ),
-                        ),
-                        itemCount: allCategories.length,
-                      )
-                    ]),
+                                ),
+                              ),
+                              itemCount: allCategories.length,
+                            )
+                          ]),
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

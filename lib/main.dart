@@ -13,6 +13,7 @@ import 'package:success_airline/screens/loadingScreen.dart';
 import 'package:success_airline/widgets/bigTexT.dart';
 
 import 'controllers/auth_controller.dart';
+import 'controllers/lessons_controller.dart';
 import 'firebase_options.dart';
 import 'widgets/splas_screen.dart';
 
@@ -20,7 +21,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   Get.lazyPut(() => AuthController(), fenix: true);
-  // Get.put(PurchasesApi());
+  // Get.put(LessonsController(), permanent: true);
   Get.put(IdreesController());
   Get.put(AudioController());
 

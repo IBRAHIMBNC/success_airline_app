@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +56,6 @@ class _SignUpFormState extends State<SignUpForm> {
   String firstName = '';
   String lastName = '';
   Map<String, dynamic> userDetails = {};
-  bool isEmailAvailable = true;
   bool isUpdating = false;
 
   Map<String, String> mailingAddress = {
@@ -67,36 +68,48 @@ class _SignUpFormState extends State<SignUpForm> {
   final _key = GlobalKey<FormState>();
   final AuthController auth = Get.find();
 
-  void onSave() async {
-    if (!_key.currentState!.validate()) {
-      return;
-    }
+  bool isEmailExit = false;
 
-    // if (widget.image == null) {
-    //   Get.closeAllSnackbars();
-    //   Get.showSnackbar(const GetSnackBar(
-    //     duration: Duration(seconds: 4),
-    //     overlayColor: Colors.red,
-    //     backgroundColor: Colors.red,
-    //     title: 'Sign up failed',
-    //     message: 'Please select profile image',
-    //   ));
-    //   return;
-    // }
-    _key.currentState!.save();
+  void onSave() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: _emailController.text.toLowerCase())
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        isEmailExit = true;
+      }
+      if (!_key.currentState!.validate()) {
+        isEmailExit = false;
 
-    userDetails = {
-      'firstName': firstName,
-      'lastName': lastName,
-      'email': email,
-      'password': password,
-      'image': widget.image ?? defaultProfile,
-      'purchaseId': PURCHASE_ID,
-      'expiryDate': expiryDate,
-    };
+        return;
+      }
 
-    Get.to(() => PURCHASE_ID.isEmpty ? PremiumPlanScreen() : AddressScreen(),
-        arguments: userDetails);
+      // if (widget.image == null) {
+      //   Get.closeAllSnackbars();
+      //   Get.showSnackbar(const GetSnackBar(
+      //     duration: Duration(seconds: 4),
+      //     overlayColor: Colors.red,
+      //     backgroundColor: Colors.red,
+      //     title: 'Sign up failed',
+      //     message: 'Please select profile image',
+      //   ));
+      //   return;
+      // }
+      _key.currentState!.save();
+      print(widget.image);
+      userDetails = {
+        'firstName': firstName,
+        'lastName': lastName,
+        'email': email,
+        'password': password,
+        'image': widget.image ?? '',
+        'purchaseId': PURCHASE_ID,
+        'expiryDate': expiryDate,
+      };
+
+      Get.to(() => AddressScreen(), arguments: userDetails);
+    });
   }
 
   @override
@@ -105,7 +118,7 @@ class _SignUpFormState extends State<SignUpForm> {
       AppUser? user = widget.userData;
       _fNameController.text = user!.name.split(' ')[0];
       _lNameController.text = user.name.split(' ')[1];
-      _emailController.text = user.email!;
+      _emailController.text = user.email!.toLowerCase();
       _home2Controller.text = user.mailingAddress['home']!;
       _city2Controller.text = user.mailingAddress['city']!;
       _state2Controller.text = user.mailingAddress['state']!;
@@ -167,13 +180,13 @@ class _SignUpFormState extends State<SignUpForm> {
                     if (!GetUtils.isEmail(val!.trim())) {
                       return 'Please enter a valid email';
                     }
-                    if (!isEmailAvailable) return 'This email already in use';
+                    if (isEmailExit) return 'This email already in use';
 
                     return null;
                   },
                   keyboardType: TextInputType.emailAddress,
                   onSave: (val) {
-                    email = val!;
+                    email = val!.trim().toLowerCase();
                   },
                   hintext: 'Jhondoe@gmail.com',
                   prefixIcon: FontAwesomeIcons.solidEnvelope,

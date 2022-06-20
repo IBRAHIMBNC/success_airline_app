@@ -29,7 +29,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void selectImage() async {
     final _imagePicker = ImagePicker();
     final xfile = await _imagePicker
-        .pickImage(source: ImageSource.gallery, imageQuality: 60)
+        .pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 60,
+    )
         .catchError((err) {
       Get.snackbar('Permission Denied', 'Go to Settings and allow photos',
           snackPosition: SnackPosition.BOTTOM,

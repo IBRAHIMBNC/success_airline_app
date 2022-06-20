@@ -78,7 +78,6 @@ class LessonsController extends GetxController {
       temp.add(categoty.data());
     });
     continuedCategories = [...temp];
-
     return continuedCategories;
   }
 

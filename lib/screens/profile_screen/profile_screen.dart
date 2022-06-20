@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/controllers/child_controller.dart';
+import 'package:success_airline/controllers/lessons_controller.dart';
+import 'package:success_airline/models/lessonModel.dart';
 import 'package:success_airline/screens/auth_screens/referral_screen.dart';
 import 'package:success_airline/screens/profile_screen/aboutUs_screen.dart';
 
@@ -166,6 +168,7 @@ class ProfileScreen extends StatelessWidget {
                   RoundedButton(
                     onPressed: () {
                       auth.signOut();
+
                       Get.close(1);
                     },
                     image: Icon(

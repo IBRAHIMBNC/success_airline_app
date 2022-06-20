@@ -5,7 +5,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:success_airline/contants/appContants.dart';
 import 'package:success_airline/controllers/idrees_controller.dart';
+import 'package:success_airline/controllers/lessons_controller.dart';
 import 'package:success_airline/screens/buyPremium.dart';
+import 'package:success_airline/screens/home_screen.dart';
 import '../models/appuser.dart';
 
 class AuthController extends GetxController {
@@ -29,12 +31,12 @@ class AuthController extends GetxController {
     if (userDetails['image'] == '') {
       picUrl = defaultProfile;
     } else {
-      await uploadProfile(userDetails['image']);
+      picUrl = await uploadProfile(userDetails['image']);
     }
 
-    await auth.currentUser!.updatePhotoURL(picUrl);
+    // await auth.currentUser!.updatePhotoURL(picUrl);
     if (auth.currentUser != null) {
-      userDetails['image'] = auth.currentUser!.photoURL;
+      userDetails['image'] = picUrl;
       await saveUserdata(auth.currentUser, userDetails);
       saveReferralData(userDetails['referralData'], auth.currentUser!.uid);
 
@@ -48,8 +50,11 @@ class AuthController extends GetxController {
       purchaseRef.doc(user!.id).set({
         'purchaseID': userDetails['purchaseId'],
         'expiryDate': userDetails['expiryDate']
+      }).then((value) {
+        print('purchase uploaded');
       });
     }
+    update();
   }
 
   Future<void> saveReferralData(List<dynamic> referrelList, String id) async {
@@ -66,6 +71,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> signIn(String email, String password) async {
+    // final LessonsController cont = Get.put(LessonsController());
     await auth
         .signInWithEmailAndPassword(email: email, password: password)
         .catchError((err) {
@@ -79,6 +85,7 @@ class AuthController extends GetxController {
     }
     final userData = await userRef.doc(auth.currentUser!.uid).get();
     user = AppUser.fromFirebase(userData);
+    // cont.fetchContinueCategory();
     varifyUser().then((value) {
       if (!value) {
         Get.to(() => PremiumPlanScreen(),
@@ -91,6 +98,8 @@ class AuthController extends GetxController {
 
   Future<void> signOut() async {
     await auth.signOut();
+    // user = null;
+    // update();
   }
 
   Future<void> saveUserdata(
@@ -160,6 +169,7 @@ class AuthController extends GetxController {
         users.add(AppUser.fromFirebaseWithChildrenDetails(user));
       }
     }
+    print(users.length);
     return users;
   }
 
