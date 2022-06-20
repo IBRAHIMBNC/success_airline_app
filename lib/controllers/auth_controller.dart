@@ -5,9 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:success_airline/contants/appContants.dart';
 import 'package:success_airline/controllers/idrees_controller.dart';
-import 'package:success_airline/controllers/lessons_controller.dart';
 import 'package:success_airline/screens/buyPremium.dart';
-import 'package:success_airline/screens/home_screen.dart';
 import '../models/appuser.dart';
 
 class AuthController extends GetxController {
@@ -162,14 +160,9 @@ class AuthController extends GetxController {
     final List<AppUser> users = [];
 
     for (var user in allUsersDocs.docs) {
-      Map<String, dynamic> ss = user.data(); // as Map<String,dynamic>();
-      bool sss = ss.keys.contains("homeAddress");
-
-      if (sss) {
-        users.add(AppUser.fromFirebaseWithChildrenDetails(user));
-      }
+      users.add(AppUser.fromFirebaseWithChildrenDetails(user));
     }
-    print(users.length);
+
     return users;
   }
 

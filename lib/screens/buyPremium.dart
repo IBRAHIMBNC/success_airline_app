@@ -15,7 +15,6 @@ import 'package:sizer/sizer.dart';
 import 'package:success_airline/constants.dart';
 import 'package:success_airline/contants/appContants.dart';
 import 'package:success_airline/controllers/auth_controller.dart';
-import 'package:success_airline/screens/auth_screens/address_screen.dart';
 import 'package:success_airline/widgets/bigTexT.dart';
 import 'package:success_airline/widgets/roundedButton.dart';
 import 'package:success_airline/widgets/smallText.dart';
@@ -152,7 +151,6 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
         print(err);
 
         //this wil be the temp code
-        //TODO : We have to remove this Snakcbar once the error is solved aboit purchases
         Get.snackbar('Error', err.message,
             snackPosition: SnackPosition.BOTTOM,
             colorText: Colors.white,
@@ -419,9 +417,18 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
                               widget.userDetails['expiryDate'] = expiryDate;
                               PURCHASE_ID = "testIDfor-30-Days";
                               widget.userDetails['purchaseId'] = PURCHASE_ID;
-
-                              Get.off(() => AddressScreen(),
-                                  arguments: widget.userDetails);
+                              String name = widget.userDetails['firstName'] +
+                                  ' ' +
+                                  widget.userDetails['lastName'];
+                              String email = widget.userDetails['email'];
+                              String password = widget.userDetails['password'];
+                              await auth
+                                  .signUp(
+                                      name, email, password, widget.userDetails)
+                                  .then((value) {
+                                PURCHASE_ID = '';
+                                Get.close(8);
+                              });
                             } else {
                               ProductDetails prod;
                               if (isYearlyPlan.value) {

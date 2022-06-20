@@ -1,14 +1,12 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
-import 'package:success_airline/contants/appContants.dart';
 import 'package:success_airline/screens/auth_screens/address_screen.dart';
 import 'package:success_airline/screens/buyPremium.dart';
 import 'package:success_airline/screens/termsAndCondition_screens/EULATerams.dart';

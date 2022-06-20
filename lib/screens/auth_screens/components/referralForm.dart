@@ -10,7 +10,6 @@ import '../../../controllers/auth_controller.dart';
 import '../../../widgets/roundedButton.dart';
 import '../../../widgets/smallText.dart';
 import '../../../widgets/textfeild2.dart';
-import 'loading_screen.dart';
 
 GlobalKey<_ReferralFormState> referralKey = GlobalKey();
 
