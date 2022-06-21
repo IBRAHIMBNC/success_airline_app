@@ -4,6 +4,7 @@ import 'package:sizer/sizer.dart';
 import '../constants.dart';
 import 'smallText.dart';
 
+// ignore: must_be_immutable
 class RoundedButton extends StatelessWidget {
   final Function()? onPressed;
   bool isLoading;

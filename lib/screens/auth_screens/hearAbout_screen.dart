@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -27,14 +29,7 @@ class HearAboutUScreen extends StatefulWidget {
 }
 
 class _HearAboutUScreenState extends State<HearAboutUScreen> {
-  AboutUs about = AboutUs.facebook;
-
-  @override
-  void initState() {
-    print(widget.userDetails);
-    // TODO: implement initState
-    super.initState();
-  }
+  AboutUs? about;
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +158,8 @@ class _HearAboutUScreenState extends State<HearAboutUScreen> {
               label: 'NEXT',
               onPressed: () {
                 print(about);
-                widget.userDetails['hearAboutUs'] = about.name;
+                if (about == null) return;
+                widget.userDetails['hearAboutUs'] = about!.name;
                 Get.to(() => ChildrenCountScreen(),
                     arguments: widget.userDetails);
               },

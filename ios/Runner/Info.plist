@@ -36,11 +36,11 @@
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Select audio file for this lesson</string>
 	<key>NSCameraUsageDescription</key>
-	<string>To chosse user profile</string>
+	<string>This app uses camera to take profile Picture.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>To take user profile image </string>
+	<string>This app uses Microphone just for opening camera.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>To take user profile image </string>
+	<string>This app uses Photo Library to select profile picture.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -52,8 +52,7 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:success_airline/controllers/audio_controller.dart';
+import 'package:success_airline/controllers/idrees_controller.dart';
 import 'package:success_airline/screens/admin_screens/adminHome_screen.dart';
 import 'package:success_airline/screens/auth_screens/signIn_screen.dart';
 import 'package:success_airline/screens/home_screen.dart';
@@ -18,7 +20,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   Get.lazyPut(() => AuthController(), fenix: true);
-  // Get.put(PurchasesApi());
+  // Get.put(LessonsController(), permanent: true);
+  Get.put(IdreesController());
+  Get.put(AudioController());
 
   runApp(const MyApp());
 }
@@ -52,7 +56,7 @@ class MyApp extends StatelessWidget {
                             Image.asset(
                               'assets/pngs/planeLoop.gif',
                               width: 100.w,
-                              height: 50.h,
+                              height: 40.h,
                               fit: BoxFit.cover,
                             ),
                           ],
@@ -65,14 +69,16 @@ class MyApp extends StatelessWidget {
                                 ConnectionState.waiting) {
                               return const LoadingScreen();
                             }
-
                             if (snapshot.hasData) {
                               if (snapshot.data!.email == 'admin@gmail.com') {
-                                return const AdminHomeScreen();
+                                Get.find<IdreesController>().isAdmin = true;
+                                return AdminHomeScreen();
+                              } else {
+                                Get.find<IdreesController>().isAdmin = false;
                               }
                               return HomeScreen();
                             }
-                            return const SignInScreen();
+                            return SignInScreen();
                           },
                         ),
                       ),

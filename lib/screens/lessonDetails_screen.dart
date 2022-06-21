@@ -1,12 +1,15 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/constants.dart';
+import 'package:success_airline/controllers/audio_controller.dart';
+import 'package:success_airline/controllers/lessons_controller.dart';
 import 'package:success_airline/models/lessonModel.dart';
 import 'package:success_airline/widgets/smallText.dart';
+
+import '../controllers/idrees_controller.dart';
+import 'admin_screens/categoryItemDetails_screen.dart';
 
 class LessonDetailScreen extends StatefulWidget {
   final List<Lesson> lesson;
@@ -29,10 +32,11 @@ class LessonDetailScreen extends StatefulWidget {
 }
 
 class _LessonDetailScreenState extends State<LessonDetailScreen> {
-  AudioPlayer? audio;
-  bool isPlay = false;
   int currentLessonIndex = 0;
   bool isContinue = true;
+
+  AudioController audioController = Get.find();
+  bool isAdmin = Get.find<IdreesController>().isAdmin;
   @override
   void initState() {
     currentLessonIndex = widget.index;
@@ -42,9 +46,58 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
 
   @override
   void dispose() {
-    if (audio != null) audio?.dispose();
-    widget.save!(isContinue);
+    audioController.stopAudio();
+
+    if (!isAdmin) widget.save!(isContinue);
     super.dispose();
+  }
+
+  deleteAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Cancel",
+          style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.normal,
+              color: Colors.grey.shade800)),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Delete",
+          style: TextStyle(
+              fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red)),
+      onPressed: () {
+        LessonsController lessonsController = Get.find();
+        lessonsController.deleteLesson(
+            widget.lesson[widget.index], widget.title);
+        IdreesController idreesController = Get.find();
+        idreesController.onUpdateCategoriesStream?.call();
+        Get.back();
+        Get.back();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Delete Category",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+      content: Text("Are you sure you want to delete this category?",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal)),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   @override
@@ -60,10 +113,28 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
           color: Colors.black,
           size: 18,
         ),
-        leading: GestureDetector(onTap: () {}),
+        actions: [
+          if (isAdmin)
+            InkWell(
+              onTap: () {
+                deleteAlertDialog(context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Image(
+                    height: 35,
+                    width: 35,
+                    image: AssetImage("assets/pngs/delete.png"),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
-      body: Container(
-          height: 100.h,
+      body: SizedBox(
+          height: 200.h,
           width: 100.w,
           child: Column(
             children: [
@@ -84,7 +155,7 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
               Container(
                 padding: EdgeInsets.only(bottom: 5.h),
                 alignment: Alignment.center,
-                height: 45.h,
+                height: 50.h,
                 width: 90.w,
                 child: Stack(clipBehavior: Clip.none, children: [
                   Padding(
@@ -97,34 +168,41 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                         color: orangeColor,
                       ),
                       child: Column(children: [
-                        const Spacer(
-                          flex: 1,
+                        SizedBox(
+                          height: 3.h,
                         ),
                         const SmallText(
                           text: 'Definition',
                           size: 18,
+                          fontWeight: FontWeight.w600,
                         ),
-                        const Spacer(),
-                        Expanded(
-                          child: SmallText(
-                            text: widget.lesson[currentLessonIndex].description,
-                            size: 18,
+                        SizedBox(height: 10),
+                        SizedBox(
+                          height: 14.h,
+                          width: 85.w,
+                          child: Center(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: SmallText(
+                                text: widget
+                                    .lesson[currentLessonIndex].description,
+                                size: 16,
+                              ),
+                            ),
                           ),
                         ),
-                        const Spacer(),
+                        SizedBox(height: 10),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 2.w),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              InkWell(
+                              GestureDetector(
                                 onTap: () {
                                   if (currentLessonIndex > 0) {
-                                    audio?.stop();
+                                    audioController.stopAudio();
                                     setState(() {
                                       currentLessonIndex--;
-                                      isPlay = false;
-                                      audio = null;
                                     });
                                   }
                                 },
@@ -134,47 +212,43 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              InkWell(
+                              GestureDetector(
                                 onTap: () async {
-                                  if (audio == null) {
-                                    audio = AudioPlayer();
-                                    await audio!.play(widget
-                                        .lesson[currentLessonIndex].audioLink);
-                                    setState(() {
-                                      isPlay = true;
-                                    });
+                                  if (audioController.myPlayer == null) {
+                                    audioController.startAudio(
+                                        widget.lesson[currentLessonIndex]
+                                            .audioLink,
+                                        widget
+                                            .lesson[currentLessonIndex].title);
                                   } else {
-                                    if (isPlay) {
-                                      audio!.pause();
-                                      setState(() {
-                                        isPlay = false;
-                                      });
+                                    if (audioController.isPlaying.value) {
+                                      audioController.myPlayer!.pause();
                                     } else {
-                                      audio!.resume();
-                                      setState(() {
-                                        isPlay = true;
-                                      });
+                                      audioController.myPlayer!.play();
                                     }
                                   }
                                 },
-                                child: Image.asset(
-                                  isPlay
-                                      ? 'assets/pngs/pause.png'
-                                      : 'assets/pngs/play.png',
-                                  height: 13.5.h,
-                                  fit: BoxFit.cover,
-                                ),
+                                child: Obx(() {
+                                  return audioController.isSyncingAudio.value
+                                      ? CircularProgressIndicator(
+                                          color: Colors.white,
+                                        )
+                                      : Image.asset(
+                                          audioController.isPlaying.value
+                                              ? 'assets/pngs/pause.png'
+                                              : 'assets/pngs/play.png',
+                                          height: 13.5.h,
+                                          fit: BoxFit.cover,
+                                        );
+                                }),
                               ),
-                              InkWell(
+                              GestureDetector(
                                 onTap: () {
                                   if (currentLessonIndex <
                                       widget.lesson.length - 1) {
-                                    audio?.stop();
-
+                                    audioController.stopAudio();
                                     setState(() {
-                                      isPlay = false;
                                       currentLessonIndex++;
-                                      audio = null;
                                     });
                                   }
                                 },
@@ -196,13 +270,14 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                   Positioned(
                       bottom: -2.3.h,
                       left: 45.w - 6.h,
-                      child: InkWell(
+                      child: GestureDetector(
                         onTap: () {
                           if (currentLessonIndex == widget.lesson.length - 1) {
                             isContinue = false;
                           }
                           widget.save!(isContinue);
-                          if (audio != null) audio!.stop();
+                          if (audioController.myPlayer != null)
+                            audioController.stopAudio();
                           Get.back();
                         },
                         child: CircleAvatar(
@@ -212,6 +287,34 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
                           backgroundColor: Colors.white,
                         ),
                       )),
+                  if (Get.find<IdreesController>().isAdmin)
+                    Positioned(
+                        top: -1.1.h,
+                        right: -1.1.h,
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.to(() => AddCategoryItemDetailScreen(
+                                  image: widget.image,
+                                  category: widget.title,
+                                  isUpdate: true,
+                                  lesson: widget.lesson[widget.index],
+                                ));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(100)),
+                            padding: EdgeInsets.all(6),
+                            child: Center(
+                              child: Image(
+                                height: 40,
+                                width: 40,
+                                image: AssetImage("assets/pngs/edit.png"),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        )),
                 ]),
               )
             ],

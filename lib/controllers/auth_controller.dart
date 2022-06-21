@@ -1,13 +1,11 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
-import 'package:success_airline/screens/auth_screens/signIn_screen.dart';
+import 'package:success_airline/contants/appContants.dart';
+import 'package:success_airline/controllers/idrees_controller.dart';
 import 'package:success_airline/screens/buyPremium.dart';
-import 'package:success_airline/screens/home_screen.dart';
 import '../models/appuser.dart';
 
 class AuthController extends GetxController {
@@ -29,15 +27,14 @@ class AuthController extends GetxController {
     });
     String picUrl = '';
     if (userDetails['image'] == '') {
-      picUrl =
-          'https://firebasestorage.googleapis.com/v0/b/success-airline-lab123.appspot.com/o/profile_placeholder.jpeg?alt=media&token=5542fab1-de36-4516-8068-1b9fe122c708';
+      picUrl = defaultProfile;
     } else {
-      String picUrl = await uploadProfile(userDetails['image']);
+      picUrl = await uploadProfile(userDetails['image']);
     }
 
-    await auth.currentUser!.updatePhotoURL(picUrl);
+    // await auth.currentUser!.updatePhotoURL(picUrl);
     if (auth.currentUser != null) {
-      userDetails['image'] = auth.currentUser!.photoURL;
+      userDetails['image'] = picUrl;
       await saveUserdata(auth.currentUser, userDetails);
       saveReferralData(userDetails['referralData'], auth.currentUser!.uid);
 
@@ -46,14 +43,16 @@ class AuthController extends GetxController {
           name: name,
           email: email,
           id: auth.currentUser!.uid,
-          homeAddress: userDetails['homeAddress'],
           mailingAddress: userDetails['mailingAddress'],
           referralList: userDetails['referralData']);
       purchaseRef.doc(user!.id).set({
         'purchaseID': userDetails['purchaseId'],
         'expiryDate': userDetails['expiryDate']
+      }).then((value) {
+        print('purchase uploaded');
       });
     }
+    update();
   }
 
   Future<void> saveReferralData(List<dynamic> referrelList, String id) async {
@@ -70,14 +69,21 @@ class AuthController extends GetxController {
   }
 
   Future<void> signIn(String email, String password) async {
+    // final LessonsController cont = Get.put(LessonsController());
     await auth
         .signInWithEmailAndPassword(email: email, password: password)
         .catchError((err) {
       throw err;
     });
-    if (auth.currentUser!.email == 'admin@gmail.com') return;
+    if (auth.currentUser!.email == 'admin@gmail.com') {
+      Get.find<IdreesController>().isAdmin = true;
+      return;
+    } else {
+      Get.find<IdreesController>().isAdmin = false;
+    }
     final userData = await userRef.doc(auth.currentUser!.uid).get();
     user = AppUser.fromFirebase(userData);
+    // cont.fetchContinueCategory();
     varifyUser().then((value) {
       if (!value) {
         Get.to(() => PremiumPlanScreen(),
@@ -90,6 +96,8 @@ class AuthController extends GetxController {
 
   Future<void> signOut() async {
     await auth.signOut();
+    // user = null;
+    // update();
   }
 
   Future<void> saveUserdata(
@@ -150,9 +158,11 @@ class AuthController extends GetxController {
       }
     }
     final List<AppUser> users = [];
+
     for (var user in allUsersDocs.docs) {
       users.add(AppUser.fromFirebaseWithChildrenDetails(user));
     }
+
     return users;
   }
 

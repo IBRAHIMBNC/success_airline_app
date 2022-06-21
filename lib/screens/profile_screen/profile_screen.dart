@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/controllers/child_controller.dart';
-import 'package:success_airline/screens/auth_screens/hearAbout_screen.dart';
 import 'package:success_airline/screens/auth_screens/referral_screen.dart';
 import 'package:success_airline/screens/profile_screen/aboutUs_screen.dart';
 
@@ -50,13 +49,13 @@ class ProfileScreen extends StatelessWidget {
                 height: 75.h,
                 child: Column(children: [
                   SizedBox(
-                    width: 22.h,
+                    width: 21.5.h,
                     height: 22.h,
                     child: Stack(children: [
                       Image.asset(
                         'assets/pngs/profileAvater.png',
-                        height: 22.h,
-                        fit: BoxFit.cover,
+                        height: 25.h,
+                        fit: BoxFit.fill,
                       ),
                       Align(
                         alignment: Alignment.center,
@@ -167,6 +166,7 @@ class ProfileScreen extends StatelessWidget {
                   RoundedButton(
                     onPressed: () {
                       auth.signOut();
+
                       Get.close(1);
                     },
                     image: Icon(

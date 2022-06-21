@@ -1,31 +1,28 @@
+// ignore_for_file: implementation_imports, avoid_function_literals_in_foreach_calls
+
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter_launcher_icons/xml_templates.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase_android/src/in_app_purchase_android_platform_addition.dart'
     show InAppPurchaseAndroidPlatformAddition;
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/constants.dart';
+import 'package:success_airline/contants/appContants.dart';
 import 'package:success_airline/controllers/auth_controller.dart';
-import 'package:success_airline/screens/auth_screens/address_screen.dart';
 import 'package:success_airline/widgets/bigTexT.dart';
 import 'package:success_airline/widgets/roundedButton.dart';
 import 'package:success_airline/widgets/smallText.dart';
-import '../controllers/consumable_store.dart';
 import '../controllers/test_purchase.dart';
+import 'auth_screens/components/loading_screen.dart';
 
 String PURCHASE_ID = '';
+DateTime? expiryDate;
 
 class PremiumPlanScreen extends StatefulWidget {
   final userDetails = Get.arguments as Map<String, dynamic>;
@@ -45,14 +42,11 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
       : ['success_599_1m', 'yearly_6299_1y'];
   List<ProductDetails> _products = [];
   List<PurchaseDetails> _purchases = [];
-  bool _isAvailable = false;
   bool _purchasePending = false;
   StreamSubscription<List<PurchaseDetails>>? _subscription;
   String? purchasedProdID;
-  DateTime expiryDate = DateTime.now();
   final RxBool isYearlyPlan = true.obs;
   bool isLoading = true;
-  String? _queryProductError;
   @override
   void initState() {
     final Stream<List<PurchaseDetails>> _purchaseStream = _ipa.purchaseStream;
@@ -82,7 +76,6 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
     isAvailable = await _ipa.isAvailable();
     if (!isAvailable) {
       setState(() {
-        _isAvailable = isAvailable;
         _products = <ProductDetails>[];
         _purchases = <PurchaseDetails>[];
 
@@ -102,8 +95,6 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
         await _ipa.queryProductDetails(productIds.toSet());
     if (productDetailResponse.error != null) {
       setState(() {
-        _queryProductError = productDetailResponse.error!.message;
-        _isAvailable = isAvailable;
         _products = productDetailResponse.productDetails;
         _purchases = <PurchaseDetails>[];
         _purchasePending = false;
@@ -113,8 +104,6 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
 
     if (productDetailResponse.productDetails.isEmpty) {
       setState(() {
-        _queryProductError = null;
-        _isAvailable = isAvailable;
         _products = productDetailResponse.productDetails;
         _purchases = <PurchaseDetails>[];
         _purchasePending = false;
@@ -123,7 +112,6 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
       return;
     }
     setState(() {
-      _isAvailable = isAvailable;
       _products = productDetailResponse.productDetails;
 
       _purchasePending = false;
@@ -134,28 +122,6 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
       isLoading = false;
     });
   }
-
-  // Future<void> initStoreInfo() async {
-  //   final bool isAvailable = await _ipa.isAvailable();
-  //   if (!isAvailable) {
-  //     setState(() {
-  //       _isAvailable = isAvailable;
-  //       _products = <ProductDetails>[];
-  //       _purchases = <PurchaseDetails>[];
-  //       _purchasePending = false;
-  //       isLoading = false;
-  //     });
-  //     return;
-  //   }
-  // }
-
-  // getProducts() async {
-  //   Set<String> ids = Set.from(productIds);
-  //   ProductDetailsResponse response = await _ipa.queryProductDetails(ids);
-  //   setState(() {
-  //     _products = response.productDetails;
-  //   });
-  // }
 
   PurchaseDetails _hasPurchase(String id) {
     return _purchases.firstWhere((item) => item.productID == id);
@@ -183,6 +149,12 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
           .buyConsumable(purchaseParam: purchaseParam, autoConsume: true)
           .catchError((err) {
         print(err);
+
+        //this wil be the temp code
+        Get.snackbar('Error', err.message,
+            snackPosition: SnackPosition.BOTTOM,
+            colorText: Colors.white,
+            backgroundColor: Colors.red);
       });
     }
   }
@@ -278,35 +250,6 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
                           height: 20.h,
                           child: Image.asset('assets/pngs/diamond 1.png'),
                         ),
-                        // BigText(
-                        //   text: 'Prices',
-                        //   color: Colors.black,
-                        //   size: 16,
-                        // ),
-                        // SizedBox(
-                        //   height: 2.h,
-                        // ),
-                        // _Feature(
-                        //   text: 'Lorem ipsum doctor  sit aimt',
-                        // ),
-                        // SizedBox(
-                        //   height: 2.h,
-                        // ),
-                        // _Feature(
-                        //   text: 'Lorem ipsum doctor  sit aimt',
-                        // ),
-                        // SizedBox(
-                        //   height: 2.h,
-                        // ),
-                        // _Feature(
-                        //   text: 'Lorem ipsum doctor  sit aimt',
-                        // ),
-                        // SizedBox(
-                        //   height: 2.h,
-                        // ),
-                        // _Feature(
-                        //   text: 'Lorem ipsum doctor  sit aimt',
-                        // ),
                         SizedBox(
                           height: 5.h,
                         ),
@@ -385,16 +328,7 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
                                   Spacer(
                                     flex: 3,
                                   )
-                                ]
-                                    // trailing: SizedBox(width: 10.w),
-                                    // trailing: BigText(
-                                    //   text: '\$ 71.88',
-                                    //   color: !isYearlyPlan.value
-                                    //       ? Colors.white
-                                    //       : Colors.black,
-                                    //   size: 12,
-                                    // ),
-                                    ),
+                                ]),
                               ),
                             ),
                           ),
@@ -475,13 +409,35 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
                         RoundedButton(
                           isLoading: _purchasePending,
                           onPressed: () async {
-                            ProductDetails prod;
-                            if (isYearlyPlan.value) {
-                              prod = _products[1];
+                            if (isPurchaesTest) {
+                              //print(widget.userDetails);
+                              expiryDate =
+                                  DateTime.now().add(const Duration(days: 30));
+                              //this code is for bypasing the purchases in Test mode
+                              widget.userDetails['expiryDate'] = expiryDate;
+                              PURCHASE_ID = "testIDfor-30-Days";
+                              widget.userDetails['purchaseId'] = PURCHASE_ID;
+                              String name = widget.userDetails['firstName'] +
+                                  ' ' +
+                                  widget.userDetails['lastName'];
+                              String email = widget.userDetails['email'];
+                              String password = widget.userDetails['password'];
+                              await auth
+                                  .signUp(
+                                      name, email, password, widget.userDetails)
+                                  .then((value) {
+                                PURCHASE_ID = '';
+                                Get.close(8);
+                              });
                             } else {
-                              prod = _products[0];
+                              ProductDetails prod;
+                              if (isYearlyPlan.value) {
+                                prod = _products[1];
+                              } else {
+                                prod = _products[0];
+                              }
+                              buyProduct(prod);
                             }
-                            buyProduct(prod);
                           },
                           label: 'Get Offer',
                           radius: 2,
@@ -504,26 +460,13 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
                                 text: 'Log out',
                                 color: Colors.black38,
                               ))
-                        // RoundedButton(
-                        //   label: 'Log out',
-                        //   size: Size(50, 7.5),
-                        //   radius: 2,
-                        //   onPressed: () async {
-                        //     // print(_purchases.first.error);
-                        //     // final platformAddition = _ipa.getPlatformAddition<
-                        //     //     InAppPurchaseAndroidPlatformAddition>();
-                        //     // platformAddition
-                        //     //     .consumePurchase(_purchases.first)
-                        //     //     .then((value) => print(value.responseCode));
-                        //
-                        //   },
-                        // )
                       ]),
                 )),
     );
   }
 
-  void newPurchase(PurchaseDetails purchaseDetails) {
+  Future<void> newPurchase(PurchaseDetails purchaseDetails) async {
+    Get.dialog(const ProgressScreen(), barrierDismissible: false);
     purchasedProdID = purchaseDetails.purchaseID;
     if (purchaseDetails.productID == _products[0].id) {
       expiryDate = DateTime.now().add(const Duration(days: 30));
@@ -540,7 +483,39 @@ class _PremiumPlanScreenState extends State<PremiumPlanScreen> {
     _ipa.completePurchase(purchaseDetails);
     print(purchasedProdID);
     PURCHASE_ID = purchaseDetails.productID;
-    Get.off(() => AddressScreen(), arguments: widget.userDetails);
+    // Get.off(() => AddressScreen(), arguments: widget.userDetails);
+    String name =
+        widget.userDetails['firstName'] + ' ' + widget.userDetails['lastName'];
+    String email = widget.userDetails['email'];
+    String password = widget.userDetails['password'];
+
+    await auth.signUp(name, email, password, widget.userDetails).then((value) {
+      PURCHASE_ID = '';
+      Get.close(8);
+    }).catchError((err) {
+      String msg = err.toString();
+      if (msg.contains('A network error')) {
+        msg = 'Please check your internet connection';
+      }
+      if (msg.contains('email-already-in-use')) {
+        msg = 'The email you entered is already exists';
+      }
+
+      Get.dialog(
+          CupertinoAlertDialog(
+            title: const Text('Sign up failed'),
+            content: Text(msg),
+            actions: [
+              CupertinoDialogAction(
+                child: const Text('OK'),
+                onPressed: () {
+                  Get.close(8);
+                },
+              )
+            ],
+          ),
+          barrierDismissible: false);
+    });
   }
 
   void updatePurchase(PurchaseDetails purchaseDetails) {

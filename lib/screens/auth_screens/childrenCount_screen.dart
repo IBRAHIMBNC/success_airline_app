@@ -26,17 +26,11 @@ class _ChildrenCountScreenState extends State<ChildrenCountScreen> {
   final _controller = TextEditingController();
   ChildAge age = ChildAge.age0_3;
   bool isAgree = false;
-  @override
-  void initState() {
-    print(widget.userDetails);
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   void dispose() {
     _controller.dispose();
-    // TODO: implement dispose
+
     super.dispose();
   }
 
@@ -67,8 +61,8 @@ class _ChildrenCountScreenState extends State<ChildrenCountScreen> {
           SizedBox(height: 2.h),
           CustomTextField(
               validator: (val) {
-                if (val!.isEmpty) return 'you have at least on child';
-                if (int.parse(val) < 1) return 'you have at least on child';
+                if (val!.isEmpty) return '';
+                if (int.parse(val) < 1) return '';
                 return null;
               },
               alwaysValidate: true,

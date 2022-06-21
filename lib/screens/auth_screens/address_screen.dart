@@ -1,13 +1,10 @@
-import 'package:flutter/gestures.dart';
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
-import 'package:success_airline/screens/auth_screens/signUp_screen.dart';
 import 'package:success_airline/widgets/roundedButton.dart';
 
 import '../../widgets/bigTexT.dart';
@@ -26,7 +23,6 @@ class AddressScreen extends StatelessWidget {
     }
     _key.currentState!.save();
 
-    userDetails['homeAddress'] = homeAddress;
     userDetails['mailingAddress'] = mailingAddress;
     print(userDetails);
     Get.to(() => AddChildScreen(), arguments: userDetails);
@@ -37,7 +33,7 @@ class AddressScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         height: 100.h,
         width: 100.w,
         child: SingleChildScrollView(
@@ -98,71 +94,71 @@ class AddressScreen extends StatelessWidget {
               key: _key,
               child: Column(
                 children: [
-                  const SmallText(
-                    size: 14,
-                    text: 'Home Address',
-                    color: Colors.blue,
-                  ),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  CustomTextField(
-                      validator: (val) {
-                        if (val!.trim().isEmpty) {
-                          return 'This field must not be empty';
-                        }
-                        return null;
-                      },
-                      onSave: (val) {
-                        homeAddress['home'] = val!;
-                      },
-                      hintext: '',
-                      prefixIcon: FontAwesomeIcons.house,
-                      label: 'House Address'),
-                  CustomTextField(
-                    validator: (val) {
-                      if (val!.trim().isEmpty) {
-                        return 'This field must not be empty';
-                      }
-                      return null;
-                    },
-                    onSave: (val) {
-                      homeAddress['city'] = val!;
-                    },
-                    hintext: '',
-                    prefixIcon: FontAwesomeIcons.city,
-                    label: 'City',
-                  ),
-                  CustomTextField(
-                      validator: (val) {
-                        if (val!.trim().isEmpty) {
-                          return 'This field must not be empty';
-                        }
-                        return null;
-                      },
-                      onSave: (val) {
-                        homeAddress['state'] = val!;
-                      },
-                      hintext: '',
-                      prefixIcon: FontAwesomeIcons.schoolFlag,
-                      label: 'State'),
-                  CustomTextField(
-                      keyboardType: TextInputType.phone,
-                      validator: (val) {
-                        if (val!.trim().isEmpty) {
-                          return 'This field must not be empty';
-                        }
-                        return null;
-                      },
-                      onSave: (val) {
-                        homeAddress['zipCode'] = val!;
-                      },
-                      hintext: '',
-                      prefixIcon: FontAwesomeIcons.mapPin,
-                      label: 'Zip Code'),
-                  SizedBox(
-                    height: 2.h,
-                  ),
+                  // const SmallText(
+                  //   size: 14,
+                  //   text: 'Home Address',
+                  //   color: Colors.blue,
+                  // ),
+                  // SizedBox(
+                  //   height: 2.h,
+                  // ),
+                  // CustomTextField(
+                  //     validator: (val) {
+                  //       if (val!.trim().isEmpty) {
+                  //         return 'This field must not be empty';
+                  //       }
+                  //       return null;
+                  //     },
+                  //     onSave: (val) {
+                  //       homeAddress['home'] = val!;
+                  //     },
+                  //     hintext: '',
+                  //     prefixIcon: FontAwesomeIcons.house,
+                  //     label: 'House Address'),
+                  // CustomTextField(
+                  //   validator: (val) {
+                  //     if (val!.trim().isEmpty) {
+                  //       return 'This field must not be empty';
+                  //     }
+                  //     return null;
+                  //   },
+                  //   onSave: (val) {
+                  //     homeAddress['city'] = val!;
+                  //   },
+                  //   hintext: '',
+                  //   prefixIcon: FontAwesomeIcons.city,
+                  //   label: 'City',
+                  // ),
+                  // CustomTextField(
+                  //     validator: (val) {
+                  //       if (val!.trim().isEmpty) {
+                  //         return 'This field must not be empty';
+                  //       }
+                  //       return null;
+                  //     },
+                  //     onSave: (val) {
+                  //       homeAddress['state'] = val!;
+                  //     },
+                  //     hintext: '',
+                  //     prefixIcon: FontAwesomeIcons.schoolFlag,
+                  //     label: 'State'),
+                  // CustomTextField(
+                  //     keyboardType: TextInputType.phone,
+                  //     validator: (val) {
+                  //       if (val!.trim().isEmpty) {
+                  //         return 'This field must not be empty';
+                  //       }
+                  //       return null;
+                  //     },
+                  //     onSave: (val) {
+                  //       homeAddress['zipCode'] = val!;
+                  //     },
+                  //     hintext: '',
+                  //     prefixIcon: FontAwesomeIcons.mapPin,
+                  //     label: 'Zip Code'),
+                  // SizedBox(
+                  //   height: 2.h,
+                  // ),
                   const SmallText(
                     size: 14,
                     text: 'Mailing Address',

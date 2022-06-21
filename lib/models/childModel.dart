@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../contants/appContants.dart';
+
 class Child {
   String id;
   final String name;
@@ -23,7 +25,7 @@ class Child {
         DOB: snapshot.get('DOB'),
         grade: snapshot.get('grade'),
         isBoy: snapshot.get('gender') == 'male' ? true : false,
-        photo: snapshot.get('image'));
+        photo: snapshot.get('image') ?? defaultProfile);
   }
   Map<String, dynamic> toJson() {
     return {

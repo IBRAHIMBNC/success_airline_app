@@ -1,17 +1,16 @@
-import 'dart:collection';
+// ignore_for_file: must_be_immutable
 
+import 'dart:collection';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
-import 'package:success_airline/screens/admin_screens/categoryItemDetails_screen.dart';
-
 import '../../constants.dart';
 import '../../controllers/auth_controller.dart';
 import '../../widgets/bigTexT.dart';
 import '../../widgets/smallText.dart';
+import '../categoryDetails_screen.dart';
 import '../home_screen.dart';
 
 class ContentScreen extends StatelessWidget {
@@ -42,10 +41,19 @@ class ContentScreen extends StatelessWidget {
     'Writers': 'assets/json/writers.json',
     'News': 'assets/json/news.json',
     'Business Owners': 'assets/json/business owner.json',
-    'Financial literacy': 'assets/json/financial literacy.json'
+    'Financial Literacy': 'assets/json/financial literacy.json'
   };
   final AuthController auth = Get.find();
-  ContentScreen({Key? key}) : super(key: key);
+
+  List<KeyData> allCategoryList = [];
+  ContentScreen() {
+    var sortedKeys = allCategories.keys.toList()..sort();
+
+    for (String item in sortedKeys) {
+      KeyData obj = KeyData(item, allCategories[item].toString());
+      allCategoryList.add(obj);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,36 +97,6 @@ class ContentScreen extends StatelessWidget {
               SizedBox(
                 height: 2.h,
               ),
-              // Container(
-              //   padding: EdgeInsets.only(left: 4.w, right: 2.w),
-              //   alignment: Alignment.center,
-              //   height: 7.h,
-              //   decoration: BoxDecoration(
-              //       borderRadius: BorderRadius.circular(15),
-              //       color: kprimaryColor.withOpacity(0.1)),
-              //   child: Row(
-              //     children: [
-              //       const Expanded(
-              //         child: TextField(
-              //             decoration: InputDecoration(
-              //                 hintStyle: TextStyle(fontSize: 20),
-              //                 border: InputBorder.none,
-              //                 hintText: 'Search...')),
-              //       ),
-              //       RoundedIconButton(
-              //         onTap: () {
-              //           auth.signOut();
-              //           // auth.signOut();
-              //         },
-              //         icon: Icon(
-              //           Icons.search,
-              //           size: 4.h,
-              //           color: kprimaryColor,
-              //         ),
-              //       )
-              //     ],
-              //   ),
-              // ),
               SizedBox(
                 height: 2.h,
               ),
@@ -137,16 +115,17 @@ class ContentScreen extends StatelessWidget {
                 separatorBuilder: (context, index) => SizedBox(height: 0.5.h),
                 itemBuilder: (context, index) => InkWell(
                   onTap: () {
-                    Get.to(() => AddCategoryItemDetailScreen(
-                        image: allCategories.values.toList()[index],
-                        category: allCategories.keys.toList()[index]));
+                    Get.to(() => CategoryDetailScreen(
+                          image: allCategoryList[index].json,
+                          title: allCategoryList[index].key,
+                        ));
                   },
                   child: _AllCategoriesItemCard(
-                    category: allCategories.keys.toList()[index],
-                    image: allCategories.values.toList()[index],
+                    category: allCategoryList[index].key,
+                    image: allCategoryList[index].json,
                   ),
                 ),
-                itemCount: allCategories.length,
+                itemCount: allCategoryList.length,
               )
             ]),
           ),
@@ -154,6 +133,12 @@ class ContentScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+class KeyData {
+  String key;
+  String json;
+  KeyData(this.key, this.json);
 }
 
 class _AllCategoriesItemCard extends StatelessWidget {

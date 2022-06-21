@@ -1,11 +1,9 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/instance_manager.dart';
-import 'package:get/state_manager.dart';
-import 'package:get/utils.dart';
+import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:success_airline/widgets/bigTexT.dart';
 import 'package:success_airline/widgets/roundedButton.dart';
@@ -49,11 +47,9 @@ class ForgotPasswordScreen extends StatelessWidget {
                 height: 2.h,
               ),
               CustomTextField(
-                validator: (value) {
-                  if (!GetUtils.isEmail(value!)) {
-                    return ' Enter a valid email address';
-                  }
-                },
+                validator: (input) => input!.isValidEmail()
+                    ? null
+                    : "Please Enter valid email address.",
                 onChanged: (value) {
                   email.value = value!;
                 },
@@ -73,7 +69,16 @@ class ForgotPasswordScreen extends StatelessWidget {
                       : () async {
                           await FirebaseAuth.instance
                               .sendPasswordResetEmail(email: email.value)
-                              .catchError((err) {
+                              .then((value) {
+                            Get.back();
+                            Get.showSnackbar(GetSnackBar(
+                              duration: const Duration(seconds: 4),
+                              overlayColor: Colors.green,
+                              backgroundColor: Colors.green,
+                              title: 'Verification email sent',
+                              message: "Reset mail is sent to your email!",
+                            ));
+                          }).catchError((err) {
                             print(err);
                           });
                         },
@@ -82,5 +87,13 @@ class ForgotPasswordScreen extends StatelessWidget {
             ],
           )),
     );
+  }
+}
+
+extension EmailValidator on String {
+  bool isValidEmail() {
+    return RegExp(
+            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+        .hasMatch(this);
   }
 }
